@@ -21,6 +21,10 @@ docker_service:
 validate_arg:
 	$(call validate_arg)
 
+.PHONY: custom
+custom: validate_arg
+	$(base_cmd) $(args)
+
 .PHONY: config
 config: validate_arg docker_service
 	$(base_cmd) config
