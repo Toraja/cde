@@ -62,7 +62,7 @@ docker-compose-install:
 .PHONY: docker-setup
 docker-setup:
 	usermod -aG docker $$(whoami)
-	cp -r ./docker ~/.docker
+	mkdir -p ~/.docker && ln -s ~/toybox/docker/config.json ~/.docker/
 	docker create volume vim-plugin
 	docker create volume gopath
 
