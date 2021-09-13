@@ -21,9 +21,9 @@
 
 ## Start Container
 Containers are separated by language.  
-Each language requires `base` image have been built. Run `make build i=base` to
+Each language requires `base` image have been built. Run `make build c=base` to
 build the docker image.
-Run `make enter i=<language>` to start and get inside the container.
+Run `make enter c=<cde>` to start and get inside the container.
 
 ## Volume Policy
 - Bind mount if:

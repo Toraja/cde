@@ -1,6 +1,6 @@
 version: '3.9'
 services:
-  ide:
+  cde:
     # build:
     #   args:
     #     - PHP_SOMETHING

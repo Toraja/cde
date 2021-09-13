@@ -1,4 +1,4 @@
-FROM base_ide:latest
+FROM base_cde:latest
 
 USER root
 

@@ -1,10 +1,10 @@
 SHELL = /bin/bash
 
-# Specify COMPOSE_PROJECT_NAME to avoid the collision of container name and volume name between IDEs
-base_cmd = COMPOSE_PROJECT_NAME=$(i) docker-compose --file docker-compose.yml --file ./$(i)/docker-compose.yml
+# Specify COMPOSE_PROJECT_NAME to avoid the collision of container name and volume name between CDEs
+base_cmd = COMPOSE_PROJECT_NAME=$(c) docker-compose --file docker-compose.yml --file ./$(c)/docker-compose.yml
 
 define validate_arg
-	@if [[ -z "$(i)" ]]; then echo 'Specify IDE as in `i=<ide>`'; exit 1; fi
+	@if [[ -z "$(c)" ]]; then echo 'Specify CDE as in `c=<cde>`'; exit 1; fi
 endef
 
 .DEFAULT_GOAL := dummy
@@ -43,7 +43,7 @@ start: validate_arg docker_service
 
 .PHONY: enter
 enter: start
-	$(base_cmd) exec ide fish
+	$(base_cmd) exec cde fish
 
 .PHONY: stop
 stop: validate_arg docker_service

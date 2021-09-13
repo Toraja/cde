@@ -1,6 +1,6 @@
 version: '3.9'
 services:
-  ide:
+  cde:
     environment:
       - GIT_HUB_SSH_KEY
       - DISPLAY # setting the same value as WSL works in container as well
@@ -36,7 +36,7 @@ services:
         source: ${HOST_HOME:?}
         target: /home/mojito/hosthome
       # Bind volume `workspace` direcory instead of symlinking so that relative
-      # path of bind volume inside IDE container does not result in error
+      # path of bind volume inside CDE container does not result in error
       - type: bind
         source: ${HOST_HOME:?}/workspace
         target: /home/mojito/workspace
