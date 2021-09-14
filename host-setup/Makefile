@@ -20,11 +20,11 @@ bashrc:
 
 .PHONY: fish
 fish:
-	# apt-get update
-	# apt-get install --no-install-recommends --yes software-properties-common
-	# apt-add-repository --yes ppa:fish-shell/release-3
-	# apt-get update
-	# apt-get install --no-install-recommends --yes fish
+	apt-get update
+	apt-get install --no-install-recommends --yes software-properties-common
+	apt-add-repository --yes ppa:fish-shell/release-3
+	apt-get update
+	apt-get install --no-install-recommends --yes fish
 	grep -q '# Added by host setup makefile' ~/.config/fish/config.fish || cat ./config.fish >> ~/.config/fish/config.fish
 	ln -s ~/toybox/fish/conf.d/* ~/.config/fish/conf.d/
 	ln -s ~/toybox/fish/functions ~/.config/fish/myfuncs
