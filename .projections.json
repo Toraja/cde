@@ -1,5 +1,6 @@
 {
-  "base/*": {"type": "ideBase"},
-  "go/*": {"type": "ideGo"},
-  "php/*": {"type": "idePhp"}
+  "base/*": {"type": "base"},
+  "go/*": {"type": "go"},
+  "java/*": {"type": "java"},
+  "php/*": {"type": "php"}
 }
