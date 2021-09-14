@@ -16,7 +16,7 @@ services:
       # It covers up files copied or created during build. In such case,
       # delete the volume and run `docker-compose up` again.
       - type: volume
-        source: home
+        source: cde_home
         target: /home/mojito
       - type: volume
         source: vim-plugin
@@ -42,6 +42,6 @@ services:
         target: /home/mojito/workspace
     network_mode: "host"
 volumes:
-  home:
+  cde_home:
   vim-plugin:
     external: true
