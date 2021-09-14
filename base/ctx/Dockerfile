@@ -71,7 +71,7 @@ RUN python3 -m pip install --user --upgrade pynvim \
     && ln -s ~/toybox/nvim/*.vim ~/.config/nvim/ \
     && ln -s ~/toybox/vim/rtp/* ~/.vim/ \
     && git clone https://github.com/junegunn/vim-plug.git .vim/bundle/vim-plug \
-    && vim -c 'PlugInstall' -es -u ~/.config/nvim/init.vim
+    && nvim -u ~/.config/nvim/init.vim --headless -c PlugInstall -c qall
 
 # Setup symlink to host home directory to reduce bind mount
 # This also enables replacing those links with actual files when symlink is inappriate
