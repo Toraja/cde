@@ -36,6 +36,7 @@ Run `make enter c=<cde>` to start and get inside the container.
   - Condition for bind mount does not apply but want to avoid accidental
     deletion by `docker-compose down -v`.  
     Note that it is still prone to `docker volume prune` if there is no
-    container that is using the volume.
+    container that is using the volume, so labels are added to those volumes and
+    `pruneFilter` is set in `config.json`.
 - Volume if:
   - Need to persist across container life cycle.
