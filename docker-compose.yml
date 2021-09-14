@@ -11,6 +11,8 @@ services:
         - IMAGE_TAG
         - USER=mojito
         - CPU_ARCH
+    extra_hosts:
+      - "registry.local:127.0.0.1" # for k3d
     volumes:
       # Be aware if the volume which was previously created exists.
       # It covers up files copied or created during build. In such case,
