@@ -29,7 +29,8 @@ RUN apt-get update && apt-get install --no-install-recommends --yes \
     && ln -n $(which fdfind) $(dirname $(which fdfind))/fd \
     && locale-gen en_US.UTF-8
 
-RUN pip install docker-compose httpie glances
+# pynvim required by deoplote.nvim
+RUN pip install docker-compose httpie glances pynvim
 
 RUN curl -fsSL https://raw.githubusercontent.com/jesseduffield/lazydocker/master/scripts/install_update_linux.sh | bash \
     && curl -fsSL https://raw.githubusercontent.com/rancher/k3d/main/install.sh | bash \
@@ -42,35 +43,36 @@ USER ${USER}
 
 WORKDIR /home/${USER}
 
-# git
-COPY --chown=${USER}:${USER} ./gitconfig .gitconfig
-RUN git clone https://github.com/Toraja/toybox.git
-
-# fish
-RUN fish -c 'curl -sL https://git.io/fisher | source && fisher install \
+# --- toybox independent operation ---
+RUN \
+    # fish \
+    fish -c 'curl -sL https://git.io/fisher | source && fisher install \
     jorgebucaran/fisher \
     decors/fish-colored-man \
     laughedelic/fish_logo \
     markcial/upto \
     oh-my-fish/plugin-pj \
     evanlucas/fish-kubectl-completions' \
+    && k3d completion fish > ~/.config/fish/completions/k3d.fish \
+    # tmux \
+    && git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm \
+    # vim \
+    && mkdir -p .config/nvim .vim/swap \
+    && git clone https://github.com/junegunn/vim-plug.git .vim/bundle/vim-plug
+COPY --chown=${USER}:${USER} ./gitconfig .gitconfig
+COPY --chown=${USER}:${USER} ./config.fish .config/fish/
+COPY --chown=${USER}:${USER} ./tmux.conf .tmux.conf
+
+# --- toybox dependent operations ---
+RUN git clone https://github.com/Toraja/toybox.git \
+    # fish \
     && ln -s ~/toybox/fish/conf.d/* ~/.config/fish/conf.d/ \
     && ln -s ~/toybox/fish/functions ~/.config/fish/myfuncs \
-    && k3d completion fish > ~/.config/fish/completions/k3d.fish
-COPY --chown=${USER}:${USER} ./config.fish .config/fish/
-
-# tmux
-COPY --chown=${USER}:${USER} ./tmux.conf .tmux.conf
-RUN git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm \
-    && ~/.tmux/plugins/tpm/bin/install_plugins
-
-# vim
-# pynvim required by deoplote.nvim
-RUN python3 -m pip install --user --upgrade pynvim \
-    && mkdir -p .config/nvim .vim/swap \
+    # tmux \
+    && ~/.tmux/plugins/tpm/bin/install_plugins \
+    # vim \
     && ln -s ~/toybox/nvim/*.vim ~/.config/nvim/ \
     && ln -s ~/toybox/vim/rtp/* ~/.vim/ \
-    && git clone https://github.com/junegunn/vim-plug.git .vim/bundle/vim-plug \
     && nvim -u ~/.config/nvim/init.vim --headless -c PlugInstall -c qall
 
 # Setup symlink to host home directory to reduce bind mount
