@@ -1,3 +1,0 @@
-[submodule "toybox"]
-	path = toybox
-	url = git@github.com:Toraja/toybox.git
