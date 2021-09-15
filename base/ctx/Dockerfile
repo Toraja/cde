@@ -19,7 +19,7 @@ RUN apt-get update && apt-get upgrade && apt-get install --no-install-recommends
 # Install docker and other packages
 # ctags required by Tagbar vim plugin
 RUN apt-get update && apt-get install --no-install-recommends --yes \
-    sudo less man-db locales tree openssh-client fish \
+    sudo less man-db locales tree openssh-client fish net-tools \
     docker-ce docker-ce-cli containerd.io python3-pip kubectl \
     git neovim tmux keychain fzf xclip make universal-ctags bat fd-find ripgrep \
     && rm -rf /var/lib/apt/lists/* \
