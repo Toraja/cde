@@ -21,7 +21,7 @@ RUN apt-get update && apt-get upgrade && apt-get install --no-install-recommends
 RUN apt-get update && apt-get install --no-install-recommends --yes \
     sudo less man-db locales tree openssh-client fish \
     docker-ce docker-ce-cli containerd.io python3-pip kubectl \
-    git neovim tmux keychain fzf xclip make exuberant-ctags bat fd-find ripgrep \
+    git neovim tmux keychain fzf xclip make universal-ctags bat fd-find ripgrep \
     && rm -rf /var/lib/apt/lists/* \
     # Rename binaries, which are named differently from other distro, by creating symlink \
     && ln -n $(which batcat) $(dirname $(which batcat))/bat \
