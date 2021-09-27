@@ -20,15 +20,17 @@ bashrc:
 
 .PHONY: fish
 fish:
-	apt-get update
-	apt-get install --no-install-recommends --yes software-properties-common
-	apt-add-repository --yes ppa:fish-shell/release-3
-	apt-get update
-	apt-get install --no-install-recommends --yes fish
+	sudo apt-get update
+	sudo apt-get install --no-install-recommends --yes software-properties-common
+	sudo apt-add-repository --yes ppa:fish-shell/release-3
+	sudo apt-get update
+	sudo apt-get install --no-install-recommends --yes fish
+	sudo usermod --shell $$(which fish) $$USER
+	@# login fish to let it create config directory
+	fish -i -c 'exit'
 	grep -q '# Added by host setup makefile' ~/.config/fish/config.fish || cat ./config.fish >> ~/.config/fish/config.fish
 	ln -s ~/toybox/fish/conf.d/* ~/.config/fish/conf.d/
 	ln -s ~/toybox/fish/functions ~/.config/fish/myfuncs
-	@ echo 'Run `chsh -s $$(which fish)` manually (password is required)'
 
 .PHONY: docker
 docker: docker-clean docker-add-repository docker-install-engine docker-compose-install docker-setup
