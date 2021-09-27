@@ -9,7 +9,7 @@ services:
       context: ./${COMPOSE_PROJECT_NAME:?}/ctx
       args:
         - IMAGE_TAG
-        - USER=mojito
+        - USER=${USER:-mojito}
         - CPU_ARCH
     extra_hosts:
       - "registry.local:127.0.0.1" # for k3d
@@ -19,10 +19,10 @@ services:
       # delete the volume and run `docker-compose up` again.
       - type: volume
         source: cde_home
-        target: /home/mojito
+        target: /home/${USER:-mojito}
       - type: volume
         source: vim-plugin
-        target: /home/mojito/.vim/bundle
+        target: /home/${USER:-mojito}/.vim/bundle
       # bind socket file so that the same docker can be used inside containers
       - type: bind
         source: /var/run/docker.sock
@@ -36,12 +36,12 @@ services:
         target: /etc/localtime
       - type: bind
         source: ${HOST_HOME:?}
-        target: /home/mojito/hosthome
+        target: /home/${USER:-mojito}/hosthome
       # Bind volume `workspace` direcory instead of symlinking so that relative
       # path of bind volume inside CDE container does not result in error
       - type: bind
         source: ${HOST_HOME:?}/workspace
-        target: /home/mojito/workspace
+        target: /home/${USER:-mojito}/workspace
     network_mode: "host"
 volumes:
   cde_home:

@@ -9,7 +9,7 @@ services:
     volumes:
       - type: volume
         source: gopath
-        target: /home/mojito/go
+        target: /home/${USER:-mojito}/go
 volumes:
   gopath:
     external: true
