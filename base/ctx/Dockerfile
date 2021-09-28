@@ -44,14 +44,15 @@ WORKDIR /home/${USER}
 
 # --- toybox independent operation ---
 RUN \
-    # fish \
-    fish -c 'curl -sL https://git.io/fisher | source && fisher install \
+    # fish (curl complains SSL error under certain environment (VPN etc). Skip installing fisher in such case.) \
+    fish -c 'curl -fsSLO https://git.io/fisher; and source fisher && fisher install \
     jorgebucaran/fisher \
     decors/fish-colored-man \
     laughedelic/fish_logo \
     markcial/upto \
     oh-my-fish/plugin-pj \
-    evanlucas/fish-kubectl-completions' \
+    evanlucas/fish-kubectl-completions; \
+    or mkdir -p ~/.config/fish/completions ~/.config/fish/conf.d' \
     && k3d completion fish > ~/.config/fish/completions/k3d.fish \
     # tmux \
     && git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm \
