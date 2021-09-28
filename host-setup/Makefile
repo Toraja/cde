@@ -38,32 +38,32 @@ docker: docker-clean docker-add-repository docker-install-engine docker-compose-
 .PHONY: docker-clean
 docker-clean:
 	@# docker-engine does not exist as package
-	apt-get remove docker docker.io containerd runc
+	sudo apt-get remove docker docker.io containerd runc
 
 .PHONY: docker-add-repository
 docker-add-repository:
-	apt-get update
-	apt-get install --no-install-recommends --yes apt-transport-https ca-certificates curl gnupg lsb-release
-	curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+	sudo apt-get update
+	sudo apt-get install --no-install-recommends --yes apt-transport-https ca-certificates curl gnupg lsb-release
+	curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
 	@# check CPU architecure and exit if it does not match
 	@if [ $$(uname -m) != 'x86_64' ]; then echo the CPU architecure is not supported; exit 1; fi
 	echo "deb [arch=amd64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu \
-		$$(lsb_release -cs) stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null
+		$$(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
 
 .PHONY: docker-install-engine
 docker-install-engine: # prerequisites commented out for reusability -- docker-clean docker-add-repository
-	apt-get update
-	apt-get install --no-install-recommends --yes docker-ce docker-ce-cli containerd.io
+	sudo apt-get update
+	sudo apt-get install --no-install-recommends --yes docker-ce docker-ce-cli containerd.io
 
 .PHONY: docker-compose-install
 docker-compose-install:
-	apt-get update
-	apt-get install --no-install-recommends --yes python3-pip
-	pip install docker-compose
+	sudo apt-get update
+	sudo apt-get install --no-install-recommends --yes python3-pip
+	sudo pip install docker-compose
 
 .PHONY: docker-setup
 docker-setup:
-	usermod -aG docker $$(whoami)
+	sudo usermod -aG docker $$(whoami)
 	mkdir -p ~/.docker && ln -s ~/toybox/docker/config.json ~/.docker/
 	docker volume create --label=prune=false vim-plugin
 	docker volume create --label=prune=false gopath
