@@ -11,7 +11,7 @@ help:
 	$(call printhelp, Target, Description)
 	$(call printhelp, ----------, ---------------)
 	$(call printhelp, 'bashrc', 'Setup bashrc')
-	@# $(call printhelp, 'fish', 'Install fish shell')
+	$(call printhelp, 'fish', 'Install fish shell')
 	$(call printhelp, 'docker', 'Install docker and docker-compose')
 
 .PHONY: bashrc
