@@ -24,6 +24,8 @@ services:
         source: vim-plugin
         target: /home/${USER:-mojito}/.vim/bundle
       # bind socket file so that the same docker can be used inside containers
+      # (actually docker client command cannot connect to daemon without this,
+      # even when daemon is started inside container)
       - type: bind
         source: /var/run/docker.sock
         target: /var/run/docker.sock
