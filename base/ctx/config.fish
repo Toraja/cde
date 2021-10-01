@@ -2,7 +2,9 @@ source ~/toybox/fish/config.fish
 
 if status --is-interactive
     # GIT_HUB_SSH_KEY is set in .env
-    keychain --quiet --agents ssh ~/.ssh/$GIT_HUB_SSH_KEY
+    if test -f ~/.ssh/$GIT_HUB_SSH_KEY
+        keychain --quiet --agents ssh ~/.ssh/$GIT_HUB_SSH_KEY
+    end
 
     begin
         set -l HOSTNAME (hostname)
