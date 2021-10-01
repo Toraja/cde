@@ -35,6 +35,10 @@ RUN pip install docker-compose httpie glances pynvim
 RUN curl -fsSL https://raw.githubusercontent.com/jesseduffield/lazydocker/master/scripts/install_update_linux.sh | bash \
     && curl -fsSL https://raw.githubusercontent.com/rancher/k3d/main/install.sh | bash
 
+# Docker Desktop uses different GID for docker
+ARG DOCKER_GID
+RUN groupmod --gid ${DOCKER_GID} docker
+
 ARG USER
 RUN useradd --create-home --groups docker --shell /usr/bin/fish ${USER} \
     && echo "%"${USER}" ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/${USER}
