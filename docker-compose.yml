@@ -21,9 +21,6 @@ services:
       - type: volume
         source: cde_home
         target: /home/${USER:-mojito}
-      - type: volume
-        source: vim-plugin
-        target: /home/${USER:-mojito}/.vim/bundle
       # bind socket file so that the same docker can be used inside containers
       # (actually docker client command cannot connect to daemon without this,
       # even when daemon is started inside container)
@@ -45,8 +42,9 @@ services:
       - type: bind
         source: ${HOST_HOME:?}/workspace
         target: /home/${USER:-mojito}/workspace
+      - type: bind
+        source: ~/.vim
+        target: /home/${USER:-mojito}/.vim
     network_mode: "host"
 volumes:
   cde_home:
-  vim-plugin:
-    external: true

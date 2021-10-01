@@ -57,27 +57,19 @@ RUN \
     oh-my-fish/plugin-pj \
     evanlucas/fish-kubectl-completions; \
     or mkdir -p ~/.config/fish/completions ~/.config/fish/conf.d' \
+    && ln -s ~/toybox/fish/functions ~/.config/fish/myfuncs \
     && k3d completion fish > ~/.config/fish/completions/k3d.fish \
     # tmux \
-    && git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm \
-    # vim \
-    && mkdir -p .config/nvim .vim/swap \
-    && git clone https://github.com/junegunn/vim-plug.git .vim/bundle/vim-plug
-COPY --chown=${USER}:${USER} ./gitconfig .gitconfig
-COPY --chown=${USER}:${USER} ./config.fish .config/fish/
-COPY --chown=${USER}:${USER} ./tmux.conf .tmux.conf
+    && git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+COPY --chown=${USER}:${USER} ./home ./
 
 # --- toybox dependent operations ---
+# (Things that would fail without toybox)
 RUN git clone https://github.com/Toraja/toybox.git \
     # fish \
     && ln -s ~/toybox/fish/conf.d/* ~/.config/fish/conf.d/ \
-    && ln -s ~/toybox/fish/functions ~/.config/fish/myfuncs \
     # tmux \
-    && ~/.tmux/plugins/tpm/bin/install_plugins \
-    # vim \
-    && ln -s ~/toybox/nvim/*.vim ~/.config/nvim/ \
-    && ln -s ~/toybox/vim/rtp/* ~/.vim/ \
-    && nvim -u ~/.config/nvim/init.vim --headless -c PlugInstall -c qall
+    && ~/.tmux/plugins/tpm/bin/install_plugins
 
 # Setup symlink to host home directory to reduce bind mount
 # This also enables replacing those links with actual files when symlink is inappriate
@@ -86,6 +78,8 @@ RUN mkdir ~/build \
     && mv ~/toybox ~/build/ \
     && ln -s ~/hosthome/.ssh ~/.ssh \
     && ln -s ~/hosthome/.docker ~/.docker \
-    && ln -s ~/hosthome/toybox ~/toybox
+    && ln -s ~/hosthome/toybox ~/toybox \
+    # Prevent Deoplete error that asks you to run UpdateRemotePlugins \
+    && ln -s ~/hosthome/.local/share/nvim ~/.local/share/nvim
 
 CMD ["tail", "-f", "/dev/null"]

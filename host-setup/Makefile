@@ -32,6 +32,18 @@ fish:
 	ln -s ~/toybox/fish/conf.d/* ~/.config/fish/conf.d/
 	ln -s ~/toybox/fish/functions ~/.config/fish/myfuncs
 
+.PHONY: vim
+vim:
+	sudo apt-get update
+	sudo apt-get install --no-install-recommends --yes python3-pip neovim
+	mkdir -p ~/.vim/swap ~/.config/nvim
+	test -f ~/.config/nvim/init.vim || echo 'source ~/toybox/nvim/init.vim' > ~/.config/nvim/init.vim
+	test -f ~/.config/nvim/ginit.vim || echo 'source ~/toybox/nvim/ginit.vim' > ~/.config/nvim/ginit.vim
+	@# If DIPLAY is set, pip get stuck due to python keyring thingy
+	DISPLAY= sudo pip install pynvim
+	git clone https://github.com/junegunn/vim-plug.git ~/.vim/bundle/vim-plug
+	nvim --headless -c PlugInstall -c qall
+
 .PHONY: docker
 docker: docker-clean docker-add-repository docker-install-engine docker-compose-install docker-setup
 
