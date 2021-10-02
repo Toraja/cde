@@ -34,9 +34,9 @@ main() {
 		${dist_wsl})
 			if is_docker_desktop; then
 				if [[ -f /mnt/c/Program\ Files/Docker/Docker/Docker\ Desktop.exe ]]; then
-					  /mnt/c/Program\ Files/Docker/Docker/Docker\ Desktop.exe &
-					  echo ${cyan}Docker Desktop has been dispatched.${nc}
-					  return 0
+					/mnt/c/Program\ Files/Docker/Docker/Docker\ Desktop.exe &
+					echo ${cyan}Docker Desktop has been dispatched.${nc}
+					return 0
 				else
 					echo 'Docker Desktop excutable was not found. Start it manually.'
 					exit 1
