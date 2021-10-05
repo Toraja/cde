@@ -18,10 +18,11 @@ RUN apt-get update && apt-get upgrade && apt-get install --no-install-recommends
     && echo "deb [signed-by=/usr/share/keyrings/kubernetes-archive-keyring.gpg] https://apt.kubernetes.io/ kubernetes-xenial main" | tee /etc/apt/sources.list.d/kubernetes.list
 # Install docker and other packages
 # ctags required by Tagbar vim plugin
+# file required by ranger
 RUN apt-get update && apt-get install --no-install-recommends --yes \
     sudo less man-db locales tree openssh-client fish net-tools \
     docker-ce docker-ce-cli containerd.io python3-pip kubectl \
-    git neovim tmux keychain fzf xclip make universal-ctags bat fd-find ripgrep \
+    git neovim tmux keychain fzf xclip make universal-ctags bat fd-find ripgrep file ranger \
     && rm -rf /var/lib/apt/lists/* \
     # Rename binaries, which are named differently from other distro, by creating symlink \
     && ln -n $(which batcat) $(dirname $(which batcat))/bat \
@@ -61,7 +62,9 @@ RUN \
     && ln -s ~/toybox/fish/functions ~/.config/fish/myfuncs \
     && k3d completion fish > ~/.config/fish/completions/k3d.fish \
     # tmux \
-    && git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+    && git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm \
+    # ranger \
+    && ln -s ~/toybox/ranger/rc.conf ~/.config/ranger/rc.conf \
 COPY --chown=${USER}:${USER} ./home ./
 
 # --- toybox dependent operations ---
