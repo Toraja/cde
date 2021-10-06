@@ -62,9 +62,7 @@ RUN \
     && ln -s ~/toybox/fish/functions ~/.config/fish/myfuncs \
     && k3d completion fish > ~/.config/fish/completions/k3d.fish \
     # tmux \
-    && git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm \
-    # ranger \
-    && ln -s ~/toybox/ranger/rc.conf ~/.config/ranger/rc.conf \
+    && git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 COPY --chown=${USER}:${USER} ./home ./
 
 # --- toybox dependent operations ---
