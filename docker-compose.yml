@@ -15,12 +15,12 @@ services:
     extra_hosts:
       - "registry.local:127.0.0.1" # for k3d
     volumes:
-      # Be aware if the volume which was previously created exists.
-      # It covers up files copied or created during build. In such case,
-      # delete the volume and run `docker-compose up` again.
       - type: volume
-        source: cde_home
-        target: /home/${USER:-mojito}
+        source: cde_cache
+        target: /home/${USER:-mojito}/.cache
+      - type: volume
+        source: cde_local_share
+        target: /home/${USER:-mojito}/.local/share
       # bind socket file so that the same docker can be used inside containers
       # (actually docker client command cannot connect to daemon without this,
       # even when daemon is started inside container)
@@ -47,4 +47,5 @@ services:
         target: /home/${USER:-mojito}/.vim
     network_mode: "host"
 volumes:
-  cde_home:
+  cde_cache:
+  cde_local_share:
