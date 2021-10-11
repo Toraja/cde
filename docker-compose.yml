@@ -3,7 +3,6 @@ services:
   cde:
     environment:
       - GIT_HUB_SSH_KEY
-      - DISPLAY # setting the same value as WSL works in container as well
       - CDE=${COMPOSE_PROJECT_NAME}
     build:
       context: ./${COMPOSE_PROJECT_NAME:?}/ctx
