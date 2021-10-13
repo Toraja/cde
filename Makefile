@@ -35,11 +35,11 @@ build: validate_arg docker_service
 
 .PHONY: up
 up: validate_arg docker_service
-	$(base_cmd) up
+	$(base_cmd) up --no-recreate
 
 .PHONY: start
 start: validate_arg docker_service
-	$(base_cmd) up -d
+	$(base_cmd) up -d --no-recreate
 
 .PHONY: enter
 enter: start
