@@ -1,6 +1,7 @@
 version: '3.9'
 services:
   cde:
+    image: ${COMPOSE_PROJECT_NAME}_cde:${GO_VERSION}
     environment:
       - CGO_ENABLED=${CGO_ENABLED:-0}
     build:
