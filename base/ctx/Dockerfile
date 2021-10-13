@@ -55,7 +55,7 @@ RUN \
     decors/fish-colored-man \
     laughedelic/fish_logo \
     markcial/upto \
-    oh-my-fish/plugin-pj \
+    joehillen/to-fish \
     evanlucas/fish-kubectl-completions \
     && rm fisher; \
     or mkdir -p ~/.config/fish/completions ~/.config/fish/conf.d' \
