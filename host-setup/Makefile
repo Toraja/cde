@@ -26,10 +26,9 @@ fish:
 	sudo -E apt-get update
 	sudo -E apt-get install --no-install-recommends --yes fish
 	sudo usermod --shell $$(which fish) $$USER
-	@# login fish to let it create config directory
-	fish -i -c 'exit'
+	@# fish -i -c 'exit' <- this does not work
 	grep -q '# Added by host setup makefile' ~/.config/fish/config.fish || cat ./config.fish >> ~/.config/fish/config.fish
-	ln -s ~/toybox/fish/conf.d/* ~/.config/fish/conf.d/
+	mkdir -p ~/.config/fish/conf.d/ && ln -s ~/toybox/fish/conf.d/* ~/.config/fish/conf.d/
 	ln -s ~/toybox/fish/functions ~/.config/fish/myfuncs
 
 .PHONY: vim
