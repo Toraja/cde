@@ -20,11 +20,11 @@ bashrc:
 
 .PHONY: fish
 fish:
-	sudo apt-get update
-	sudo apt-get install --no-install-recommends --yes software-properties-common
-	sudo apt-add-repository --yes ppa:fish-shell/release-3
-	sudo apt-get update
-	sudo apt-get install --no-install-recommends --yes fish
+	sudo -E apt-get update
+	sudo -E apt-get install --no-install-recommends --yes software-properties-common
+	sudo -E apt-add-repository --yes ppa:fish-shell/release-3
+	sudo -E apt-get update
+	sudo -E apt-get install --no-install-recommends --yes fish
 	sudo usermod --shell $$(which fish) $$USER
 	@# login fish to let it create config directory
 	fish -i -c 'exit'
@@ -34,13 +34,13 @@ fish:
 
 .PHONY: vim
 vim:
-	sudo apt-get update
-	sudo apt-get install --no-install-recommends --yes python3-pip neovim
+	sudo -E apt-get update
+	sudo -E apt-get install --no-install-recommends --yes python3-pip neovim
 	mkdir -p ~/.vim/swap ~/.config/nvim
 	test -f ~/.config/nvim/init.vim || echo 'source ~/toybox/nvim/init.vim' > ~/.config/nvim/init.vim
 	test -f ~/.config/nvim/ginit.vim || echo 'source ~/toybox/nvim/ginit.vim' > ~/.config/nvim/ginit.vim
 	@# If DIPLAY is set, pip get stuck due to python keyring thingy
-	DISPLAY= sudo pip install pynvim
+	DISPLAY= sudo -E pip install pynvim
 	git clone https://github.com/junegunn/vim-plug.git ~/.vim/bundle/vim-plug
 	nvim --headless -c PlugInstall -c qall
 
@@ -50,32 +50,32 @@ docker: docker-clean docker-add-repository docker-install-engine docker-compose-
 .PHONY: docker-clean
 docker-clean:
 	@# docker-engine does not exist as package
-	sudo apt-get remove docker docker.io containerd runc
+	sudo -E apt-get remove docker docker.io containerd runc
 
 .PHONY: docker-add-repository
 docker-add-repository:
-	sudo apt-get update
-	sudo apt-get install --no-install-recommends --yes apt-transport-https ca-certificates curl gnupg lsb-release
-	curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+	sudo -E apt-get update
+	sudo -E apt-get install --no-install-recommends --yes apt-transport-https ca-certificates curl gnupg lsb-release
+	curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo -E gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
 	@# check CPU architecure and exit if it does not match
 	@if [ $$(uname -m) != 'x86_64' ]; then echo the CPU architecure is not supported; exit 1; fi
 	echo "deb [arch=amd64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu \
-		$$(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+		$$(lsb_release -cs) stable" | sudo -E tee /etc/apt/sources.list.d/docker.list > /dev/null
 
 .PHONY: docker-install-engine
 docker-install-engine: # prerequisites commented out for reusability -- docker-clean docker-add-repository
-	sudo apt-get update
-	sudo apt-get install --no-install-recommends --yes docker-ce docker-ce-cli containerd.io
+	sudo -E apt-get update
+	sudo -E apt-get install --no-install-recommends --yes docker-ce docker-ce-cli containerd.io
 
 .PHONY: docker-compose-install
 docker-compose-install:
-	sudo apt-get update
-	sudo apt-get install --no-install-recommends --yes python3-pip
-	sudo pip install docker-compose
+	sudo -E apt-get update
+	sudo -E apt-get install --no-install-recommends --yes python3-pip
+	sudo -E pip install docker-compose
 
 .PHONY: docker-setup
 docker-setup:
-	sudo usermod -aG docker $$(whoami)
+	sudo -E usermod -aG docker $$(whoami)
 	mkdir -p ~/.docker && ln -s ~/toybox/docker/config.json ~/.docker/
 	docker volume create --label=prune=false vim-plugin
 	docker volume create --label=prune=false gopath
