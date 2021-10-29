@@ -1,6 +1,8 @@
 version: '3.9'
 services:
   cde:
-    # build:
-      # args:
-        # - COMPOSE_VERSION=${COMPOSE_VERSION:?set value in .env file} # required if downloading docker-compose via curl
+    build:
+      args:
+        - BASE_IMAGE_TAG # set this if other than `rollout` (latest releas regardless of LTS) is required
+        - DOCKER_GID=${DOCKER_GID:?}
+        - UID=${UID:-1000}

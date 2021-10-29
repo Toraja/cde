@@ -1,7 +1,7 @@
 # Simply assigning default value in ARG instruction does not work, maybe because an environment variable
 # with the same name is defined in docker-compose file...  So use variable substitution instead.
-ARG IMAGE_TAG
-FROM ubuntu:${IMAGE_TAG:-rolling}
+ARG BASE_IMAGE_TAG
+FROM ubuntu:${BASE_IMAGE_TAG:-rolling}
 
 # `unminimize` is required to use `man`
 RUN yes | unminimize

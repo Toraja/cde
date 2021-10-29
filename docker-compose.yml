@@ -7,11 +7,8 @@ services:
     build:
       context: ./${COMPOSE_PROJECT_NAME:?}/ctx
       args:
-        - IMAGE_TAG # set this if other than `rollout` (latest releas regardless of LTS) is required
         - USER=${USER:-mojito}
         - CPU_ARCH
-        - DOCKER_GID=${DOCKER_GID:?}
-        - UID=${UID:-1000}
     extra_hosts:
       - "registry.local:127.0.0.1" # for k3d
     volumes:
