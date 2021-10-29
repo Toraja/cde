@@ -49,6 +49,8 @@ WORKDIR /home/${USER}
 
 # --- toybox independent operation ---
 RUN \
+    # Create directory for volume so that owner will be the ${USER} \
+    mkdir -p ~/.cache ~/.local/share \
     # fish (curl complains SSL error under certain environment (VPN etc). Skip installing fisher in such case.) \
     fish -c 'curl -fsSLO https://git.io/fisher; and source fisher && fisher install \
     jorgebucaran/fisher \
