@@ -41,7 +41,7 @@ ARG DOCKER_GID
 RUN groupmod --gid ${DOCKER_GID} docker
 
 ARG USER
-RUN useradd --create-home --groups docker --shell /usr/bin/fish ${USER} \
+RUN useradd --create-home --uid ${UID} --groups docker --shell /usr/bin/fish ${USER} \
     && echo "%"${USER}" ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/${USER}
 USER ${USER}
 
