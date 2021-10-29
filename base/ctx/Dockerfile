@@ -40,6 +40,7 @@ RUN curl -fsSL https://raw.githubusercontent.com/jesseduffield/lazydocker/master
 ARG DOCKER_GID
 RUN groupmod --gid ${DOCKER_GID} docker
 
+ARG UID
 ARG USER
 RUN useradd --create-home --uid ${UID} --groups docker --shell /usr/bin/fish ${USER} \
     && echo "%"${USER}" ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/${USER}
@@ -49,8 +50,6 @@ WORKDIR /home/${USER}
 
 # --- toybox independent operation ---
 RUN \
-    # Create directory for volume so that owner will be the ${USER} \
-    mkdir -p ~/.cache ~/.local/share \
     # fish (curl complains SSL error under certain environment (VPN etc). Skip installing fisher in such case.) \
     fish -c 'curl -fsSLO https://git.io/fisher; and source fisher && fisher install \
     jorgebucaran/fisher \
@@ -65,7 +64,8 @@ RUN \
     && k3d completion fish > ~/.config/fish/completions/k3d.fish \
     # tmux \
     && git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm \
-    && mkdir -p ~/.tmux/resurrect
+    # Create directory for volume so that owner will be the ${USER} \
+    && mkdir -p ~/.cache ~/.local/share ~/.tmux/resurrect
 COPY --chown=${USER}:${USER} ./home ./
 
 # --- toybox dependent operations ---
