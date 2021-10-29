@@ -25,7 +25,7 @@ fish:
 	sudo -E apt-add-repository --yes ppa:fish-shell/release-3
 	sudo -E apt-get update
 	sudo -E apt-get install --no-install-recommends --yes fish
-	sudo usermod --shell $$(which fish) $$USER
+	sudo usermod --shell $$(which fish) $$USER || echo "failed to change shell to fish :("
 	@# fish -i -c 'exit' <- this does not work
 	grep -q '# Added by host setup makefile' ~/.config/fish/config.fish || cat ./config.fish >> ~/.config/fish/config.fish
 	mkdir -p ~/.config/fish/conf.d/ && ln -s ~/toybox/fish/conf.d/* ~/.config/fish/conf.d/
