@@ -1,4 +1,6 @@
-FROM base_cde:latest
+ARG GO_BASE_IMAGE_NAME
+ARG GO_BASE_IMAGE_TAG
+FROM ${GO_BASE_IMAGE_NAME:-base_cde}:${GO_BASE_IMAGE_TAG:-latest}
 
 USER root
 

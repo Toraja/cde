@@ -1,4 +1,6 @@
-FROM base_cde:latest
+ARG PHP_BASE_IMAGE_NAME
+ARG PHP_BASE_IMAGE_TAG
+FROM ${PHP_BASE_IMAGE_NAME:-base_cde}:${PHP_BASE_IMAGE_TAG:-latest}
 
 USER root
 
