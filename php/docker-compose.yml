@@ -1,6 +1,8 @@
 version: '3.9'
 services:
   cde:
+    # TODO enable to pick a version
+    # image: ${COMPOSE_PROJECT_NAME}_cde:${PHP_VERSION}
     # build:
     #   args:
-    #     - PHP_SOMETHING
+    #     - PHP_VERSION

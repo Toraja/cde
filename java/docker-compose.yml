@@ -1,6 +1,7 @@
 version: '3.9'
 services:
   cde:
+    image: ${COMPOSE_PROJECT_NAME}_cde:${JDK_VERSION}
     build:
       args:
         - JDK_VERSION
