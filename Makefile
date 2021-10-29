@@ -1,5 +1,7 @@
 SHELL = /bin/bash
 
+-include localise/Makefile
+
 # Specify COMPOSE_PROJECT_NAME to avoid the collision of container name and volume name between CDEs
 base_cmd = COMPOSE_PROJECT_NAME=$(c) docker-compose --file docker-compose.yml --file ./$(c)/docker-compose.yml
 

@@ -40,3 +40,17 @@ Run `make enter c=<cde>` to start and get inside the container.
     `pruneFilter` is set in `config.json`.
 - Volume if:
   - Need to persist across container life cycle.
+
+## Localisation
+You can extend images by utilising `localise` directory.
+Inside the `localise` directory, you should at least have:
+```
+localise
+├── Makefile
+├── docker-compose.yml
+└── ctx
+    └── Dockerfile
+```
+
+Localised `Makefile` is included in the main `Makefile` automatically.
+You can also `git clone` repository if the directory structure mathces it.
