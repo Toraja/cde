@@ -34,6 +34,9 @@ fish:
 .PHONY: vim
 vim:
 	sudo -E apt-get update
+	sudo -E apt-get install --no-install-recommends --yes software-properties-common
+	sudo -E add-apt-repository ppa:neovim-ppa/stable
+	sudo -E apt-get update
 	sudo -E apt-get install --no-install-recommends --yes python3-pip neovim
 	mkdir -p ~/.vim/swap ~/.config/nvim
 	test -f ~/.config/nvim/init.vim || echo 'source ~/toybox/nvim/init.vim' > ~/.config/nvim/init.vim
