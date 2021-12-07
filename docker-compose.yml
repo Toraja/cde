@@ -49,5 +49,11 @@ services:
     network_mode: "host"
 volumes:
   cde_cache:
+    labels:
+      prune: false
   cde_local_share:
+    labels:
+      prune: false
   cde_tmux_resurrect:
+    labels:
+      prune: false

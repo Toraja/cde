@@ -14,3 +14,5 @@ services:
 volumes:
   gopath:
     name: gopath_${GO_VERSION}
+    labels:
+      prune: false
