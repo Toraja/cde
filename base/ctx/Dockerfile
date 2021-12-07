@@ -48,7 +48,7 @@ RUN useradd --create-home --uid ${UID} --groups docker --shell /usr/bin/fish ${U
     && echo "%"${USER}" ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/${USER}
 USER ${USER}
 
-WORKDIR /home/${USER}
+WORKDIR ${HOME}
 
 # --- toybox independent operation ---
 RUN \

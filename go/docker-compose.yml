@@ -1,7 +1,7 @@
 version: '3.9'
 services:
   cde:
-    image: ${COMPOSE_PROJECT_NAME}_cde:${GO_VERSION}
+    image: ${COMPOSE_PROJECT_NAME}_cde:${GO_VERSION:?}
     environment:
       - CGO_ENABLED=${CGO_ENABLED:-0}
     build:
@@ -10,7 +10,7 @@ services:
     volumes:
       - type: volume
         source: gopath
-        target: /home/${USER:-mojito}/go
+        target: ${HOME}/go
 volumes:
   gopath:
     name: gopath_${GO_VERSION}
