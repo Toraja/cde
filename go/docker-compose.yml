@@ -13,4 +13,4 @@ services:
         target: /home/${USER:-mojito}/go
 volumes:
   gopath:
-    external: true
+    name: gopath_${GO_VERSION}
