@@ -19,9 +19,9 @@ RUN apt-get update && apt-get upgrade --no-install-recommends --yes && apt-get i
     && add-apt-repository --yes ppa:neovim-ppa/stable
 # Install docker and other packages
 # ctags required by Tagbar vim plugin
-# file required by ranger
+# file required by ranger, unzip is required by deno
 RUN apt-get update && apt-get install --no-install-recommends --yes \
-    sudo less man-db locales tree openssh-client fish net-tools \
+    sudo less man-db locales tree openssh-client fish net-tools netcat unzip \
     docker-ce docker-ce-cli containerd.io python3-pip kubectl \
     git neovim tmux keychain fzf xclip make universal-ctags bat fd-find ripgrep file ranger \
     && rm -rf /var/lib/apt/lists/* \
