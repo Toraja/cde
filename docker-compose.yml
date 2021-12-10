@@ -7,7 +7,6 @@ services:
     build:
       context: ./${COMPOSE_PROJECT_NAME:?}/ctx
       args:
-        - HOME=${HOME:?}
         - USER=${USER:?}
         - CPU_ARCH
     extra_hosts:
@@ -15,13 +14,13 @@ services:
     volumes:
       - type: volume
         source: cde_cache
-        target: ${HOME}/.cache
+        target: /home/${USER}/.cache
       - type: volume
         source: cde_local_share
-        target: ${HOME}/.local/share
+        target: /home/${USER}/.local/share
       - type: volume
         source: cde_tmux_resurrect
-        target: ${HOME}/.tmux/resurrect
+        target: /home/${USER}/.tmux/resurrect
       # bind socket file so that the same docker can be used inside containers
       # (actually docker client command cannot connect to daemon without this,
       # even when daemon is started inside container)
@@ -37,15 +36,15 @@ services:
         target: /etc/localtime
       - type: bind
         source: ${HOST_HOME:?}
-        target: ${HOME}/hosthome
+        target: /home/${USER}/hosthome
       # Bind volume `workspace` direcory instead of symlinking so that relative
       # path of bind volume inside CDE container does not result in error
       - type: bind
         source: ${HOST_HOME:?}/workspace
-        target: ${HOME}/workspace
+        target: /home/${USER}/workspace
       - type: bind
         source: ~/.vim
-        target: ${HOME}/.vim
+        target: /home/${USER}/.vim
     network_mode: "host"
 volumes:
   cde_cache:

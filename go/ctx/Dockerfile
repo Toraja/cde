@@ -13,6 +13,6 @@ RUN curl -fsSL -o go.tar.gz https://golang.org/dl/go${GO_VERSION}.linux-${CPU_AR
 ARG USER
 USER ${USER}
 RUN mkdir -p ~/go
-VOLUME ${HOME}/go
+VOLUME /home/${USER}/go
 
 CMD ["tail", "-f", "/dev/null"]

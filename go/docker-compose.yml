@@ -10,7 +10,7 @@ services:
     volumes:
       - type: volume
         source: gopath
-        target: ${HOME}/go
+        target: /home/${USER}/go
 volumes:
   gopath:
     name: gopath_${GO_VERSION}
