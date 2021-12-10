@@ -10,8 +10,10 @@
       IdentityFile <path to key file>
   ```
 - Clone this repository and toybox  
-  `git clone git@github.com:Toraja/cde.git ~/cde`
-	`git clone git@github.com:Toraja/toybox.git ~/toybox`
+	- `mkdir -p ~/workspace/toraja`
+  - `git clone git@github.com:Toraja/cde.git ~/workspace/toraja/cde`
+	- `git clone git@github.com:Toraja/toybox.git ~/workspace/toraja/toybox`
+  - `ln -s ~/workspace/toraja/toybox ~/toybox`
 - Install `make` and run `make` in `host-setup` directory.
 - Run `cp .env.example .env` and set appropriate values.
 

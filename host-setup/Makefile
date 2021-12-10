@@ -92,5 +92,3 @@ docker-setup:
 
 .PHONY: misc
 misc:
-	@# use `-p` to avoid error in case any of these directory already exists
-	mkdir -p ~/workspace

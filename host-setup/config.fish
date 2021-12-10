@@ -1,4 +1,4 @@
 # ----------------------------
 # Added by host setup makefile
 # ----------------------------
-source ~/toybox/fish/config.fish
+source ~/workspace/toraja/toybox/fish/config.fish

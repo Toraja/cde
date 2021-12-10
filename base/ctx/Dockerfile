@@ -85,7 +85,7 @@ RUN mkdir ~/build \
     && mv ~/toybox ~/build/ \
     && ln -s ~/hosthome/.ssh ~/.ssh \
     && ln -s ~/hosthome/.docker ~/.docker \
-    && ln -s ~/hosthome/toybox ~/toybox \
+    && ln -s ~/workspace/toraja/toybox ~/toybox \
     # Prevent Deoplete error that asks you to run UpdateRemotePlugins \
     && ln -s ~/hosthome/.local/share/nvim ~/.local/share/nvim
 
