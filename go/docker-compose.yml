@@ -1,12 +1,15 @@
 version: '3.9'
 services:
   cde:
-    image: ${COMPOSE_PROJECT_NAME}_cde:${GO_VERSION:?}
+    image: go_cde:${GO_VERSION:?}
     environment:
       - CGO_ENABLED=${CGO_ENABLED:-0}
     build:
+      context: ./go/ctx
       args:
-        - GO_VERSION
+        - GO_VERSION=${GO_VERSION:?}
+      labels:
+        go.version: ${GO_VERSION:?}
     volumes:
       - type: volume
         source: gopath

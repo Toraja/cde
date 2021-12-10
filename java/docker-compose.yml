@@ -1,7 +1,10 @@
 version: '3.9'
 services:
   cde:
-    image: ${COMPOSE_PROJECT_NAME}_cde:${JDK_VERSION}
+    image: java_cde:${JDK_VERSION}
     build:
+      context: ./java/ctx
       args:
         - JDK_VERSION
+      labels:
+        jdk.version: ${JDK_VERSION:?}

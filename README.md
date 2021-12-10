@@ -21,11 +21,28 @@
 - Do the setup and configuration illustrated
   [here](https://github.com/Toraja/toybox/blob/master/windows/wsl/wsl.md)
 
+## Build Image
+Run `make build c=<cde>` where `<cde>` is one of the directory other than
+`host-setup`.  
+
+You can specify multiple `<cde>` and if you do so, all the `docker-compose.yml`
+are merged and the last specified image is built.  
+```sh
+# An image is built using dockerfile under `rust` directory in this case.
+make build c=base,localise,go,rust
+```
+This is useful to track what other images a image bases on, as all the `labels`
+are added to the built image.
+
+Start with building `base` cde image first as the common setup is done there.  
+You can build `localise` image on top of the `base` image if you need common
+setup that is machine/project etc. dependent.  
+See `Localisation` section below for more detail.
+
 ## Start Container
-Containers are separated by language.  
-Each language requires `base` image have been built. Run `make build c=base` to
-build the docker image.
-Run `make enter c=<cde>` to start and get inside the container.
+Run `make enter c=<cde>` to start and get inside the container.  
+Make sure that `<cde>` contains all the languages that the container bases on,
+so that volumes and environment variables are properly setup.
 
 ## Volume Policy
 - Bind mount if:
@@ -44,15 +61,16 @@ Run `make enter c=<cde>` to start and get inside the container.
   - Need to persist across container life cycle.
 
 ## Localisation
-You can extend images by utilising `localise` directory.
+You can extend images by utilising `localise` directory.  
 Inside the `localise` directory, you should at least have:
 ```
 localise
-├── Makefile
+├── Makefile (optional)
 ├── docker-compose.yml
 └── ctx
     └── Dockerfile
 ```
 
-Localised `Makefile` is included in the main `Makefile` automatically.
-You can also `git clone` repository if the directory structure mathces it.
+Localised `Makefile` is included in the main `Makefile` automatically.  
+You can also `git clone` repository or create symlink if the directory structure
+mathces it.

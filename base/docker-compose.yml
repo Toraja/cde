@@ -1,7 +1,9 @@
 version: '3.9'
 services:
   cde:
+    image: base_cde
     build:
+      context: ./base/ctx
       args:
         - BASE_IMAGE_TAG # set this if other than `rollout` (latest releas regardless of LTS) is required
         - DOCKER_GID=${DOCKER_GID:?}

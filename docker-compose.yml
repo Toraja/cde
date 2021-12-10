@@ -5,7 +5,6 @@ services:
       - GIT_HUB_SSH_KEY
       - CDE=${COMPOSE_PROJECT_NAME}
     build:
-      context: ./${COMPOSE_PROJECT_NAME:?}/ctx
       args:
         - USER=${USER:?}
         - CPU_ARCH
