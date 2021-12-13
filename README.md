@@ -39,6 +39,14 @@ You can build `localise` image on top of the `base` image if you need common
 setup that is machine/project etc. dependent.  
 See `Localisation` section below for more detail.
 
+### Name of images
+By default, built images' name will be the last element of `<cde>` + `_cde`. If
+you want to change the the `<cde>` part, pass `pj` argument to make command.
+```sh
+# The name of built image will be `zzz_cde` instead of `rust_cde`
+make build c=base,localise,go,rust pj=zzz
+```
+
 ## Start Container
 Run `make enter c=<cde>` to start and get inside the container.  
 Make sure that `<cde>` contains all the languages that the container bases on,

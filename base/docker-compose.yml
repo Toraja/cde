@@ -1,7 +1,7 @@
 version: '3.9'
 services:
   cde:
-    image: base_cde
+    image: ${COMPOSE_PROJECT_NAME}_cde:${BASE_VERSION:-latest}
     build:
       context: ./base/ctx
       args:

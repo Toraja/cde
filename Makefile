@@ -7,7 +7,7 @@ comma := ,
 space := $(empty) $(empty)
 target_cde_list := $(subst $(comma),$(space),$(c))
 compose_file_flags := $(foreach cde,$(target_cde_list),--file ./$(cde)/docker-compose.yml)
-compose_project_name := $(lastword $(target_cde_list))
+compose_project_name := $(or $(pj), $(lastword $(target_cde_list)))
 # Specify COMPOSE_PROJECT_NAME to avoid the collision of container name and volume name between CDEs
 base_cmd = COMPOSE_PROJECT_NAME=$(compose_project_name) docker-compose --file docker-compose.yml $(compose_file_flags)
 

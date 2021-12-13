@@ -1,7 +1,7 @@
 version: '3.9'
 services:
   cde:
-    image: rust_cde:${RUST_VERSION}
+    image: ${COMPOSE_PROJECT_NAME}_cde:${RUST_VERSION}
     environment:
       - RUST_VERSION
     build:
