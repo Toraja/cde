@@ -7,19 +7,13 @@ comma := ,
 space := $(empty) $(empty)
 target_cde_list := $(subst $(comma),$(space),$(c))
 compose_file_flags := $(foreach cde,$(target_cde_list),--file ./$(cde)/docker-compose.yml)
+compose_project_name := $(lastword $(target_cde_list))
 # Specify COMPOSE_PROJECT_NAME to avoid the collision of container name and volume name between CDEs
-base_cmd = COMPOSE_PROJECT_NAME=$(pj) docker-compose --file docker-compose.yml $(compose_file_flags)
+base_cmd = COMPOSE_PROJECT_NAME=$(compose_project_name) docker-compose --file docker-compose.yml $(compose_file_flags)
 
 define validate_arg_cde
 	@if [[ -z "$(c)" ]]; then \
 		echo 'Specify CDE as in `c=<cde>[,cde2...]`'; \
-		exit 1; \
-	fi
-endef
-
-define validate_arg_pj
-	@if [[ -z "$(pj)" ]]; then \
-		echo 'Specify COMPOSE_PROJECT_NAME as in `pj=<name>`'; \
 		exit 1; \
 	fi
 endef
@@ -37,7 +31,6 @@ docker_service:
 .PHONY: validate_arg
 validate_arg:
 	$(call validate_arg_cde)
-	$(call validate_arg_pj)
 
 .PHONY: custom
 custom: validate_arg
