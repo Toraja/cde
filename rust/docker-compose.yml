@@ -5,7 +5,6 @@ services:
     environment:
       - RUST_VERSION
     build:
-      context: ./rust/ctx
       args:
         - RUST_BASE_IMAGE_NAME
         - RUST_BASE_IMAGE_TAG

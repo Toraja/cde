@@ -4,7 +4,6 @@ services:
     # TODO enable to pick a version
     # image: ${COMPOSE_PROJECT_NAME}_cde:${PHP_VERSION}
     # build:
-    #   context: ./php/ctx
     #   args:
     #     - PHP_VERSION
     #     - PHP_BASE_IMAGE_NAME

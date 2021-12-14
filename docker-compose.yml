@@ -5,9 +5,13 @@ services:
       - GIT_HUB_SSH_KEY
       - CDE=${COMPOSE_PROJECT_NAME}
     build:
+      context: ./${PRIMARY_CDE}/ctx
       args:
         - USER=${USER:?}
         - CPU_ARCH
+      labels:
+        # This has to be array instead of map. (With map, variables in key are not expanded)
+        - cde.${PRIMARY_CDE:?}.created=${BUILD_DATE:?}
     extra_hosts:
       - "registry.local:127.0.0.1" # for k3d
     volumes:

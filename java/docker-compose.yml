@@ -3,7 +3,6 @@ services:
   cde:
     image: ${COMPOSE_PROJECT_NAME}_cde:${JDK_VERSION}
     build:
-      context: ./java/ctx
       args:
         - JAVA_BASE_IMAGE_NAME
         - JAVA_BASE_IMAGE_TAG
