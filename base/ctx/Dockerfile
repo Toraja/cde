@@ -34,7 +34,7 @@ RUN apt-get update && apt-get install --no-install-recommends --yes \
 # pynvim required by deoplote.nvim
 RUN pip install docker-compose httpie glances pynvim
 
-RUN curl -fsSL https://raw.githubusercontent.com/jesseduffield/lazydocker/master/scripts/install_update_linux.sh | bash \
+RUN curl -fsSL https://raw.githubusercontent.com/jesseduffield/lazydocker/master/scripts/install_update_linux.sh | DIR=/usr/local/bin bash \
     && curl -fsSL https://raw.githubusercontent.com/rancher/k3d/main/install.sh | bash \
     && curl -fsSL https://deno.land/x/install/install.sh | DENO_INSTALL=/usr/local/ sh
 
