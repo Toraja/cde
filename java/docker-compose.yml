@@ -5,6 +5,8 @@ services:
     build:
       context: ./java/ctx
       args:
+        - JAVA_BASE_IMAGE_NAME
+        - JAVA_BASE_IMAGE_TAG
         - JDK_VERSION
       labels:
         jdk.version: ${JDK_VERSION:?}

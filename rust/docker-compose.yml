@@ -7,6 +7,8 @@ services:
     build:
       context: ./rust/ctx
       args:
+        - RUST_BASE_IMAGE_NAME
+        - RUST_BASE_IMAGE_TAG
         - RUST_VERSION
         - RUSTUP_HOME=/home/${USER}/rust/rustup
         - CARGO_HOME=/home/${USER}/rust/cargo
