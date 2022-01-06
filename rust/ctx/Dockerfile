@@ -24,6 +24,7 @@ RUN curl --proto '=https' --tlsv1.2 https://sh.rustup.rs -sSf | bash -s -- -y --
 VOLUME /home/${USER}/rust
 
 RUN rustup completions fish > ~/.config/fish/completions/rustup.fish \
-    && rustup component add rls rust-src rust-analysis
+    && rustup component add rls rust-src rust-analysis \
+    && rustup +nightly component add rust-analyzer-preview
 
 CMD ["tail", "-f", "/dev/null"]
