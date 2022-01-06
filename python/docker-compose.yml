@@ -1,0 +1,20 @@
+version: '3.9'
+services:
+  cde:
+    image: ${COMPOSE_PROJECT_NAME}_cde
+    build:
+      args:
+        # - PYTHON_VERSION
+        - PYTHON_BASE_IMAGE_NAME
+        - PYTHON_BASE_IMAGE_TAG
+      labels:
+        python.version: latest
+    # volumes:
+    #   - type: volume
+    #     source: rustpath
+    #     target: /home/${USER}/rust
+# volumes:
+#   rustpath:
+#     name: rustpath_${RUST_VERSION}
+#     labels:
+#       prune: false
