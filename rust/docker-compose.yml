@@ -7,8 +7,6 @@ services:
       args:
         - RUSTUP_HOME=/home/${USER}/rust/rustup
         - CARGO_HOME=/home/${USER}/rust/cargo
-      labels:
-        rust.version: ${VERSION:?}
     volumes:
       - type: volume
         source: rustpath

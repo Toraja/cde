@@ -1,7 +1,3 @@
 version: '3.9'
 services:
   cde:
-    # TODO enable to pick a version
-    # build:
-    #   labels:
-    #     php.version: ${VERSION:?}

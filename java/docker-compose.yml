@@ -1,6 +1,3 @@
 version: '3.9'
 services:
   cde:
-    build:
-      labels:
-        jdk.version: ${VERSION:?}

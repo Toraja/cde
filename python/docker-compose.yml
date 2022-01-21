@@ -1,9 +1,6 @@
 version: '3.9'
 services:
   cde:
-    build:
-      labels:
-        python.version: latest
     # volumes:
     #   - type: volume
     #     source: rustpath

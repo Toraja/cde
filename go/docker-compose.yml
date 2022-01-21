@@ -3,9 +3,6 @@ services:
   cde:
     environment:
       - CGO_ENABLED=${CGO_ENABLED:-0}
-    build:
-      labels:
-        go.version: ${VERSION:?}
     volumes:
       - type: volume
         source: gopath
