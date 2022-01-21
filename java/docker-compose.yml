@@ -1,11 +1,6 @@
 version: '3.9'
 services:
   cde:
-    image: ${COMPOSE_PROJECT_NAME}_cde:${JDK_VERSION}
     build:
-      args:
-        - JAVA_BASE_IMAGE_NAME
-        - JAVA_BASE_IMAGE_TAG
-        - JDK_VERSION
       labels:
-        jdk.version: ${JDK_VERSION:?}
+        jdk.version: ${VERSION:?}

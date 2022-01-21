@@ -1,22 +1,17 @@
 version: '3.9'
 services:
   cde:
-    image: ${COMPOSE_PROJECT_NAME}_cde:${GO_VERSION}
     environment:
       - CGO_ENABLED=${CGO_ENABLED:-0}
     build:
-      args:
-        - GO_BASE_IMAGE_NAME
-        - GO_BASE_IMAGE_TAG
-        - GO_VERSION=${GO_VERSION:?}
       labels:
-        go.version: ${GO_VERSION:?}
+        go.version: ${VERSION:?}
     volumes:
       - type: volume
         source: gopath
         target: /home/${USER}/go
 volumes:
   gopath:
-    name: gopath_${GO_VERSION}
+    name: gopath_${VERSION}
     labels:
       prune: false

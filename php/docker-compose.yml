@@ -2,11 +2,6 @@ version: '3.9'
 services:
   cde:
     # TODO enable to pick a version
-    # image: ${COMPOSE_PROJECT_NAME}_cde:${PHP_VERSION}
     # build:
-    #   args:
-    #     - PHP_VERSION
-    #     - PHP_BASE_IMAGE_NAME
-    #     - PHP_BASE_IMAGE_TAG
     #   labels:
-    #     php.version: ${PHP_VERSION:?}
+    #     php.version: ${VERSION:?}

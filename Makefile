@@ -7,6 +7,7 @@ comma := ,
 space := $(empty) $(empty)
 target_cde_list := $(subst $(comma),$(space),$(c))
 compose_file_flags := $(foreach cde,$(target_cde_list),--file ./$(cde)/docker-compose.yml)
+envs := $(foreach cde,$(target_cde_list),./$(cde)/.env)
 primary_cde := $(lastword $(target_cde_list))
 compose_project_name := $(or $(pj), $(primary_cde))
 build_date := $(shell date --utc --iso-8601=seconds)
@@ -20,6 +21,9 @@ define validate_arg_cde
 		exit 1; \
 	fi
 endef
+
+include .env $(envs)
+export
 
 .DEFAULT_GOAL := dummy
 

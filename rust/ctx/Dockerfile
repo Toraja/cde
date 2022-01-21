@@ -1,6 +1,6 @@
-ARG RUST_BASE_IMAGE_NAME
-ARG RUST_BASE_IMAGE_TAG
-FROM ${RUST_BASE_IMAGE_NAME}:${RUST_BASE_IMAGE_TAG}
+ARG BASE_IMAGE_NAME
+ARG BASE_IMAGE_TAG
+FROM ${BASE_IMAGE_NAME}:${BASE_IMAGE_TAG}
 
 USER root
 
@@ -11,13 +11,13 @@ RUN apt-get update && apt-get upgrade --no-install-recommends --yes && apt-get i
 ARG USER
 USER ${USER}
 
-ARG RUST_VERSION
+ARG VERSION
 ARG RUSTUP_HOME
 ARG CARGO_HOME
 ENV RUSTUP_HOME=${RUSTUP_HOME} \
     CARGO_HOME=${CARGO_HOME} \
     PATH=${CARGO_HOME}/bin:$PATH
-RUN curl --proto '=https' --tlsv1.2 https://sh.rustup.rs -sSf | bash -s -- -y --no-modify-path --default-toolchain ${RUST_VERSION}; \
+RUN curl --proto '=https' --tlsv1.2 https://sh.rustup.rs -sSf | bash -s -- -y --no-modify-path --default-toolchain ${VERSION}; \
     rustup --version; \
     cargo --version; \
     rustc --version;

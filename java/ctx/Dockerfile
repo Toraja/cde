@@ -1,12 +1,12 @@
-ARG JAVA_BASE_IMAGE_NAME
-ARG JAVA_BASE_IMAGE_TAG
-FROM ${JAVA_BASE_IMAGE_NAME}:${JAVA_BASE_IMAGE_TAG}
+ARG BASE_IMAGE_NAME
+ARG BASE_IMAGE_TAG
+FROM ${BASE_IMAGE_NAME}:${BASE_IMAGE_TAG}
 
 USER root
 
-ARG JDK_VERSION
+ARG VERSION
 RUN apt-get update && apt-get install --no-install-recommends --yes \
-    openjdk-${JDK_VERSION}-jdk \
+    openjdk-${VERSION}-jdk \
     && rm -rf /var/lib/apt/lists/*
 
 ARG USER

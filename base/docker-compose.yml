@@ -1,9 +1,7 @@
 version: '3.9'
 services:
   cde:
-    image: ${COMPOSE_PROJECT_NAME}_cde:${BASE_VERSION:-latest}
     build:
       args:
-        - BASE_IMAGE_TAG # set this if other than `rollout` (latest releas regardless of LTS) is required
         - DOCKER_GID=${DOCKER_GID:?}
         - UID=${UID:-1000}

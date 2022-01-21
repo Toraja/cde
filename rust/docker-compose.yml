@@ -1,24 +1,20 @@
 version: '3.9'
 services:
   cde:
-    image: ${COMPOSE_PROJECT_NAME}_cde:${RUST_VERSION}
     environment:
-      - RUST_VERSION
+      - RUST_VERSION=${VERSION}
     build:
       args:
-        - RUST_BASE_IMAGE_NAME
-        - RUST_BASE_IMAGE_TAG
-        - RUST_VERSION
         - RUSTUP_HOME=/home/${USER}/rust/rustup
         - CARGO_HOME=/home/${USER}/rust/cargo
       labels:
-        rust.version: ${RUST_VERSION:?}
+        rust.version: ${VERSION:?}
     volumes:
       - type: volume
         source: rustpath
         target: /home/${USER}/rust
 volumes:
   rustpath:
-    name: rustpath_${RUST_VERSION}
+    name: rustpath_${VERSION}
     labels:
       prune: false

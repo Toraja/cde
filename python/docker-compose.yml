@@ -1,12 +1,7 @@
 version: '3.9'
 services:
   cde:
-    image: ${COMPOSE_PROJECT_NAME}_cde
     build:
-      args:
-        # - PYTHON_VERSION
-        - PYTHON_BASE_IMAGE_NAME
-        - PYTHON_BASE_IMAGE_TAG
       labels:
         python.version: latest
     # volumes:
