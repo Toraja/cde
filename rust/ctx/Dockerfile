@@ -16,7 +16,8 @@ ARG RUSTUP_HOME
 ARG CARGO_HOME
 ENV RUSTUP_HOME=${RUSTUP_HOME} \
     CARGO_HOME=${CARGO_HOME} \
-    PATH=${CARGO_HOME}/bin:$PATH
+    PATH=${CARGO_HOME}/bin:$PATH \
+    RUST_VERSION=${VERSION}
 RUN curl --proto '=https' --tlsv1.2 https://sh.rustup.rs -sSf | bash -s -- -y --no-modify-path --default-toolchain ${VERSION}; \
     rustup --version; \
     cargo --version; \
