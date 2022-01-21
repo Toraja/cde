@@ -7,6 +7,6 @@ services:
         target: /home/${USER}/rust
 volumes:
   rustpath:
-    name: rustpath_${VERSION}
+    name: rust_cde_rustpath_${VERSION}
     labels:
       prune: false

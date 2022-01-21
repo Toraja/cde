@@ -9,6 +9,6 @@ services:
         target: /home/${USER}/go
 volumes:
   gopath:
-    name: gopath_${VERSION}
+    name: go_cde_gopath
     labels:
       prune: false
