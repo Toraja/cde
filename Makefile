@@ -39,24 +39,27 @@ docker_service:
 validate_arg:
 	$(call validate_arg_cde)
 
+.PHONY: pre_process
+pre_process: validate_arg docker_service
+
 .PHONY: custom
-custom: validate_arg
+custom: pre_process
 	$(base_cmd) $(args)
 
 .PHONY: config
-config: validate_arg docker_service
+config: pre_process
 	$(base_cmd) config
 
 .PHONY: build
-build: validate_arg docker_service
+build: pre_process
 	$(base_cmd) build
 
 .PHONY: up
-up: validate_arg docker_service
+up: pre_process
 	$(base_cmd) up --no-recreate
 
 .PHONY: start
-start: validate_arg docker_service
+start: pre_process
 	$(base_cmd) up -d --no-recreate
 
 .PHONY: enter
@@ -64,13 +67,13 @@ enter: start
 	$(base_cmd) exec cde fish
 
 .PHONY: stop
-stop: validate_arg docker_service
+stop: pre_process
 	$(base_cmd) stop
 
 .PHONY: down
-down: validate_arg docker_service
+down: pre_process
 	$(base_cmd) down
 
 .PHONY: destroy
-destroy: validate_arg docker_service
+destroy: pre_process
 	$(base_cmd) down -v
