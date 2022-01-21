@@ -12,11 +12,9 @@ ARG USER
 USER ${USER}
 
 ARG VERSION
-ARG RUSTUP_HOME
-ARG CARGO_HOME
-ENV RUSTUP_HOME=${RUSTUP_HOME} \
-    CARGO_HOME=${CARGO_HOME} \
-    PATH=${CARGO_HOME}/bin:$PATH \
+ENV RUSTUP_HOME=/home/${USER}/rust/rustup \
+    CARGO_HOME=/home/${USER}/rust/cargo \
+    PATH=/home/${USER}/rust/cargo/bin:$PATH \
     RUST_VERSION=${VERSION}
 RUN curl --proto '=https' --tlsv1.2 https://sh.rustup.rs -sSf | bash -s -- -y --no-modify-path --default-toolchain ${VERSION}; \
     rustup --version; \
