@@ -10,9 +10,8 @@ compose_file_flags := $(foreach cde,$(target_cde_list),--file ./$(cde)/docker-co
 envs := $(foreach cde,$(target_cde_list),./$(cde)/.env)
 primary_cde := $(lastword $(target_cde_list))
 compose_project_name := $(or $(pj), $(primary_cde))
-build_date := $(shell date --utc --iso-8601=seconds)
 # Specify COMPOSE_PROJECT_NAME to avoid the collision of container name and volume name between CDEs
-base_cmd = COMPOSE_PROJECT_NAME=$(compose_project_name) BUILD_DATE=$(build_date) PRIMARY_CDE=$(primary_cde) \
+base_cmd = COMPOSE_PROJECT_NAME=$(compose_project_name) PRIMARY_CDE=$(primary_cde) \
 		   docker-compose --file docker-compose.yml $(compose_file_flags)
 
 define validate_arg_cde

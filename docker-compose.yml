@@ -15,7 +15,7 @@ services:
         - VERSION
       labels:
         # This has to be array instead of map. (With map, variables in key are not expanded)
-        - cde.${PRIMARY_CDE:?}.created=${BUILD_DATE:?}
+        - cde.${PRIMARY_CDE:?}=true
         - ${PRIMARY_CDE:?}.version=${VERSION:-latest}
     extra_hosts:
       - "registry.local:127.0.0.1" # for k3d
