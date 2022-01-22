@@ -2,7 +2,6 @@ version: '3.9'
 services:
   cde:
     image: cde/${COMPOSE_PROJECT_NAME}:${VERSION:-latest}
-    container_name: cde_${COMPOSE_PROJECT_NAME}_${VERSION:-latest}
     environment:
       - GIT_HUB_SSH_KEY
       - CDE=${COMPOSE_PROJECT_NAME}
