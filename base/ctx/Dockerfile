@@ -50,7 +50,8 @@ RUN curl -fsSLo /usr/share/keyrings/kubernetes-archive-keyring.gpg https://packa
     && ln -n $(which fdfind) $(dirname $(which fdfind))/fd \
     && pip install httpie glances \
     && curl -fsSL https://raw.githubusercontent.com/jesseduffield/lazydocker/master/scripts/install_update_linux.sh | DIR=/usr/local/bin bash \
-    && curl -fsSL https://raw.githubusercontent.com/rancher/k3d/main/install.sh | bash
+    && curl -fsSL https://raw.githubusercontent.com/rancher/k3d/main/install.sh | bash \
+    && curl -sS https://webinstall.dev/k9s | bash
 
 # vim plugin related
 RUN apt-get update && apt-get install --no-install-recommends --yes \
