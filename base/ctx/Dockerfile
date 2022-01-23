@@ -44,6 +44,8 @@ RUN curl -fsSLo /usr/share/keyrings/kubernetes-archive-keyring.gpg https://packa
     && apt-get update && apt-get install --no-install-recommends --yes \
         # file required by ranger \
         keychain fzf bat fd-find ripgrep file ranger kubectl \
+        # these required by asdf \
+        dirmngr gpg curl gawk \
     && rm -rf /var/lib/apt/lists/* \
     # Rename binaries, which are named differently from other distro, by creating symlink \
     && ln -n $(which batcat) $(dirname $(which batcat))/bat \
@@ -87,6 +89,15 @@ RUN \
     && git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm \
     # k3d \
     && k3d completion fish > ~/.config/fish/completions/k3d.fish
+
+ARG ASDF_VERSION
+RUN git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch ${ASDF_VERSION} \
+    && ln -s ~/.asdf/completions/asdf.fish ~/.config/fish/completions \
+    # create tool-versions file under .asdf so that it is included in volume as well \
+    && ln -s ~/.asdf/tool-versions ~/.tool-versions \
+    && bash -c '. ~/.asdf/asdf.sh \
+    && asdf plugin-add direnv && asdf install direnv latest && asdf global direnv latest'
+
 COPY --chown=${USER}:${USER} ./home ./
 
 # --- toybox dependent operations ---

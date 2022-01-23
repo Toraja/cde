@@ -4,6 +4,7 @@ FROM ${BASE_IMAGE_NAME}:${BASE_IMAGE_TAG}
 
 USER root
 
+# TODO use asdf instead of specifying version
 ARG VERSION
 RUN apt-get update && apt-get install --no-install-recommends --yes \
     openjdk-${VERSION}-jdk \

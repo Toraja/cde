@@ -5,3 +5,4 @@ services:
       args:
         - DOCKER_GID=${DOCKER_GID:?}
         - UID=${UID:-1000}
+        - ASDF_VERSION
