@@ -80,6 +80,8 @@ RUN \
     && rm fisher; \
     or mkdir -p ~/.config/fish/completions ~/.config/fish/conf.d' \
     && ln -s ~/toybox/fish/functions ~/.config/fish/myfuncs \
+    # git \
+    && ln -s ~/toybox/git/.gitignore_global ~/.gitignore_global \
     # tmux \
     && git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm \
     # k3d \
