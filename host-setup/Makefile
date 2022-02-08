@@ -88,5 +88,13 @@ docker-setup:
 	sudo -E usermod -aG docker $$(whoami)
 	mkdir -p ~/.docker && cat ~/toybox/docker/config.json > ~/.docker/config.json
 
+.PHONY: taskwarrior
+taskwarrior:
+	sudo -E apt-get update
+	sudo -E apt-get install --no-install-recommends --yes taskwarrior
+	curl -fsSL --output taskwarrior-tui.tar.gz https://github.com/kdheepak/taskwarrior-tui/releases/download/v0.19.1/taskwarrior-tui-x86_64-unknown-linux-gnu.tar.gz
+	mkdir -p ~/.local/bin && tar -xzf taskwarrior-tui.tar.gz --directory=~/.local/bin
+	mkdir -p ${TASKRC} && ln -s ~/toybox/taskwarrior/taskrc ${TASKRC}
+
 .PHONY: misc
 misc:
