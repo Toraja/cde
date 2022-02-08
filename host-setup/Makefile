@@ -87,8 +87,6 @@ docker-compose-install:
 docker-setup:
 	sudo -E usermod -aG docker $$(whoami)
 	mkdir -p ~/.docker && cat ~/toybox/docker/config.json > ~/.docker/config.json
-	sudo docker volume create --label=prune=false vim-plugin
-	sudo docker volume create --label=prune=false gopath
 
 .PHONY: misc
 misc:
