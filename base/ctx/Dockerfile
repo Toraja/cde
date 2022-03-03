@@ -43,7 +43,7 @@ RUN curl -fsSLo /usr/share/keyrings/kubernetes-archive-keyring.gpg https://packa
     && echo "deb [signed-by=/usr/share/keyrings/kubernetes-archive-keyring.gpg] https://apt.kubernetes.io/ kubernetes-xenial main" | tee /etc/apt/sources.list.d/kubernetes.list \
     && apt-get update && apt-get install --no-install-recommends --yes \
         # file required by ranger \
-        keychain fzf bat fd-find ripgrep file ranger kubectl \
+        keychain fzf bat jq fd-find ripgrep file ranger kubectl \
         # these required by asdf \
         dirmngr gpg curl gawk \
     && rm -rf /var/lib/apt/lists/* \
