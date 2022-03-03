@@ -11,19 +11,10 @@ RUN apt-get update && apt-get upgrade --no-install-recommends --yes && apt-get i
 ARG USER
 USER ${USER}
 
-ARG VERSION
-ENV RUSTUP_HOME=/home/${USER}/rust/rustup \
-    CARGO_HOME=/home/${USER}/rust/cargo \
-    PATH=/home/${USER}/rust/cargo/bin:$PATH \
-    RUST_VERSION=${VERSION}
-RUN curl --proto '=https' --tlsv1.2 https://sh.rustup.rs -sSf | bash -s -- -y --no-modify-path --default-toolchain ${VERSION}; \
-    rustup --version; \
-    cargo --version; \
-    rustc --version;
-VOLUME /home/${USER}/rust
-
-RUN rustup completions fish > ~/.config/fish/completions/rustup.fish \
+RUN bash -c '. ~/.asdf/asdf.sh \
+    && asdf plugin-add rust && asdf install rust stable && asdf global rust stable \
+    && rustup completions fish > ~/.config/fish/completions/rustup.fish \
     && rustup component add rls rust-src rust-analysis \
-    && rustup +nightly component add rust-analyzer-preview
+    && rustup +nightly component add rust-analyzer-preview'
 
 CMD ["tail", "-f", "/dev/null"]

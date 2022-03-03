@@ -1,12 +1,3 @@
 version: '3.9'
 services:
   cde:
-    volumes:
-      - type: volume
-        source: rustpath
-        target: /home/${USER}/rust
-volumes:
-  rustpath:
-    name: rust_cde_rustpath_${VERSION}
-    labels:
-      prune: false

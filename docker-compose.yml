@@ -1,7 +1,7 @@
 version: '3.9'
 services:
   cde:
-    image: cde/${COMPOSE_PROJECT_NAME}:${VERSION:-latest}
+    image: cde/${COMPOSE_PROJECT_NAME}
     environment:
       - GIT_HUB_SSH_KEY
       - CDE=${COMPOSE_PROJECT_NAME}
@@ -12,11 +12,9 @@ services:
         - CPU_ARCH
         - BASE_IMAGE_NAME
         - BASE_IMAGE_TAG
-        - VERSION
       labels:
         # This has to be array instead of map. (With map, variables in key are not expanded)
         - cde.${PRIMARY_CDE:?}=true
-        - ${PRIMARY_CDE:?}.version=${VERSION:-latest}
     extra_hosts:
       - "registry.local:127.0.0.1" # for k3d
     volumes:
@@ -29,6 +27,9 @@ services:
       - type: volume
         source: cde_tmux_resurrect
         target: /home/${USER}/.tmux/resurrect
+      - type: volume
+        source: cde_asdf
+        target: /home/${USER}/.asdf
       # bind socket file so that the same docker can be used inside containers
       # (actually docker client command cannot connect to daemon without this,
       # even when daemon is started inside container)
@@ -62,5 +63,8 @@ volumes:
     labels:
       prune: false
   cde_tmux_resurrect:
+    labels:
+      prune: false
+  cde_asdf:
     labels:
       prune: false
