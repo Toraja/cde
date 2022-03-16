@@ -96,7 +96,8 @@ RUN git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch ${ASDF_VERSIO
     # create tool-versions file under .asdf so that it is included in volume as well \
     && ln -s ~/.asdf/tool-versions ~/.tool-versions \
     && bash -c '. ~/.asdf/asdf.sh \
-    && asdf plugin-add direnv && asdf install direnv latest && asdf global direnv latest'
+    && asdf plugin-add direnv && asdf install direnv latest && asdf global direnv latest \
+    && asdf plugin-add grpcurl && asdf install grpcurl latest && asdf global grpcurl latest'
 
 COPY --chown=${USER}:${USER} ./home ./
 
