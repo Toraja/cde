@@ -76,12 +76,15 @@ RUN \
     && fish -c 'curl -fsSLO https://git.io/fisher; and source fisher && fisher install \
     jorgebucaran/fisher \
     decors/fish-colored-man \
+    decors/fish-ghq \
     laughedelic/fish_logo \
     markcial/upto \
     joehillen/to-fish \
     evanlucas/fish-kubectl-completions \
     && rm fisher; \
     or mkdir -p ~/.config/fish/completions ~/.config/fish/conf.d' \
+    # change keybind of fish-ghq \
+    && sed -i 's/\\cg/\\eo/g' ~/.config/fish/conf.d/ghq_key_bindings.fish \
     && ln -s ~/toybox/fish/functions ~/.config/fish/myfuncs \
     # git \
     && ln -s ~/toybox/git/.gitignore_global ~/.gitignore_global \
@@ -97,7 +100,8 @@ RUN git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch ${ASDF_VERSIO
     && ln -s ~/.asdf/tool-versions ~/.tool-versions \
     && bash -c '. ~/.asdf/asdf.sh \
     && asdf plugin-add direnv && asdf install direnv latest && asdf global direnv latest \
-    && asdf plugin-add grpcurl && asdf install grpcurl latest && asdf global grpcurl latest'
+    && asdf plugin-add grpcurl && asdf install grpcurl latest && asdf global grpcurl latest \
+    && asdf plugin-add ghq && asdf install ghq latest && asdf global ghq latest'
 
 COPY --chown=${USER}:${USER} ./home ./
 
@@ -116,6 +120,6 @@ RUN mkdir ~/build \
     && mv ~/toybox ~/build/ \
     && ln -s ~/hosthome/.ssh ~/.ssh \
     && ln -s ~/hosthome/.docker ~/.docker \
-    && ln -s ~/workspace/toraja/toybox ~/toybox
+    && ln -s ~/workspace/github.com/Toraja/toybox ~/toybox
 
 CMD ["tail", "-f", "/dev/null"]
