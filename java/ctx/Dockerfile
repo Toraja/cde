@@ -19,5 +19,3 @@ USER ${USER}
 RUN git clone https://github.com/eclipse/eclipse.jdt.ls.git \
     && cd eclipse.jdt.ls \
     && ./mvnw clean verify -DskipTests
-
-CMD ["tail", "-f", "/dev/null"]

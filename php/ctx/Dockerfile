@@ -27,5 +27,3 @@ RUN composer global require --dev \
     nikic/php-parser
 # phpactor is installed via vim's plugin manager since phpactor is likely to cause
 # conflicts with other packages.
-
-CMD ["tail", "-f", "/dev/null"]

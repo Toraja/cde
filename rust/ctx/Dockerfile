@@ -16,5 +16,3 @@ RUN bash -c '. ~/.asdf/asdf.sh \
     && rustup completions fish > ~/.config/fish/completions/rustup.fish \
     && rustup component add rls rust-src rust-analysis \
     && rustup +nightly component add rust-analyzer-preview'
-
-CMD ["tail", "-f", "/dev/null"]

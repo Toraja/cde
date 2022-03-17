@@ -9,5 +9,3 @@ RUN pip install 'python-language-server[all]' pipenv
 
 ARG USER
 USER ${USER}
-
-CMD ["tail", "-f", "/dev/null"]

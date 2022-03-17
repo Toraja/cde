@@ -9,5 +9,3 @@ RUN mkdir -p ~/go \
     && asdf plugin-add golang && asdf install golang latest && asdf global golang latest' \
     && go install github.com/kyoh86/richgo@latest
 VOLUME /home/${USER}/go
-
-CMD ["tail", "-f", "/dev/null"]
