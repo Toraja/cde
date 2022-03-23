@@ -87,7 +87,7 @@ RUN \
     && sed -i 's/\\cg/\\eo/g' ~/.config/fish/conf.d/ghq_key_bindings.fish \
     && ln -s ~/toybox/fish/functions ~/.config/fish/myfuncs \
     # git \
-    && ln -s ~/toybox/git/.gitignore_global ~/.gitignore_global \
+    && ln -s ~/toybox/git/gitignore_global ~/.gitignore_global \
     # tmux \
     && git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm \
     # k3d \

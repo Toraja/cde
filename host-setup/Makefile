@@ -51,7 +51,7 @@ tmux:
 	sudo -E apt-get update
 	sudo -E apt-get install --no-install-recommends --yes tmux
 	git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
-	echo 'source ~/toybox/tmux/.tmux.conf' > ~/.tmux.conf
+	echo 'source ~/toybox/tmux/tmux.conf' > ~/.tmux.conf
 	~/.tmux/plugins/tpm/bin/install_plugins
 
 .PHONY: docker

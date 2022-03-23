@@ -46,7 +46,7 @@ RUN ln -s ~/toybox/fish/functions ~/.config/fish/myfuncs
 
 # tmux
 RUN git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm \
-    && ln -s ~/toybox/tmux/.tmux.conf ~/.tmux.conf \
+    && ln -s ~/toybox/tmux/tmux.conf ~/.tmux.conf \
     && ~/.tmux/plugins/tpm/bin/install_plugins
 
 # vim
