@@ -43,17 +43,13 @@ RUN curl -fsSLo /usr/share/keyrings/kubernetes-archive-keyring.gpg https://packa
     && echo "deb [signed-by=/usr/share/keyrings/kubernetes-archive-keyring.gpg] https://apt.kubernetes.io/ kubernetes-xenial main" | tee /etc/apt/sources.list.d/kubernetes.list \
     && apt-get update && apt-get install --no-install-recommends --yes \
         # file required by ranger \
-        keychain fzf bat jq fd-find ripgrep file ranger kubectl \
+        keychain jq ripgrep file ranger kubectl \
         # these required by asdf \
         dirmngr gpg curl gawk \
     && rm -rf /var/lib/apt/lists/* \
     # Rename binaries, which are named differently from other distro, by creating symlink \
-    && ln -n $(which batcat) $(dirname $(which batcat))/bat \
-    && ln -n $(which fdfind) $(dirname $(which fdfind))/fd \
     && pip install httpie glances \
-    && curl -fsSL https://raw.githubusercontent.com/jesseduffield/lazydocker/master/scripts/install_update_linux.sh | DIR=/usr/local/bin bash \
-    && curl -fsSL https://raw.githubusercontent.com/rancher/k3d/main/install.sh | bash \
-    && curl -sS https://webinstall.dev/k9s | bash
+    && curl -fsSL https://raw.githubusercontent.com/jesseduffield/lazydocker/master/scripts/install_update_linux.sh | DIR=/usr/local/bin bash
 
 # vim plugin related
 RUN apt-get update && apt-get install --no-install-recommends --yes \
@@ -89,9 +85,7 @@ RUN \
     # git \
     && ln -s ~/toybox/git/gitignore_global ~/.gitignore_global \
     # tmux \
-    && git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm \
-    # k3d \
-    && k3d completion fish > ~/.config/fish/completions/k3d.fish
+    && git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 
 ARG ASDF_VERSION
 RUN git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch ${ASDF_VERSION} \
@@ -101,7 +95,16 @@ RUN git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch ${ASDF_VERSIO
     && bash -c '. ~/.asdf/asdf.sh \
     && asdf plugin-add direnv && asdf install direnv latest && asdf global direnv latest \
     && asdf plugin-add grpcurl && asdf install grpcurl latest && asdf global grpcurl latest \
-    && asdf plugin-add ghq && asdf install ghq latest && asdf global ghq latest'
+    && asdf plugin-add ghq && asdf install ghq latest && asdf global ghq latest \
+    && asdf plugin-add bat && asdf install bat latest && asdf global bat latest \
+    && asdf plugin-add fd && asdf install fd latest && asdf global fd latest \
+    && asdf plugin-add k3d && asdf install k3d latest && asdf global k3d latest \
+    && asdf plugin-add k9s && asdf install k9s latest && asdf global k9s latest \
+    && asdf plugin-add fzf && asdf install fzf latest && asdf global fzf latest \
+    && k3d completion fish > ~/.config/fish/completions/k3d.fish \
+    && k9s completion fish > ~/.config/fish/completions/k9s.fish \
+    && eval $(asdf where fzf)/install --all'
+    # tmux is installed via apt because it requireds C compiler and asdf does not resolve the dependency
 
 COPY --chown=${USER}:${USER} ./home ./
 
