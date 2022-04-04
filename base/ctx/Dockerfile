@@ -28,7 +28,7 @@ RUN apt-get update && apt-get install --no-install-recommends --yes \
     && add-apt-repository --yes ppa:neovim-ppa/stable \
     && apt-get update && apt-get install --no-install-recommends --yes \
         sudo less man-db locales tree openssh-client \
-        git make xclip net-tools netcat fish tmux neovim \
+        git git-lfs make xclip net-tools netcat fish tmux neovim \
     && rm -rf /var/lib/apt/lists/* \
     # Without this, `man` complains that $LC_* is not set \
     && locale-gen en_US.UTF-8
