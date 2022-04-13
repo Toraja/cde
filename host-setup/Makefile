@@ -18,6 +18,16 @@ help:
 bashrc:
 	grep -q '# Added by host setup makefile' ~/.bashrc || cat ./bashrc >> ~/.bashrc
 
+.PHONY: git
+git:
+	sudo -E apt-get update
+	sudo -E apt-get install --no-install-recommends --yes git unzip
+	curl --output ghq.zip -fsSL https://github.com/x-motemen/ghq/releases/download/v1.2.1/ghq_linux_amd64.zip
+	unzip ghq.zip && mkdir -p ~/.local/bin && mv ghq_linux_amd64/ghq ~/.local/bin && rm -rdf ghq.zip ghq_linux_amd64
+	ghq get https://github.com/Toraja/toybox.git
+	cat ./gitconfig > ~/.gitconfig
+	echo "Now, move ghq root directory to the location specified in $$(ghq list --full-path --exact Toraja/toybox)/git/gitconfig, and create symlink to toybox"
+
 .PHONY: fish
 fish:
 	sudo -E apt-get update
@@ -27,7 +37,7 @@ fish:
 	sudo -E apt-get install --no-install-recommends --yes fish
 	sudo usermod --shell $$(which fish) $$USER || echo "failed to change shell to fish :("
 	@# fish -i -c 'exit' <- this does not work
-	grep -q '# Added by host setup makefile' ~/.config/fish/config.fish || cat ./config.fish >> ~/.config/fish/config.fish
+	grep -q '# Added by host setup makefile' ~/.config/fish/config.fish &> /dev/null || mkdir -p ~/.config/fish/ && cat ./config.fish >> ~/.config/fish/config.fish
 	mkdir -p ~/.config/fish/conf.d/ && ln -s ~/toybox/fish/conf.d/* ~/.config/fish/conf.d/
 	ln -s ~/toybox/fish/functions ~/.config/fish/myfuncs
 
@@ -35,14 +45,14 @@ fish:
 vim:
 	sudo -E apt-get update
 	sudo -E apt-get install --no-install-recommends --yes software-properties-common
-	sudo -E add-apt-repository ppa:neovim-ppa/stable
+	sudo -E add-apt-repository --yes ppa:neovim-ppa/stable
 	sudo -E apt-get update
-	sudo -E apt-get install --no-install-recommends --yes python3-pip neovim
+	sudo -E apt-get install --no-install-recommends --yes neovim
 	mkdir -p ~/.vim/swap ~/.config/nvim
 	test -f ~/.config/nvim/init.vim || echo 'source ~/toybox/nvim/init.vim' > ~/.config/nvim/init.vim
 	test -f ~/.config/nvim/ginit.vim || echo 'source ~/toybox/nvim/ginit.vim' > ~/.config/nvim/ginit.vim
 	@# If DIPLAY is set, pip get stuck due to python keyring thingy
-	DISPLAY= sudo -E pip install pynvim
+	# DISPLAY= sudo -E pip install pynvim
 	git clone https://github.com/junegunn/vim-plug.git ~/.vim/bundle/vim-plug
 	nvim --headless -c PlugInstall -c qall
 
@@ -91,10 +101,14 @@ docker-setup:
 .PHONY: taskwarrior
 taskwarrior:
 	sudo -E apt-get update
-	sudo -E apt-get install --no-install-recommends --yes taskwarrior
+	sudo -E apt-get install --no-install-recommends --yes cmake gcc g++ uuid-dev
+	git clone --recursive -b stable https://github.com/GothenburgBitFactory/taskwarrior.git
+	cd taskwarrior && cmake -DCMAKE_BUILD_TYPE=release -DENABLE_SYNC=OFF . && make && sudo make install
+	cd .. && rm -rf taskwarrior.tar.gz taskwarrior
 	curl -fsSL --output taskwarrior-tui.tar.gz https://github.com/kdheepak/taskwarrior-tui/releases/download/v0.19.1/taskwarrior-tui-x86_64-unknown-linux-gnu.tar.gz
-	mkdir -p ~/.local/bin && tar -xzf taskwarrior-tui.tar.gz --directory=~/.local/bin
-	mkdir -p ${TASKRC} && ln -s ~/toybox/taskwarrior/taskrc ${TASKRC}
+	mkdir -p ~/.local/bin && && tar -xzf taskwarrior-tui.tar.gz --directory=$$HOME/.local/bin && rm taskwarrior-tui.tar.gz
+	test -n "${TASKRC}" && mkdir -p $$(dirname ${TASKRC}) && ln -s ~/toybox/taskwarrior/taskrc ${TASKRC} || echo "Create symlink to taskrc manually"
 
 .PHONY: misc
 misc:
+	sudo -E apt-get install --no-install-recommends --yes xclip
