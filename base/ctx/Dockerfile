@@ -27,7 +27,7 @@ RUN apt-get update && apt-get install --no-install-recommends --yes \
     && apt-add-repository ppa:fish-shell/release-3 \
     && add-apt-repository --yes ppa:neovim-ppa/stable \
     && apt-get update && apt-get install --no-install-recommends --yes \
-        sudo less man-db locales tree openssh-client \
+        sudo less man-db locales tree openssh-client unzip \
         git git-lfs make xclip net-tools netcat fish tmux neovim \
     && rm -rf /var/lib/apt/lists/* \
     # Without this, `man` complains that $LC_* is not set \
@@ -53,13 +53,11 @@ RUN curl -fsSLo /usr/share/keyrings/kubernetes-archive-keyring.gpg https://packa
 
 # vim plugin related
 RUN apt-get update && apt-get install --no-install-recommends --yes \
-        # vim: universal-ctags is required by TagBar, unzip is required by deno \
-        universal-ctags unzip \
+        # vim: universal-ctags is required by TagBar \
+        universal-ctags \
     && rm -rf /var/lib/apt/lists/* \
-    # pynvim is required by deoplote.nvim \
-    && pip install pynvim \
-    # deno is required by deoppet \
-    && curl -fsSL https://deno.land/x/install/install.sh | DENO_INSTALL=/usr/local/ sh
+    # pynvim is required by python plugins \
+    && pip install pynvim
 
 USER ${USER}
 WORKDIR /home/${USER}
