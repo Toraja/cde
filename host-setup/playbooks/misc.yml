@@ -21,3 +21,17 @@
       cmd: bash -s -- --to {{ just_install_dest }}
       stdin: '{{ just_installer.content }}'
     when: just_installer is not skipped
+
+- name: apt-get
+  hosts: localhost
+  connection: local
+  become: true
+  tasks:
+    - name: install packages
+      apt:
+        name: xclip
+        state: present
+        install_recommends: no
+        update_cache: true
+        cache_valid_time: 3600
+        force_apt_get: true
