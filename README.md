@@ -3,14 +3,9 @@
 ## Things to do on Host machine
 - Generate ssh key and put on Github
   ```
-  ssh-keygen -t rsa -b 4096 -C '<description>' -f "$HOME/.ssh/<key_file_name>"
+  ssh-keygen -t ed25519 -C 'Toraja@users.noreply.github.com' -f "$HOME/.ssh/<key_file_name>"
   ```
-- Create ssh config
-  ```sshconfig
-  Host github.com
-      User <github user>
-      IdentityFile <path to key file>
-  ```
+- Copy `.ssh` directory under `host-setup`
 - Clone this repository
   ```
   git clone git@github.com:Toraja/cde.git
