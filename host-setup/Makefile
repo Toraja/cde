@@ -65,7 +65,7 @@ tmux:
 	~/.tmux/plugins/tpm/bin/install_plugins
 
 .PHONY: docker
-docker: docker-clean docker-add-repository docker-install-engine docker-compose-install docker-setup
+docker: docker-clean docker-add-repository docker-install-engine docker-setup
 
 .PHONY: docker-clean
 docker-clean:
@@ -86,12 +86,11 @@ docker-add-repository:
 docker-install-engine: # prerequisites commented out for reusability -- docker-clean docker-add-repository
 	sudo -E apt-get update
 	sudo -E apt-get install --no-install-recommends --yes docker-ce docker-ce-cli containerd.io
-
-.PHONY: docker-compose-install
-docker-compose-install:
-	sudo -E apt-get update
-	sudo -E apt-get install --no-install-recommends --yes python3-pip
-	sudo -E pip install docker-compose
+	# use github_latest_installer
+	curl -fsSL --create-dirs -o ~/.docker/cli-plugins/docker-compose \
+		$$(curl -s https://api.github.com/repos/docker/compose/releases/latest \
+			| jq -r '.assets[] | select( .name == '\"docker-compose-linux-x86_64\"' ) | .browser_download_url')
+	chmod +x ~/.docker/cli-plugins/docker-compose
 
 .PHONY: docker-setup
 docker-setup:

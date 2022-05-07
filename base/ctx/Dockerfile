@@ -23,8 +23,8 @@ RUN apt-get update && apt-get upgrade --no-install-recommends --yes && apt-get i
 # Must-have basic packages
 RUN apt-get update && apt-get install --no-install-recommends --yes \
         software-properties-common \
-    && apt-add-repository ppa:fish-shell/release-3 \
-    && add-apt-repository --yes ppa:neovim-ppa/stable \
+    # && apt-add-repository ppa:fish-shell/release-3 \
+    # && add-apt-repository --yes ppa:neovim-ppa/stable \
     && apt-get update && apt-get install --no-install-recommends --yes \
         sudo less man-db locales tree openssh-client unzip \
         git git-lfs make xclip net-tools netcat fish tmux neovim \
@@ -47,7 +47,7 @@ RUN curl -fsSLo /usr/share/keyrings/kubernetes-archive-keyring.gpg https://packa
         dirmngr gpg curl gawk \
     && rm -rf /var/lib/apt/lists/* \
     # Rename binaries, which are named differently from other distro, by creating symlink \
-    && pip install httpie glances \
+    && pip install httpie glances ansible \
     && curl -fsSL https://raw.githubusercontent.com/jesseduffield/lazydocker/master/scripts/install_update_linux.sh | DIR=/usr/local/bin bash
 
 # vim plugin related

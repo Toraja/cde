@@ -1,0 +1,16 @@
+---
+- name: apt
+  hosts: localhost
+  connection: local
+  become: true
+  tasks:
+    - name: install packages
+      apt:
+        name:
+          - jq
+          - unzip
+        state: present
+        install_recommends: no
+        update_cache: true
+        cache_valid_time: 3600
+        force_apt_get: true
