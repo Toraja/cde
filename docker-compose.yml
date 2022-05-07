@@ -5,7 +5,7 @@ services:
     environment:
       - GIT_HUB_SSH_KEY
     build:
-      context: ./${PRIMARY_CDE}/ctx
+      context: ./${PRIMARY_CDE:?}/ctx
       args:
         - USER=${USER:?}
         - CPU_ARCH
@@ -20,13 +20,13 @@ services:
     volumes:
       - type: volume
         source: cde_cache
-        target: /home/${USER}/.cache
+        target: /home/${USER:?}/.cache
       - type: volume
         source: cde_local_share
-        target: /home/${USER}/.local/share
+        target: /home/${USER:?}/.local/share
       - type: volume
         source: cde_asdf
-        target: /home/${USER}/.asdf
+        target: /home/${USER:?}/.asdf
       # bind socket file so that the same docker can be used inside containers
       # (actually docker client command cannot connect to daemon without this,
       # even when daemon is started inside container)
@@ -42,15 +42,15 @@ services:
         target: /etc/localtime
       - type: bind
         source: ${HOST_HOME:?}
-        target: /home/${USER}/hosthome
+        target: /home/${USER:?}/hosthome
       # Bind volume `workspace` direcory instead of symlinking so that relative
       # path of bind volume inside CDE container does not result in error
       - type: bind
         source: ${HOST_HOME:?}/workspace
-        target: /home/${USER}/workspace
+        target: /home/${USER:?}/workspace
       - type: bind
         source: ~/.vim
-        target: /home/${USER}/.vim
+        target: /home/${USER:?}/.vim
     network_mode: "host"
 volumes:
   cde_cache:

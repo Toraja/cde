@@ -6,7 +6,7 @@ services:
     volumes:
       - type: volume
         source: gopath
-        target: /home/${USER}/go
+        target: /home/${USER:?}/go
 volumes:
   gopath:
     name: go_cde_gopath
