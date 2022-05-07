@@ -1,12 +1,12 @@
 # Simply assigning default value in ARG instruction does not work, maybe because an environment variable
-# with the same name is defined in docker-compose file...  So use variable substitution instead.
+# with the same name is defined in compose file...  So use variable substitution instead.
 ARG BASE_IMAGE_TAG
 FROM ubuntu:${BASE_IMAGE_TAG:-rolling}
 
 # `unminimize` is required to use `man`
 RUN yes | unminimize
 # Official Debian and Ubuntu images automatically run apt-get clean, so explicit invocation is not required.
-# Set up to install docker & docker-compose
+# Set up to install docker
 ARG CPU_ARCH
 ARG DOCKER_GID
 RUN apt-get update && apt-get upgrade --no-install-recommends --yes && apt-get install --no-install-recommends --yes \
@@ -17,7 +17,6 @@ RUN apt-get update && apt-get upgrade --no-install-recommends --yes && apt-get i
         docker-ce docker-ce-cli containerd.io \
         python3-pip \
     && rm -rf /var/lib/apt/lists/* \
-    && pip install docker-compose \
     # Specify GID for docker as it differs depending on the environment (Docker Desktop etc.) \
     && groupmod --gid ${DOCKER_GID} docker
 
@@ -62,6 +61,8 @@ RUN apt-get update && apt-get install --no-install-recommends --yes \
 USER ${USER}
 WORKDIR /home/${USER}
 
+COPY --chown=${USER}:${USER} ./home ./
+
 # --- toybox independent operation ---
 RUN \
     # Create directory for volume so that owner will be the ${USER} \
@@ -83,7 +84,9 @@ RUN \
     # git \
     && ln -s ~/toybox/git/gitignore_global ~/.gitignore_global \
     # tmux \
-    && git clone https://github.com/tmux-plugins/tpm ~/.config/tmux/plugins/tpm
+    && git clone https://github.com/tmux-plugins/tpm ~/.config/tmux/plugins/tpm \
+    # docker compose \
+    && ~/.local/bin/github_latest_release_installer.sh -x docker compose docker-compose-linux-x86_64 ~/.docker/cli-plugins/docker-compose
 
 ARG ASDF_VERSION
 RUN git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch ${ASDF_VERSION} \
@@ -103,8 +106,6 @@ RUN git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch ${ASDF_VERSIO
     && k9s completion fish > ~/.config/fish/completions/k9s.fish \
     && eval $(asdf where fzf)/install --all'
     # tmux is installed via apt because it requireds C compiler and asdf does not resolve the dependency
-
-COPY --chown=${USER}:${USER} ./home ./
 
 # --- toybox dependent operations ---
 # (Things that would fail without toybox)
