@@ -25,9 +25,6 @@ services:
         source: cde_local_share
         target: /home/${USER}/.local/share
       - type: volume
-        source: cde_tmux_resurrect
-        target: /home/${USER}/.tmux/resurrect
-      - type: volume
         source: cde_asdf
         target: /home/${USER}/.asdf
       # bind socket file so that the same docker can be used inside containers
@@ -60,9 +57,6 @@ volumes:
     labels:
       prune: false
   cde_local_share:
-    labels:
-      prune: false
-  cde_tmux_resurrect:
     labels:
       prune: false
   cde_asdf:

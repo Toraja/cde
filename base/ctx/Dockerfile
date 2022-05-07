@@ -65,7 +65,7 @@ WORKDIR /home/${USER}
 # --- toybox independent operation ---
 RUN \
     # Create directory for volume so that owner will be the ${USER} \
-    mkdir -p ~/.cache ~/.local/share ~/.tmux/resurrect \
+    mkdir -p ~/.cache ~/.local/share \
     # fish (curl complains SSL error under certain environment (VPN etc). Skip installing fisher in such case.) \
     && fish -c 'curl -fsSLO https://git.io/fisher; and source fisher && fisher install \
     jorgebucaran/fisher \
@@ -83,7 +83,7 @@ RUN \
     # git \
     && ln -s ~/toybox/git/gitignore_global ~/.gitignore_global \
     # tmux \
-    && git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+    && git clone https://github.com/tmux-plugins/tpm ~/.config/tmux/plugins/tpm
 
 ARG ASDF_VERSION
 RUN git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch ${ASDF_VERSION} \
@@ -112,7 +112,7 @@ RUN git clone https://github.com/Toraja/toybox.git \
     # fish \
     && ln -s ~/toybox/fish/conf.d/* ~/.config/fish/conf.d/ \
     # tmux \
-    && ~/.tmux/plugins/tpm/bin/install_plugins
+    && ~/.config/tmux/plugins/tpm/bin/install_plugins
 
 # Setup symlink to host home directory to reduce bind mount
 # This also enables replacing those links with actual files when symlink is inappriate
