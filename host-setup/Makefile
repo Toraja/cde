@@ -21,12 +21,14 @@ bashrc:
 .PHONY: git
 git:
 	sudo -E apt-get update
-	sudo -E apt-get install --no-install-recommends --yes git unzip
+	sudo -E apt-get install --no-install-recommends --yes git
+	# use github_latest_installer
 	curl --output ghq.zip -fsSL https://github.com/x-motemen/ghq/releases/download/v1.2.1/ghq_linux_amd64.zip
 	unzip ghq.zip && mkdir -p ~/.local/bin && mv ghq_linux_amd64/ghq ~/.local/bin && rm -rdf ghq.zip ghq_linux_amd64
-	ghq get https://github.com/Toraja/toybox.git
+	git clone https://github.com/Toraja/toybox.git ~/toybox
 	cat ./gitconfig > ~/.gitconfig
-	echo "Now, move ghq root directory to the location specified in $$(ghq list --full-path --exact Toraja/toybox)/git/gitconfig, and create symlink to toybox"
+	mv ~/toybox $$(ghq list --full-path --exact Toraja/toybox)
+	ln -s $$(ghq list --full-path --exact Toraja/toybox) ~/toybox
 
 .PHONY: fish
 fish:
