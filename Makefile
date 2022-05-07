@@ -9,9 +9,11 @@ target_cde_list := $(subst $(comma),$(space),$(c))
 compose_file_flags := $(foreach cde,$(target_cde_list),--file ./$(cde)/docker-compose.yml)
 envs := $(foreach cde,$(target_cde_list),./$(cde)/.env)
 primary_cde := $(lastword $(target_cde_list))
-compose_project_name := $(or $(pj), $(primary_cde))
+compose_project_name := $(or $(pj), $(subst /,_,$(primary_cde)))
+image_name := $(or $(pj), $(primary_cde))
+host_name := cde.$(subst /,.,$(primary_cde))
 # Specify COMPOSE_PROJECT_NAME to avoid the collision of container name and volume name between CDEs
-base_cmd = COMPOSE_PROJECT_NAME=$(compose_project_name) PRIMARY_CDE=$(primary_cde) \
+base_cmd = COMPOSE_PROJECT_NAME=$(compose_project_name) PRIMARY_CDE=$(primary_cde) CDE_IMAGE_NAME=$(image_name) CDE_HOSTNAME=$(host_name) \
 		   docker-compose --file docker-compose.yml $(compose_file_flags)
 
 define validate_arg_cde

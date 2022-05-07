@@ -1,10 +1,9 @@
 version: '3.9'
 services:
   cde:
-    image: cde/${COMPOSE_PROJECT_NAME}
+    image: cde/${CDE_IMAGE_NAME:?}
     environment:
       - GIT_HUB_SSH_KEY
-      - CDE=${COMPOSE_PROJECT_NAME}
     build:
       context: ./${PRIMARY_CDE}/ctx
       args:
@@ -15,6 +14,7 @@ services:
       labels:
         # This has to be array instead of map. (With map, variables in key are not expanded)
         - cde.${PRIMARY_CDE:?}=true
+    hostname: ${CDE_HOSTNAME:?}
     extra_hosts:
       - "registry.local:127.0.0.1" # for k3d
     volumes:
