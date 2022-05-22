@@ -11,9 +11,9 @@ RUN apt-get update && apt-get upgrade --no-install-recommends --yes && apt-get i
 ARG USER
 USER ${USER}
 
-# Install `stable` version of rust instead of `latest` so that it is easier to run `rustup run stable ...`
 RUN bash -c '. ~/.asdf/asdf.sh \
-    && asdf plugin-add rust && asdf install rust stable && asdf global rust stable \
+    && ~/.local/bin/asdf-global-installer.sh \
+        rust rust-analyzer \
     && rustup completions fish > ~/.config/fish/completions/rustup.fish \
-    && rustup component add rls rust-src rust-analysis \
-    && rustup +nightly component add rust-analyzer-preview'
+    && rustup component add rls rust-src rust-analysis'
+    # && rustup +nightly component add rust-analyzer-preview'

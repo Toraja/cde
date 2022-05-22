@@ -90,21 +90,27 @@ RUN \
 
 ARG ASDF_VERSION
 RUN git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch ${ASDF_VERSION} \
-    && ln -s ~/.asdf/completions/asdf.fish ~/.config/fish/completions \
+    && ln -s ~/.asdf/completions/asdf.fish ~/.config/fish/completions/ \
     # create tool-versions file under .asdf so that it is included in volume as well \
     && ln -s ~/.asdf/tool-versions ~/.tool-versions \
     && bash -c '. ~/.asdf/asdf.sh \
-    && asdf plugin-add direnv && asdf install direnv latest && asdf global direnv latest \
-    && asdf plugin-add grpcurl && asdf install grpcurl latest && asdf global grpcurl latest \
-    && asdf plugin-add ghq && asdf install ghq latest && asdf global ghq latest \
-    && asdf plugin-add bat && asdf install bat latest && asdf global bat latest \
-    && asdf plugin-add fd && asdf install fd latest && asdf global fd latest \
-    && asdf plugin-add k3d && asdf install k3d latest && asdf global k3d latest \
-    && asdf plugin-add k9s && asdf install k9s latest && asdf global k9s latest \
-    && asdf plugin-add fzf && asdf install fzf latest && asdf global fzf latest \
+    && ~/.local/bin/asdf-global-installer.sh \
+        direnv \
+        grpcurl \
+        ghq \
+        fd \
+        k3d \
+        k9s \
+        fzf \
+        cheat \
+        helm \
+        helmfile \
     && k3d completion fish > ~/.config/fish/completions/k3d.fish \
     && k9s completion fish > ~/.config/fish/completions/k9s.fish \
-    && eval $(asdf where fzf)/install --all'
+    && eval $(asdf where fzf)/install --all \
+    && yes | cheat > /dev/null \
+    && rmdir ~/.config/cheat/cheatsheets/personal \
+    && ln -s ~/toybox/cheat ~/.config/cheat/cheatsheets/personal'
     # tmux is installed via apt because it requireds C compiler and asdf does not resolve the dependency
 
 # --- toybox dependent operations ---

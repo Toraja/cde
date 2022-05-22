@@ -6,6 +6,7 @@ ARG USER
 USER ${USER}
 RUN mkdir -p ~/go \
     && bash -c '. ~/.asdf/asdf.sh \
-    && asdf plugin-add golang && asdf install golang latest && asdf global golang latest \
+    && ~/.local/bin/asdf-global-installer.sh \
+        golang \
     && go install github.com/kyoh86/richgo@latest'
 VOLUME /home/${USER}/go
