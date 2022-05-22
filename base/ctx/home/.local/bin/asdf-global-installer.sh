@@ -1,24 +1,24 @@
-#!/usr/bin/fish
-# XXX Somehow this does not create ~/.asdf/shims directory and installed plugins cannot be found
+#!/bin/bash
 
-type -q asdf; or begin
-    echo (set_color red)asdf is not installed(set_color normal)
+set -eo pipefail
+
+if [[ $# -eq 0 ]]; then
+    echo Argument is required.
+    echo "$(basename (status --current-filename)) <plugin name[:version]> [plugin name[:version]...]"
     exit 1
-end
+fi
 
-test (count $argv) -eq 0; and begin
-    set --local help (basename (status --current-filename))" <plugin name[:version]> [plugin name[:version]...]"
-    echo (set_color red)Argument is required.(set_color normal)
-    echo $help
-    exit 1
-end
+for plugin in $@; do
+    readarray -d ':' -t pluginfo <<< $plugin
+    plugin_name=${pluginfo[0]}
+    if [[ ${#pluginfo[@]} -ge 2 ]]; then
+        plugin_ver=${pluginfo[1]}
+    else
+        plugin_ver=latest
+    fi
 
-for plugin in $argv
-    set --local pluginfo (string split ':' $plugin)
-    set --local plugin_name $pluginfo[1]
-    set --local plugin_ver (test (count $pluginfo) -gt 1; and echo $pluginfo[2]; or echo latest)
-
-    echo asdf plugin-add $plugin_name
-    echo asdf install $plugin_name $plugin_ver
-    echo asdf global $plugin_name $plugin_ver
-end
+    # force successful exit in case the plugin has already been added
+    asdf plugin-add $plugin_name || true
+    asdf install $plugin_name $plugin_ver
+    asdf global $plugin_name $plugin_ver
+done
