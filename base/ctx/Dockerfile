@@ -52,8 +52,9 @@ RUN curl -fsSLo /usr/share/keyrings/kubernetes-archive-keyring.gpg https://packa
 
 # vim plugin related
 RUN apt-get update && apt-get install --no-install-recommends --yes \
-        # vim: universal-ctags is required by TagBar \
-        universal-ctags \
+        # TagBar: universal-ctags \
+        # telescope-fzf-native.nvim: gcc \
+        universal-ctags gcc \
     && rm -rf /var/lib/apt/lists/* \
     # pynvim is required by python plugins \
     && pip install pynvim
