@@ -111,7 +111,8 @@ RUN git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch ${ASDF_VERSIO
     && eval $(asdf where fzf)/install --all \
     && yes | cheat > /dev/null \
     && rmdir ~/.config/cheat/cheatsheets/personal \
-    && ln -s ~/toybox/cheat ~/.config/cheat/cheatsheets/personal'
+    && ln -s ~/toybox/cheat ~/.config/cheat/cheatsheets/personal \
+    && curl -fsSL -o ~/.config/fish/completions/cheat.fish https://raw.githubusercontent.com/cheat/cheat/master/scripts/cheat.fish'
     # tmux is installed via apt because it requireds C compiler and asdf does not resolve the dependency
 
 # --- toybox dependent operations ---
