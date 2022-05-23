@@ -40,12 +40,12 @@ services:
         source: /etc/localtime
         target: /etc/localtime
       - type: bind
-        source: ${HOST_HOME:?}
+        source: "~"
         target: /home/${USER:?}/hosthome
       # Bind volume `workspace` direcory instead of symlinking so that relative
       # path of bind volume inside CDE container does not result in error
       - type: bind
-        source: ${HOST_HOME:?}/workspace
+        source: ~/workspace
         target: /home/${USER:?}/workspace
       - type: bind
         source: ~/.vim
