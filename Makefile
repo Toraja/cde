@@ -35,7 +35,7 @@ dummy:
 
 .PHONY: docker_service
 docker_service:
-	@./start-docker-service.sh
+	@helpers/start-docker-service.sh
 
 .PHONY: validate_arg
 validate_arg:
