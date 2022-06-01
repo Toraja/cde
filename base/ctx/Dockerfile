@@ -24,10 +24,9 @@ RUN apt-get update && apt-get upgrade --no-install-recommends --yes && apt-get i
 RUN apt-get update && apt-get install --no-install-recommends --yes \
         software-properties-common \
     # && apt-add-repository ppa:fish-shell/release-3 \
-    # && add-apt-repository --yes ppa:neovim-ppa/stable \
     && apt-get update && apt-get install --no-install-recommends --yes \
         sudo less man-db locales tree openssh-client unzip \
-        git git-lfs make xclip net-tools netcat fish tmux neovim \
+        git git-lfs make xclip net-tools netcat fish tmux \
     && rm -rf /var/lib/apt/lists/* \
     # Without this, `man` complains that $LC_* is not set \
     && locale-gen en_US.UTF-8
@@ -97,6 +96,7 @@ RUN git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch ${ASDF_VERSIO
     && bash -c '. ~/.asdf/asdf.sh \
     && ~/.local/bin/asdf-global-installer.sh \
         direnv \
+        neovim \
         grpcurl \
         ghq \
         fd \
