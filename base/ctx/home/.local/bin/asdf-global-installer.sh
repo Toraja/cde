@@ -3,8 +3,10 @@
 set -eo pipefail
 
 if [[ $# -eq 0 ]]; then
-    echo Argument is required.
-    echo "$(basename (status --current-filename)) <plugin name[:version]> [plugin name[:version]...]"
+    cat <<EOF
+Usage:
+  $(basename $0) <plugin name[:version]> [plugin name[:version]...]
+EOF
     exit 1
 fi
 
