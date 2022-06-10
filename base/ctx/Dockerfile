@@ -76,6 +76,7 @@ RUN \
     markcial/upto \
     joehillen/to-fish \
     evanlucas/fish-kubectl-completions \
+    edc/bass \
     && rm fisher; \
     or mkdir -p ~/.config/fish/completions ~/.config/fish/conf.d' \
     # change keybind of fish-ghq \
