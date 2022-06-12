@@ -62,6 +62,7 @@ USER ${USER}
 WORKDIR /home/${USER}
 
 COPY --chown=${USER}:${USER} ./home ./
+ENV PATH="/home/${USER}/.local/bin:${PATH}"
 
 # --- toybox independent operation ---
 RUN \
@@ -87,7 +88,7 @@ RUN \
     # tmux \
     && git clone https://github.com/tmux-plugins/tpm ~/.config/tmux/plugins/tpm \
     # docker compose \
-    && ~/.local/bin/github_latest_release_installer.sh -x docker compose docker-compose-linux-x86_64 ~/.docker/cli-plugins/docker-compose
+    && github_latest_release_installer.sh -x docker compose docker-compose-linux-x86_64 ~/.docker/cli-plugins/docker-compose
 
 ARG ASDF_VERSION
 RUN git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch ${ASDF_VERSION} \
@@ -95,7 +96,7 @@ RUN git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch ${ASDF_VERSIO
     # create tool-versions file under .asdf so that it is included in volume as well \
     && ln -s ~/.asdf/tool-versions ~/.tool-versions \
     && bash -c '. ~/.asdf/asdf.sh \
-    && ~/.local/bin/asdf-global-installer.sh \
+    && asdf-global-installer.sh \
         direnv \
         neovim \
         grpcurl \
