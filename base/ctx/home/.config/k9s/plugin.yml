@@ -1,0 +1,18 @@
+plugin:
+
+  tree-cluster:
+    # Define a mnemonic to invoke the plugin
+    shortCut: Shift-T
+    # What will be shown on the K9s menu
+    description: Cluster tree
+    # Collections of views that support this shortcut. (You can use `all`)
+    scopes:
+    - cluster
+    # The command to run upon invocation. Can use Krew plugins here too!
+    command: bash
+    # Whether or not to run the command in background mode
+    background: false
+    # Defines the command arguments
+    args:
+    - -c
+    - "kubectl tree cluster $NAME -n $NAMESPACE --context $CONTEXT | less"

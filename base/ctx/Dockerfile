@@ -117,6 +117,10 @@ RUN git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch ${ASDF_VERSIO
     && curl -fsSL -o ~/.config/fish/completions/cheat.fish https://raw.githubusercontent.com/cheat/cheat/master/scripts/cheat.fish
     # tmux is installed via apt because it requireds C compiler and asdf does not resolve the dependency
 
+ENV PATH="/home/${USER}/.krew/bin:$PATH"
+RUN krew-installer.sh \
+    &&  kubectl krew install tree tail ns
+
 # --- toybox dependent operations ---
 # (Things that would fail without toybox)
 RUN git clone https://github.com/Toraja/toybox.git \
