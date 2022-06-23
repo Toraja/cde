@@ -21,11 +21,12 @@ RUN apt-get update && apt-get upgrade --no-install-recommends --yes && apt-get i
     && groupmod --gid ${DOCKER_GID} docker
 
 # Must-have basic packages
+## gettext-base installs envsubst
 RUN apt-get update && apt-get install --no-install-recommends --yes \
         software-properties-common \
     # && apt-add-repository ppa:fish-shell/release-3 \
     && apt-get update && apt-get install --no-install-recommends --yes \
-        sudo less man-db locales tree openssh-client unzip \
+        sudo less man-db locales tree openssh-client unzip gettext-base \
         git git-lfs make xclip net-tools netcat fish tmux \
     && rm -rf /var/lib/apt/lists/* \
     # Without this, `man` complains that $LC_* is not set \
