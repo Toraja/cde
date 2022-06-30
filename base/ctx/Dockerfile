@@ -89,7 +89,7 @@ RUN \
     # tmux \
     && git clone https://github.com/tmux-plugins/tpm ~/.config/tmux/plugins/tpm \
     # docker compose \
-    && github_latest_release_installer.sh -x docker compose docker-compose-linux-x86_64 ~/.docker/cli-plugins/docker-compose
+    && github-latest-release-installer.sh -x docker compose docker-compose-linux-x86_64 ~/.docker/cli-plugins/docker-compose
 
 ARG ASDF_VERSION
 RUN git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch ${ASDF_VERSION} \
