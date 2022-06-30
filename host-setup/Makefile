@@ -38,6 +38,13 @@ git:
 	mv ~/toybox $$(ghq list --full-path --exact Toraja/toybox)
 	ln -s $$(ghq list --full-path --exact Toraja/toybox) ~/toybox
 
+# Run this if you connect to github via ssh
+.PHONY: git-ssh
+git-ssh:
+	git -C $$(ghq list --full-path --exact Toraja/toybox) remote set-url origin git@github.com:Toraja/toybox.git
+	git -C $$(ghq list --full-path --exact Toraja/toybox) remote set-url origin git@github.com:Toraja/cde.git
+	ssh-keygen -t rsa -b 4096 -C 'github-toraja' -f "$$HOME/.ssh/github-toraja"
+
 .PHONY: fish
 fish:
 	sudo -E apt-get update
