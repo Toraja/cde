@@ -29,7 +29,9 @@
   tasks:
     - name: install packages
       apt:
-        name: xclip
+        pkg:
+          - xclip
+          - keychain
         state: present
         install_recommends: no
         update_cache: true
