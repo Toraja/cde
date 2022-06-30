@@ -103,6 +103,7 @@ RUN git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch ${ASDF_VERSIO
         grpcurl \
         ghq \
         fd \
+        bat \
         k3d \
         k9s \
         fzf \
