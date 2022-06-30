@@ -6,6 +6,14 @@ define printhelp
 	@printf '%-30s %s\n' $(1) $(2)
 endef
 
+define echored
+	echo -e "\e[0;31m$(1)\e[0;0m"
+endef
+
+define echocyan
+	echo -e "\e[0;36m$(1)\e[0;0m"
+endef
+
 .PHONY: help
 help:
 	$(call printhelp, Target, Description)
@@ -37,7 +45,7 @@ fish:
 	sudo -E apt-add-repository --yes ppa:fish-shell/release-3
 	sudo -E apt-get update
 	sudo -E apt-get install --no-install-recommends --yes fish
-	sudo usermod --shell $$(which fish) $$USER || echo "failed to change shell to fish :("
+	sudo usermod --shell $$(which fish) $$USER || $(call echored,failed to change shell to fish)
 	@# fish -i -c 'exit' <- this does not work
 	grep -q '# Added by host setup makefile' ~/.config/fish/config.fish &> /dev/null || mkdir -p ~/.config/fish/ && cat ./config.fish >> ~/.config/fish/config.fish
 	mkdir -p ~/.config/fish/conf.d/ && ln -s ~/toybox/fish/conf.d/* ~/.config/fish/conf.d/
