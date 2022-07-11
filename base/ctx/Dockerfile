@@ -15,18 +15,19 @@ RUN apt-get update && apt-get upgrade --no-install-recommends --yes && apt-get i
     && echo "deb [arch="${CPU_ARCH}" signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null \
     && apt-get update && apt-get install --no-install-recommends --yes \
         docker-ce docker-ce-cli containerd.io \
-        python3-pip \
     && rm -rf /var/lib/apt/lists/* \
     # Specify GID for docker as it differs depending on the environment (Docker Desktop etc.) \
     && groupmod --gid ${DOCKER_GID} docker
 
 # Must-have basic packages
 ## gettext-base installs envsubst
+## build-essential is required by lua
 RUN apt-get update && apt-get install --no-install-recommends --yes \
         software-properties-common \
     # && apt-add-repository ppa:fish-shell/release-3 \
     && apt-get update && apt-get install --no-install-recommends --yes \
         sudo less man-db locales tree openssh-client unzip gettext-base \
+        python3-pip build-essential \
         git git-lfs make xclip net-tools netcat fish tmux \
     && rm -rf /var/lib/apt/lists/* \
     # Without this, `man` complains that $LC_* is not set \
@@ -100,6 +101,7 @@ RUN git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch ${ASDF_VERSIO
     && asdf-global-installer.sh \
         direnv \
         neovim \
+        lua \
         grpcurl \
         ghq \
         fd \
@@ -110,8 +112,10 @@ RUN git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch ${ASDF_VERSIO
         cheat \
         helm \
         helmfile \
+    && luarocks completion fish > ~/.config/fish/completions/luarocks.fish \
     && k3d completion fish > ~/.config/fish/completions/k3d.fish \
     && k9s completion fish > ~/.config/fish/completions/k9s.fish \
+    && helm completion fish > ~/.config/fish/completions/helm.fish \
     && eval $(asdf where fzf)/install --all' \
     && git clone --depth 1 https://github.com/cheat/cheatsheets.git ~/.config/cheat/cheatsheets/community \
     && ln -s ~/toybox/cheat/conf.yml ~/.config/cheat/conf.yml \
