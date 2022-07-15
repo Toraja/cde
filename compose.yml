@@ -23,9 +23,6 @@ services:
       - type: volume
         source: cde_local_share
         target: /home/${USER:?}/.local/share
-      - type: volume
-        source: cde_asdf
-        target: /home/${USER:?}/.asdf
       # bind socket file so that the same docker can be used inside containers
       # (actually docker client command cannot connect to daemon without this,
       # even when daemon is started inside container)
@@ -56,8 +53,5 @@ volumes:
     labels:
       prune: false
   cde_local_share:
-    labels:
-      prune: false
-  cde_asdf:
     labels:
       prune: false
