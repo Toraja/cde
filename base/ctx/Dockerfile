@@ -112,6 +112,7 @@ RUN git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch ${ASDF_VERSIO
         cheat \
         helm \
         helmfile \
+    && asdf direnv setup --shell fish --version latest \
     && helm plugin install https://github.com/databus23/helm-diff \
     && luarocks completion fish > ~/.config/fish/completions/luarocks.fish \
     && kind completion fish > ~/.config/fish/completions/kind.fish \
