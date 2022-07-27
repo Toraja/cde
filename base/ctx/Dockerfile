@@ -106,7 +106,7 @@ RUN git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch ${ASDF_VERSIO
         ghq \
         fd \
         bat \
-        k3d \
+        kind \
         k9s \
         fzf \
         cheat \
@@ -114,7 +114,7 @@ RUN git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch ${ASDF_VERSIO
         helmfile \
     && helm plugin install https://github.com/databus23/helm-diff \
     && luarocks completion fish > ~/.config/fish/completions/luarocks.fish \
-    && k3d completion fish > ~/.config/fish/completions/k3d.fish \
+    && kind completion fish > ~/.config/fish/completions/kind.fish \
     && k9s completion fish > ~/.config/fish/completions/k9s.fish \
     && helm completion fish > ~/.config/fish/completions/helm.fish \
     && eval $(asdf where fzf)/install --all' \
