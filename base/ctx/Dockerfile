@@ -39,11 +39,9 @@ RUN useradd --create-home --uid ${UID} --groups docker --shell /usr/bin/fish ${U
     && echo "%"${USER}" ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/${USER}
 
 # Other nice-to-have tools
-RUN curl -fsSLo /usr/share/keyrings/kubernetes-archive-keyring.gpg https://packages.cloud.google.com/apt/doc/apt-key.gpg \
-    && echo "deb [signed-by=/usr/share/keyrings/kubernetes-archive-keyring.gpg] https://apt.kubernetes.io/ kubernetes-xenial main" | tee /etc/apt/sources.list.d/kubernetes.list \
-    && apt-get update && apt-get install --no-install-recommends --yes \
+RUN apt-get update && apt-get install --no-install-recommends --yes \
         # file required by ranger \
-        keychain jq ripgrep file ranger kubectl \
+        keychain jq ripgrep file ranger \
         # these required by asdf \
         dirmngr gpg curl gawk \
     && rm -rf /var/lib/apt/lists/* \
@@ -105,15 +103,17 @@ RUN git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch ${ASDF_VERSIO
         ghq \
         fd \
         bat \
-        kind \
-        k9s \
         fzf \
         cheat \
+        kubectl \
+        kind \
+        k9s \
         helm \
         helmfile \
     && asdf direnv setup --shell fish --version latest \
     && helm plugin install https://github.com/databus23/helm-diff \
     && luarocks completion fish > ~/.config/fish/completions/luarocks.fish \
+    && kubectl completion fish > ~/.config/fish/completions/kubectl.fish \
     && kind completion fish > ~/.config/fish/completions/kind.fish \
     && k9s completion fish > ~/.config/fish/completions/k9s.fish \
     && helm completion fish > ~/.config/fish/completions/helm.fish \
