@@ -8,5 +8,6 @@ RUN mkdir -p ~/go \
     && bash -c '. ~/.asdf/asdf.sh \
     && ~/.local/bin/asdf-global-installer.sh \
         golang \
-    && go install github.com/kyoh86/richgo@latest'
+    && go install github.com/kyoh86/richgo@latest \
+    && go install github.com/cweill/gotests/...@latest'
 VOLUME /home/${USER}/go
