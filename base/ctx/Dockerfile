@@ -95,7 +95,7 @@ ARG ASDF_VERSION
 RUN git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch ${ASDF_VERSION} \
     && ln -s ~/.asdf/completions/asdf.fish ~/.config/fish/completions/ \
     # create tool-versions file under .asdf so that it is included in volume as well \
-    && ln -s ~/.asdf/tool-versions ~/.tool-versions \
+    && ln -s ~/.asdf/my-tool-versions ~/.tool-versions \
     && bash -c '. ~/.asdf/asdf.sh \
     && asdf-global-installer.sh \
         direnv \
