@@ -28,7 +28,7 @@ RUN apt-get update && apt-get install --no-install-recommends --yes \
     && apt-get update && apt-get install --no-install-recommends --yes \
         sudo less man-db locales tree openssh-client unzip gettext-base \
         python3-pip build-essential \
-        git git-lfs make xclip net-tools netcat fish tmux \
+        git git-lfs make xclip net-tools netcat fish vim tmux \
     && rm -rf /var/lib/apt/lists/* \
     # Without this, `man` complains that $LC_* is not set \
     && locale-gen en_US.UTF-8
