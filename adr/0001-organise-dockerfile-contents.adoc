@@ -1,0 +1,43 @@
+= Organize Dockerfile contents
+:toc:
+
+* Status: accepted
+* Deciders: me
+
+== Context and Problem Statement
+The contents of Dockerfile is large and hard to read, so each chunk of commands
+has be categorised well.
+Arrange in a way that is easier to understand and edit later.
+
+== Decision Drivers
+
+* How easy to read
+* How easy to edit
+
+== Considered Options
+
+* 1. Categorise each chunk by linux process/command
+** e.g. all `apt-get` in one place, `pip` in another...
+* 2. Categorise by what each command is required by.
+** e.g. This part is for `vim`, That is for `tmux` ...
+
+== Decision Outcome
+
+Chosen option: 2
+
+Reason: +
+It makes easier to understand which packages/softwares are required by what.
+
+== Pros and Cons of the Options
+
+=== [option 1]
+
+Pros and Cons are the opposite of [option 2].
+
+=== [option 2]
+
+==== Pros
+* Easy to remove packages/softwares because you know what requires those.
+
+==== Cons
+* Dockerfile will have more steps, meaning there will be more intermediate images and hence more capacity is used.
