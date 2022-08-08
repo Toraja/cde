@@ -1,0 +1,116 @@
+= [short title of solved problem and solution]
+:toc:
+
+* Status: accepted
+* Deciders: me
+
+== Context and Problem Statement
+
+For commands that require non-default shell (e.g. bash), commands will look
+like `bash -c 'do something'` and it looks ugly. +
+(Especially on editors, quoted strings are highlighted so the commands will
+look like string though they are actually not.)
+
+== Decision Drivers
+
+* Look elegant
+* Does not inflate image too much nor occupies much storage
+
+== Considered Options
+
+* `bash -c 'do something'`
+* Use `SHELL` instruction
+* Create dedicated scripts
+
+== Decision Outcome
+
+Chosen option: 2 & 3
+
+Reason: +
+Use option 2 for where `RUN` instruction contains only commands that require different shell. +
+Use option 3 otherwise.
+
+== Pros and Cons of the Options
+
+=== [option 1]
+
+[source,dockerfile]
+----
+RUN bash -c 'cmd1 \
+    cmd2 \
+    cmd3'
+RUN fish -c 'cmd1 \
+    cmd2 \
+    cmd3'
+----
+
+==== Pros
+* The effect of changing shell is only for that instruction, so there will be
+  no unintended side effect.
+
+==== Cons
+* Quotations look ugly. +
+
+=== [option 2]
+
+[source,dockerfile]
+----
+SHELL ["/bin/bash", "-c"]
+RUN cmd1 \
+    cmd2 \
+    cmd3
+SHELL ["/usr/bin/fish", "-c"]
+RUN cmd1 \
+    cmd2 \
+    cmd3
+SHELL ["/bin/sh", "-c"]
+----
+
+==== Pros
+* No ugly quotations.
+
+==== Cons
+* You need to be aware that changing `SHELL` might cause unintended side effect
+  on other `RUN`, `CMD` and `ENTRYPOINT` instructions. +
+  (`bash` should work fine though.)
+* To avoid that, you need to set `SHELL` back to original and that clutters Dockerfile.
+* If commands in `RUN` instruction are chained and not all the commands
+  required different shell, those commands are run in the modified `SHELL` as
+  well.
+
+=== [option 3]
+
+[source,dockerfile]
+----
+COPY ./script1.sh /tmp/script1.sh
+RUN script1.sh
+COPY ./script2.sh /tmp/script2.sh
+RUN script2.sh
+----
+
+==== Pros
+* Fewer lines of code in Dockerfile.
+* No unintended side effect of changing shell.
+
+==== Cons
+* `COPY` instruction add another layer and that takes storage.
+* If you try to reduce layers by copying multiple scripts together, and you
+  need change one of those script, cache after `COPY` command will be
+  invalidated and build starts from `COPY` command. +
+  In the below example, modifying `script2.sh` cause docker to build from
+  `COPY`, results in running `script1.sh` which is not changed.
++
+[source,dockerfile]
+----
+COPY ./scripts-dir /tmp/
+RUN /tmp/script1.sh
+RUN /tmp/script2.sh
+----
+
+// optional
+== Links
+
+* [Link type] [Link to ADR]
+// example: Refined by [ADR-0005](0005-example.md)
+* …
+// numbers of links can vary
