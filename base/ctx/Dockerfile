@@ -64,24 +64,13 @@ COPY --chown=${USER}:${USER} ./home ./
 ENV PATH="/home/${USER}/.local/bin:${PATH}"
 
 # --- toybox independent operation ---
+COPY --chown=${USER}:${USER} ./helpers/install-fish-plugins.fish /home/${USER}/.local/bin/
 RUN \
     mkdir -p ~/tmp \
     # Create directory for volume so that owner will be the ${USER} \
     && mkdir -p ~/.cache ~/.local/share \
-    # fish (curl complains SSL error under certain environment (VPN etc). Skip installing fisher in such case.) \
-    && fish -c 'curl -fsSLO https://git.io/fisher; and source fisher && fisher install \
-    jorgebucaran/fisher \
-    decors/fish-colored-man \
-    decors/fish-ghq \
-    laughedelic/fish_logo \
-    markcial/upto \
-    joehillen/to-fish \
-    evanlucas/fish-kubectl-completions \
-    edc/bass \
-    && rm fisher; \
-    or mkdir -p ~/.config/fish/completions ~/.config/fish/conf.d' \
-    # change keybind of fish-ghq \
-    && sed -i 's/\\cg/\\eo/g' ~/.config/fish/conf.d/ghq_key_bindings.fish \
+    # fish \
+    && install-fish-plugins.fish \
     && ln -s ~/toybox/fish/functions ~/.config/fish/myfuncs \
     # git \
     && ln -s ~/toybox/git/gitignore_global ~/.gitignore_global \
@@ -90,44 +79,12 @@ RUN \
     # docker compose \
     && github-latest-release-installer.sh -x docker compose docker-compose-linux-x86_64 ~/.docker/cli-plugins/docker-compose
 
+COPY --chown=${USER}:${USER} ./helpers/install-asdf-plugins.sh /home/${USER}/.local/bin/
+ENV PATH="/home/${USER}/.krew/bin:$PATH"
 ARG ASDF_VERSION
 RUN git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch ${ASDF_VERSION} \
     && ln -s ~/.asdf/completions/asdf.fish ~/.config/fish/completions/ \
-    # create tool-versions file under .asdf so that it is included in volume as well \
-    && ln -s ~/.asdf/my-tool-versions ~/.tool-versions \
-    && bash -c '. ~/.asdf/asdf.sh \
-    && asdf-global-installer.sh \
-        direnv \
-        neovim \
-        lua \
-        grpcurl \
-        ghq \
-        fd \
-        bat \
-        fzf \
-        cheat \
-        kubectl \
-        kind \
-        k9s \
-        helm \
-        helmfile \
-    && asdf direnv setup --shell fish --version latest \
-    && helm plugin install https://github.com/databus23/helm-diff \
-    && luarocks completion fish > ~/.config/fish/completions/luarocks.fish \
-    && kubectl completion fish > ~/.config/fish/completions/kubectl.fish \
-    && kind completion fish > ~/.config/fish/completions/kind.fish \
-    && k9s completion fish > ~/.config/fish/completions/k9s.fish \
-    && helm completion fish > ~/.config/fish/completions/helm.fish \
-    && eval $(asdf where fzf)/install --all' \
-    && git clone --depth 1 https://github.com/cheat/cheatsheets.git ~/.config/cheat/cheatsheets/community \
-    && ln -s ~/toybox/cheat/conf.yml ~/.config/cheat/conf.yml \
-    && ln -s ~/toybox/cheat/cheatsheets ~/.config/cheat/cheatsheets/personal \
-    && curl -fsSL -o ~/.config/fish/completions/cheat.fish https://raw.githubusercontent.com/cheat/cheat/master/scripts/cheat.fish
-    # tmux is installed via apt because it requireds C compiler and asdf does not resolve the dependency
-
-ENV PATH="/home/${USER}/.krew/bin:$PATH"
-RUN krew-installer.sh \
-    &&  kubectl krew install tree tail ns
+    && install-asdf-plugins.sh
 
 # --- toybox dependent operations ---
 # (Things that would fail without toybox)
