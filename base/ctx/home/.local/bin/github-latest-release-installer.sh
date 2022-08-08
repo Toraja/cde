@@ -12,20 +12,20 @@ usage() {
 executable=false
 
 while getopts :hx opt; do
-	case ${opt} in
-		x)
-			executable=true
-			;;
-		h)
+    case ${opt} in
+        x)
+            executable=true
+            ;;
+        h)
             echo help
             usage
-			exit 0
-			;;
+            exit 0
+            ;;
         \?)
             usage
             exit 1
             ;;
-	esac
+    esac
 done
 shift $((OPTIND-1))
 unset OPTIND
