@@ -11,9 +11,9 @@ RUN apt-get update && apt-get upgrade --no-install-recommends --yes && apt-get i
 ARG USER
 USER ${USER}
 
-RUN bash -c '. ~/.asdf/asdf.sh \
-    && ~/.local/bin/asdf-global-installer.sh \
-        rust rust-analyzer \
+SHELL ["/bin/bash", "-c"]
+RUN source ~/.asdf/asdf.sh \
+    && asdf-global-installer.sh rust rust-analyzer \
     && rustup completions fish > ~/.config/fish/completions/rustup.fish \
-    && rustup component add rls rust-src rust-analysis'
-    # && rustup +nightly component add rust-analyzer-preview'
+    && rustup component add rls rust-src rust-analysis
+SHELL ["/bin/sh", "-c"]
