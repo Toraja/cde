@@ -92,8 +92,8 @@ RUN git clone https://github.com/Toraja/toybox.git \
     # fish \
     && ln -s ~/toybox/fish/conf.d/* ~/.config/fish/conf.d/ \
     # git \
-    && ln -s ~/toybox/git/bin/bash/* ~/.local/bin/ \
-    && ln -s ~/toybox/git/bin/fish/* ~/.local/bin/ \
+    && ln -s ~/toybox/git/custom-commands/bin/* ~/.local/bin/ \
+    && ln -s ~/toybox/git/custom-commands/config/fish/* ~/.config/fish/conf.d/ \
     # tmux \
     && ~/.config/tmux/plugins/tpm/bin/install_plugins
 
