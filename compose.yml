@@ -47,6 +47,9 @@ services:
       - type: bind
         source: ~/.vim
         target: /home/${USER:?}/.vim
+      - type: bind
+        source: ~/.local/share/nvim/site
+        target: /home/${USER:?}/.local/share/nvim/site
     network_mode: "host"
 volumes:
   cde_cache:
