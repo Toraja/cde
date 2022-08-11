@@ -31,4 +31,4 @@ or begin
 end
 
 # change keybind of fish-ghq
-sed -i 's/\\cg/\\eo/g' ~/.config/fish/conf.d/ghq_key_bindings.fish
+sed -i 's/\\\\cg/\\\\eo/g' ~/.config/fish/conf.d/ghq_key_bindings.fish
