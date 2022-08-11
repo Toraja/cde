@@ -4,7 +4,9 @@ set -e
 
 source ~/.asdf/asdf.sh
 
-# tmux is installed via apt because it requireds C compiler and asdf does not resolve the dependency
+# tmux is installed via apt because it requireds build dependencies and asdf does not resolve the dependency.
+# For the record, those dependencies are zip, unzip, automake as well as packages written on
+# https://github.com/tmux/tmux/wiki/Installing#from-source-tarball .
 asdf-global-installer.sh \
     direnv \
     neovim \
