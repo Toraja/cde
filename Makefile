@@ -14,7 +14,7 @@ compose_project_name := $(or $(pj), $(subst /,_,$(primary_cde)))
 image_name := $(or $(pj), $(primary_cde))
 host_name := cde.$(subst /,.,$(primary_cde))
 # Specify COMPOSE_PROJECT_NAME to avoid the collision of container name and volume name between CDEs
-base_cmd = COMPOSE_PROJECT_NAME=$(compose_project_name) PRIMARY_CDE=$(primary_cde) CDE_IMAGE_NAME=$(image_name) CDE_HOSTNAME=$(host_name) \
+base_cmd = COMPOSE_PROJECT_NAME=$(compose_project_name) PRIMARY_CDE=$(primary_cde) CDE_HOSTNAME=$(host_name) \
 		   docker compose --file compose.yml $(compose_file_flags)
 
 define validate_arg_cde

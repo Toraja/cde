@@ -1,6 +1,6 @@
 services:
   cde:
-    image: cde/${CDE_IMAGE_NAME:?}
+    image: cde/${PRIMARY_CDE:?}
     environment:
       - GIT_HUB_SSH_KEY
     build:
