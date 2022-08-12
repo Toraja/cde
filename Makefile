@@ -12,7 +12,7 @@ envs := $(foreach cde,$(target_cde_list),$(wildcard ./$(cde)/.env))
 primary_cde := $(lastword $(target_cde_list))
 compose_project_name := $(or $(pj), $(subst /,_,$(primary_cde)))
 image_name := $(or $(pj), $(primary_cde))
-host_name := cde.$(subst /,.,$(primary_cde))
+host_name := cde.$(subst /,.,$(compose_project_name))
 # Specify COMPOSE_PROJECT_NAME to avoid the collision of container name and volume name between CDEs
 base_cmd = COMPOSE_PROJECT_NAME=$(compose_project_name) PRIMARY_CDE=$(primary_cde) CDE_HOSTNAME=$(host_name) \
 		   docker compose --file compose.yml $(compose_file_flags)
