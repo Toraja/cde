@@ -26,7 +26,7 @@ RUN apt-get update && apt-get install --no-install-recommends --yes \
         software-properties-common \
     && apt-add-repository ppa:fish-shell/release-3 \
     && apt-get update && apt-get install --no-install-recommends --yes \
-        sudo less man-db locales tree openssh-client unzip gettext-base \
+        sudo less man-db locales tree openssh-client unzip wget gettext-base \
         python3-pip build-essential \
         git git-lfs make xclip net-tools netcat fish vim tmux \
     && rm -rf /var/lib/apt/lists/* \
