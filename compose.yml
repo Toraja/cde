@@ -15,7 +15,7 @@ services:
         - cde.${PRIMARY_CDE:?}=true
     hostname: ${CDE_HOSTNAME:?}
     extra_hosts:
-      - "registry.local:127.0.0.1" # for k3d
+      - ${CDE_HOSTNAME:?}:127.0.0.1
     volumes:
       - type: volume
         source: cde_cache
