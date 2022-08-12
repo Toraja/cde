@@ -46,6 +46,10 @@ destination=$4
 
 download_url=$(curl -s https://api.github.com/repos/${github_user}/${github_reponame}/releases/latest \
     | jq -r '.assets[] | select( .name | match ('\"${asset_name}\"') ) | .browser_download_url')
+if [[ -z "$download_url" ]]; then
+    echo 'Failed to get download URL.'
+    exit 1
+fi
 
 curl_cmd='curl -fsSL'
 if $untar; then
