@@ -77,7 +77,9 @@ RUN \
     # tmux \
     && git clone https://github.com/tmux-plugins/tpm ~/.config/tmux/plugins/tpm \
     # docker compose \
-    && github-latest-release-installer.sh -x docker compose docker-compose-linux-x86_64 ~/.docker/cli-plugins/docker-compose
+    && github-latest-release-installer.sh -x docker compose docker-compose-linux-x86_64 ~/.docker/cli-plugins/docker-compose \
+    # lua-language-server \
+    && github-latest-release-installer.sh -t sumneko lua-language-server 'lua-language-server-.*-linux-x64.tar.gz' ~/.local/share/lua-language-server/
 
 COPY --chown=${USER}:${USER} ./helpers/install-asdf-plugins.sh /home/${USER}/.local/bin/
 ENV PATH="/home/${USER}/.krew/bin:$PATH"
