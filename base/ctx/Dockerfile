@@ -68,7 +68,7 @@ COPY --chown=${USER}:${USER} ./helpers/install-fish-plugins.fish /home/${USER}/.
 RUN \
     mkdir -p ~/tmp \
     # Create directory for volume so that owner will be the ${USER} \
-    && mkdir -p ~/.cache ~/.local/share \
+    && mkdir -p ~/.cache ~/.local/share/nvim/site \
     # fish \
     && install-fish-plugins.fish \
     && ln -s ~/toybox/fish/functions ~/.config/fish/myfuncs \
