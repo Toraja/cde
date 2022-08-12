@@ -114,6 +114,15 @@ docker-setup:
 	sudo -E usermod -aG docker $$(whoami)
 	mkdir -p ~/.docker && cat ~/toybox/docker/config.json > ~/.docker/config.json
 
+.PHONY: docker-wsl
+docker-wsl:
+	@# This is needed for Ubuntu 22.04
+	@# Source:
+	@# - https://dev.to/felipecrs/simply-run-docker-on-wsl2-3o8
+	@# - https://medium.com/twodigits/install-docker-on-wsl-2-with-vpn-support-to-replace-docker-for-windows-45b8e200e171
+	sudo update-alternatives --set iptables /usr/sbin/iptables-legacy
+	sudo update-alternatives --set ip6tables /usr/sbin/ip6tables-legacy
+
 .PHONY: taskwarrior
 taskwarrior:
 	sudo -E apt-get update
