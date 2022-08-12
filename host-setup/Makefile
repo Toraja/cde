@@ -34,8 +34,12 @@ git:
 	curl --output ghq.zip -fsSL https://github.com/x-motemen/ghq/releases/download/v1.2.1/ghq_linux_amd64.zip
 	unzip ghq.zip && mkdir -p ~/.local/bin && mv ghq_linux_amd64/ghq ~/.local/bin && rm -rdf ghq.zip ghq_linux_amd64
 	git clone https://github.com/Toraja/toybox.git ~/toybox
+	curl -fsSL --create-dirs \
+		--output ~/toybox/git/gitconfig https://raw.githubusercontent.com/Toraja/toybox/master/git/gitconfig \
+		--output ~/toybox/git/personal.gitconfig https://raw.githubusercontent.com/Toraja/toybox/master/git/personal.gitconfig
 	cat ./gitconfig > ~/.gitconfig
-	mv ~/toybox $$(ghq list --full-path --exact Toraja/toybox)
+	ghq get https://personal.github.com/Toraja/toybox.git
+	rm -rdf ~/toybox
 	ln -s $$(ghq list --full-path --exact Toraja/toybox) ~/toybox
 
 # Run this if you connect to github via ssh
