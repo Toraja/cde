@@ -1,2 +1,2 @@
 #!/bin/bash
-exec "~/.local/share/lua-language-server/bin/lua-language-server" "$@"
+exec "~/.local/opt/lua-language-server/bin/lua-language-server" "$@"
