@@ -63,47 +63,40 @@ WORKDIR /home/${USER}
 COPY --chown=${USER}:${USER} ./home ./
 ENV PATH="/home/${USER}/.local/bin:${PATH}"
 
-# --- toybox independent operation ---
 COPY --chown=${USER}:${USER} ./helpers/install-fish-plugins.fish /home/${USER}/.local/bin/
 RUN \
     mkdir -p ~/tmp \
     # Create directory for volume so that owner will be the ${USER} \
     && mkdir -p ~/.cache ~/.local/share/nvim/site \
-    # fish \
-    && install-fish-plugins.fish \
-    && ln -s ~/toybox/fish/functions ~/.config/fish/myfuncs \
-    # git \
-    && ln -s ~/toybox/git/gitignore_global ~/.gitignore_global \
-    # tmux \
-    && git clone https://github.com/tmux-plugins/tpm ~/.config/tmux/plugins/tpm \
-    # docker compose \
+    # others \
     && github-latest-release-installer.sh -x docker compose docker-compose-linux-x86_64 ~/.docker/cli-plugins/docker-compose \
-    # lua-language-server \
     && github-latest-release-installer.sh -t sumneko lua-language-server 'lua-language-server-.*-linux-x64.tar.gz' ~/.local/share/lua-language-server/
 
 COPY --chown=${USER}:${USER} ./helpers/install-asdf-plugins.sh /home/${USER}/.local/bin/
 ENV PATH="/home/${USER}/.krew/bin:$PATH"
 ARG ASDF_VERSION
 RUN git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch ${ASDF_VERSION} \
+    && mkdir -p ~/.config/fish/completions/ \
     && ln -s ~/.asdf/completions/asdf.fish ~/.config/fish/completions/ \
     && install-asdf-plugins.sh
 
-# --- toybox dependent operations ---
-# (Things that would fail without toybox)
+# Setup tools
 RUN git clone https://github.com/Toraja/toybox.git \
     # fish \
+    && install-fish-plugins.fish \
+    && ln -s ~/toybox/fish/functions ~/.config/fish/myfuncs \
     && ln -s ~/toybox/fish/conf.d/* ~/.config/fish/conf.d/ \
     # git \
+    && ln -s ~/toybox/git/gitignore_global ~/.gitignore_global \
     && ln -s ~/toybox/git/custom-commands/bin/* ~/.local/bin/ \
     && ln -s ~/toybox/git/custom-commands/config/fish/* ~/.config/fish/conf.d/ \
     # tmux \
+    && git clone https://github.com/tmux-plugins/tpm ~/.config/tmux/plugins/tpm \
     && ~/.config/tmux/plugins/tpm/bin/install_plugins
 
 # Setup symlink to host home directory to reduce bind mount
 # This also enables replacing those links with actual files when symlink is inappriate
-# Here cloned toybox directory is moved so that it can be used in case host's toybox is unavailable
-RUN mkdir ~/build \
-    && mv ~/toybox ~/build/ \
+RUN rm -rf ~/toybox \
     && ln -s ~/hosthome/.ssh ~/.ssh \
     && ln -s ~/hosthome/.docker/config.json ~/.docker/config.json \
     && ln -s ~/workspace/github.com/Toraja/toybox ~/toybox
