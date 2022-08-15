@@ -99,6 +99,6 @@ RUN git clone https://github.com/Toraja/toybox.git \
 RUN rm -rf ~/toybox \
     && ln -s ~/hosthome/.ssh ~/.ssh \
     && ln -s ~/hosthome/.docker/config.json ~/.docker/config.json \
-    && ln -s ~/workspace/github.com/Toraja/toybox ~/toybox
+    && ln -s ~/workspace/personal.github.com/Toraja/toybox ~/toybox
 
 CMD ["tail", "-f", "/dev/null"]
