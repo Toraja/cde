@@ -136,4 +136,4 @@ taskwarrior:
 	cd .. && rm -rf taskwarrior.tar.gz taskwarrior
 	curl -fsSL --output taskwarrior-tui.tar.gz https://github.com/kdheepak/taskwarrior-tui/releases/download/v0.19.1/taskwarrior-tui-x86_64-unknown-linux-gnu.tar.gz
 	mkdir -p ~/.local/bin && && tar -xzf taskwarrior-tui.tar.gz --directory=$$HOME/.local/bin && rm taskwarrior-tui.tar.gz
-	test -n "${TASKRC}" && mkdir -p $$(dirname ${TASKRC}) && ln -s ~/toybox/taskwarrior/taskrc ${TASKRC} || echo "Create symlink to taskrc manually"
+	test -n "${TASKRC}" && mkdir -p $$(dirname ${TASKRC}) && cp taskrc ${TASKRC} || echo "Setup taskrc manually"
