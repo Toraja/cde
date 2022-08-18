@@ -13,7 +13,8 @@ USER ${USER}
 
 SHELL ["/bin/bash", "-c"]
 RUN source ~/.asdf/asdf.sh \
-    && asdf-global-installer.sh rust rust-analyzer \
+    # protoc is required by rust-analyzer \
+    && asdf-global-installer.sh rust rust-analyzer protoc \
     && rustup completions fish > ~/.config/fish/completions/rustup.fish \
     && rustup component add rls rust-src rust-analysis
 SHELL ["/bin/sh", "-c"]
