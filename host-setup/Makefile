@@ -22,6 +22,11 @@ help:
 	$(call printhelp, 'fish', 'Install fish shell')
 	$(call printhelp, 'docker', 'Install docker and docker-compose')
 
+.PHONY: setup
+setup:
+	sudo -E apt-get update
+	sudo -E apt-get install --no-install-recommends --yes jq unzip
+
 .PHONY: bashrc
 bashrc:
 	grep -q '# Added by host setup makefile' ~/.bashrc || cat ./bashrc >> ~/.bashrc
@@ -30,24 +35,17 @@ bashrc:
 git:
 	sudo -E apt-get update
 	sudo -E apt-get install --no-install-recommends --yes git
-	# use github_latest_installer
-	curl --output ghq.zip -fsSL https://github.com/x-motemen/ghq/releases/download/v1.2.1/ghq_linux_amd64.zip
-	unzip ghq.zip && mkdir -p ~/.local/bin && mv ghq_linux_amd64/ghq ~/.local/bin && rm -rdf ghq.zip ghq_linux_amd64
-	git clone https://github.com/Toraja/toybox.git ~/toybox
+	./github-latest-release-installer.sh x-motemen ghq ghq_linux_amd64.zip /tmp/ghq_linux_amd64.zip \
+		&& unzip /tmp/ghq_linux_amd64.zip -d /tmp/ \
+		&& mv /tmp/ghq_linux_amd64/ghq ~/.local/bin/
+	rm -rdf /tmp/ghq_linux_amd64*
 	curl -fsSL --create-dirs \
 		--output ~/toybox/git/gitconfig https://raw.githubusercontent.com/Toraja/toybox/master/git/gitconfig \
 		--output ~/toybox/git/personal.gitconfig https://raw.githubusercontent.com/Toraja/toybox/master/git/personal.gitconfig
 	cat ./gitconfig > ~/.gitconfig
-	ghq get https://personal.github.com/Toraja/toybox.git
-	rm -rdf ~/toybox
-	ln -s $$(ghq list --full-path --exact Toraja/toybox) ~/toybox
-
-# Run this if you connect to github via ssh
-.PHONY: git-ssh
-git-ssh:
-	git -C $$(ghq list --full-path --exact Toraja/toybox) remote set-url origin git@github.com:Toraja/toybox.git
-	git -C $$(ghq list --full-path --exact Toraja/toybox) remote set-url origin git@github.com:Toraja/cde.git
-	ssh-keygen -t rsa -b 4096 -C 'github-toraja' -f "$$HOME/.ssh/github-toraja"
+	ghq get git@personal.github.com:Toraja/toybox.git
+	@# Get path to toybox first before deleting otherwise path cannot be obtained
+	toybox=$$(ghq list --full-path --exact Toraja/toybox) && rm -rdf ~/toybox && ln -s ${toybox} ~/toybox
 
 .PHONY: fish
 fish:

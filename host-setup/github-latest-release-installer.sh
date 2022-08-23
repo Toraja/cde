@@ -1,0 +1,1 @@
+../base/ctx/home/.local/bin/github-latest-release-installer.sh

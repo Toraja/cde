@@ -15,6 +15,10 @@
   ```
   cp .env.example .env
   ```
+- Run below after toybox has been cloned via ghq
+  ```sh
+	ghq get git@personal.github.com:Toraja/cde.git && rm -rdf ~/cde && ln -s $(ghq list --full-path --exact Toraja/cde) ~/cde
+  ```
 
 ### WSL
 - Do the setup and configuration illustrated in
