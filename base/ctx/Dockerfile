@@ -45,7 +45,7 @@ RUN apt-get update && apt-get install --no-install-recommends --yes \
         # these required by asdf \
         dirmngr gpg curl gawk \
     && rm -rf /var/lib/apt/lists/* \
-    && pip install httpie glances ansible \
+    && pip install httpie glances ansible yamllint \
     && curl -fsSL https://raw.githubusercontent.com/jesseduffield/lazydocker/master/scripts/install_update_linux.sh | DIR=/usr/local/bin bash
 
 # vim plugin related
