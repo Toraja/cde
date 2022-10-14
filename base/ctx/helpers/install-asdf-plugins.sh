@@ -18,6 +18,7 @@ asdf-global-installer.sh \
     fzf \
     cheat \
     fx \
+    yq \
     kubectl \
     kind \
     k9s \
