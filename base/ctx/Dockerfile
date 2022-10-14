@@ -25,6 +25,7 @@ RUN apt-get update && apt-get upgrade --no-install-recommends --yes && apt-get i
 RUN apt-get update && apt-get install --no-install-recommends --yes \
         software-properties-common \
     && apt-add-repository ppa:fish-shell/release-3 \
+    && apt-add-repository ppa:git-core/ppa \
     && apt-get update && apt-get install --no-install-recommends --yes \
         sudo less man-db locales tree openssh-client unzip wget gettext-base \
         python3-pip build-essential \
