@@ -1,4 +1,4 @@
-= [short title of solved problem and solution]
+= Running commands requiring other shell
 :toc:
 
 * Status: accepted
