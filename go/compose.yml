@@ -2,12 +2,3 @@ services:
   cde:
     environment:
       - CGO_ENABLED=${CGO_ENABLED:-0}
-    volumes:
-      - type: volume
-        source: gopath
-        target: /home/${USER:?}/go
-volumes:
-  gopath:
-    name: go_cde_gopath
-    labels:
-      prune: false

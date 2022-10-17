@@ -1,0 +1,68 @@
+= Install go tools
+:toc:
+
+* Status: accepted
+* Deciders: me
+
+== Context and Problem Statement
+
+Go tools (such as `gopls`) are installed manually using neovim plugin during container runtime and the installed directory is mounted as a volume. +
+This causes unused tools to remain undeleted, and old tools to remain old. +
+
+== Decision Drivers
+
+* Make sure only necessary tools are installed.
+* Those tools are regularly updated.
+
+== Considered Options
+
+. Install using neovim plugin during build time
+. Install all tools one by one using `go install`
+
+== Decision Outcome
+
+.Chosen option
+2
+
+.Reason
+Option 1 is hard to achieve.
+
+== Pros and Cons of the Options
+
+Let `go.nvim` plugin isntall them.
+
+=== [option 1]
+
+[source,sh]
+----
+nvim --headless -c GoInstallBinaries -c qall
+----
+
+==== Pros
+* You do not need to track the list of go tools to install manually.
+
+==== Cons
+* The command runs asynchronously and does not emits any event when it completes, so neovim quits before istallation is completed.
+
+=== [option 2]
+
+Install the list of go tools that `go.nvim` plugin installs (defined in `go.nvim/lua/go/install.lua`).
+
+[source,sh]
+----
+go install golang.org/x/tools/gopls@latest \
+&& go install ...
+----
+
+==== Pros
+* Not particularly good, but at least achievable.
+
+==== Cons
+* Hard to keep track of the list of latest go tools.
+
+== Links
+
+* [Link type] [Link to ADR]
+// example: Refined by [ADR-0005](0005-example.md)
+* …
+// numbers of links can vary
