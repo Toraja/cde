@@ -42,7 +42,7 @@ RUN useradd --create-home --uid ${UID} --groups docker --shell /usr/bin/fish ${U
 # Other nice-to-have tools
 RUN apt-get update && apt-get install --no-install-recommends --yes \
         # file required by ranger \
-        keychain jq ripgrep file ranger \
+        keychain jq ripgrep file ranger skopeo \
         # these required by asdf \
         dirmngr gpg curl gawk \
     && rm -rf /var/lib/apt/lists/* \
