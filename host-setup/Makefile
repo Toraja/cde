@@ -132,6 +132,6 @@ taskwarrior:
 	git clone --recursive -b stable https://github.com/GothenburgBitFactory/taskwarrior.git
 	cd taskwarrior && cmake -DCMAKE_BUILD_TYPE=release -DENABLE_SYNC=OFF . && make && sudo make install
 	cd .. && rm -rf taskwarrior.tar.gz taskwarrior
-	curl -fsSL --output taskwarrior-tui.tar.gz https://github.com/kdheepak/taskwarrior-tui/releases/download/v0.19.1/taskwarrior-tui-x86_64-unknown-linux-gnu.tar.gz
-	mkdir -p ~/.local/bin && && tar -xzf taskwarrior-tui.tar.gz --directory=$$HOME/.local/bin && rm taskwarrior-tui.tar.gz
+	curl -fsSL --output taskwarrior-tui.tar.gz https://github.com/kdheepak/taskwarrior-tui/releases/download/v0.23.7/taskwarrior-tui-x86_64-unknown-linux-gnu.tar.gz
+	mkdir -p ~/.local/bin && tar -xzf taskwarrior-tui.tar.gz --directory=$$HOME/.local/bin && rm taskwarrior-tui.tar.gz
 	test -n "${TASKRC}" && mkdir -p $$(dirname ${TASKRC}) && cp taskrc ${TASKRC} || echo "Setup taskrc manually"
