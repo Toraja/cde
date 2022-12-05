@@ -31,21 +31,26 @@ setup:
 bashrc:
 	grep -q '# Added by host setup makefile' ~/.bashrc || cat ./bashrc >> ~/.bashrc
 
-.PHONY: git
-git:
-	sudo -E apt-get update
-	sudo -E apt-get install --no-install-recommends --yes git
+github_repo_subpath := 'personal.github.com/Toraja'
+github_host_user := 'personal.github.com:Toraja'
+toybox_repo_url := 'git@${github_host_user}/toybox.git'
+cde_repo_url := 'git@${github_host_user}/cde.git'
+
+.PHONY: repositories
+repositories:
 	./github-latest-release-installer.sh x-motemen ghq ghq_linux_amd64.zip /tmp/ghq_linux_amd64.zip \
 		&& unzip /tmp/ghq_linux_amd64.zip -d /tmp/ \
-		&& mv /tmp/ghq_linux_amd64/ghq ~/.local/bin/
-	rm -rdf /tmp/ghq_linux_amd64*
-	curl -fsSL --create-dirs \
-		--output ~/toybox/git/gitconfig https://raw.githubusercontent.com/Toraja/toybox/master/git/gitconfig \
-		--output ~/toybox/git/personal.gitconfig https://raw.githubusercontent.com/Toraja/toybox/master/git/personal.gitconfig
+		&& mkdir -p ~/.local/bin/ \
+		&& mv /tmp/ghq_linux_amd64/ghq ~/.local/bin/ \
+		&& rm -rdf /tmp/ghq_linux_amd64*
+	git clone ${toybox_repo_url} ~/toybox
 	cat ./gitconfig > ~/.gitconfig
-	ghq get git@personal.github.com:Toraja/toybox.git
-	@# Get path to toybox first before deleting otherwise path cannot be obtained
-	toybox=$$(ghq list --full-path --exact Toraja/toybox) && rm -rdf ~/toybox && ln -s ${toybox} ~/toybox
+	ghq_root=$$(~/.local/bin/ghq root) \
+		&& mkdir -p $${ghq_root}/${github_repo_subpath} \
+		&& mv ~/toybox $${ghq_root}/${github_repo_subpath} \
+		&& ln -s $${ghq_root}/${github_repo_subpath}/toybox ~/toybox \
+		&& mv ~/cde $${ghq_root}/${github_repo_subpath} \
+		&& ln -s $${ghq_root}/${github_repo_subpath}/cde ~/cde
 
 .PHONY: fish
 fish:
