@@ -1,0 +1,10 @@
+---
+- name: install packages
+  become: yes
+  apt:
+    name: "{{ apt_packages }}"
+    state: present
+    install_recommends: no
+    update_cache: true
+    cache_valid_time: 3600
+    force_apt_get: true
