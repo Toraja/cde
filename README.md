@@ -1,24 +1,7 @@
 # CDE - Containerised Develop Environment
 
 ## Things to do on Host machine
-- Generate ssh key and put on Github
-  ```
-  ssh-keygen -t ed25519 -C 'Toraja@users.noreply.github.com' -f "$HOME/.ssh/<key_file_name>"
-  ```
-- Copy `.ssh` directory under `host-setup`
-- Clone this repository
-  ```
-  git clone git@github.com:Toraja/cde.git
-  ```
-- Install `make` and run `make` in `host-setup` directory.
-- Copy `.env` and set appropriate values.
-  ```
-  cp .env.example .env
-  ```
-- Run below after toybox has been cloned via ghq
-  ```sh
-	ghq get git@personal.github.com:Toraja/cde.git && rm -rdf ~/cde && ln -s $(ghq list --full-path --exact Toraja/cde) ~/cde
-  ```
+Refer to `[this README](./host-setup/README.md)`
 
 ### WSL
 - Do the setup and configuration illustrated in
