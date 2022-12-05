@@ -22,10 +22,13 @@ help:
 	$(call printhelp, 'fish', 'Install fish shell')
 	$(call printhelp, 'docker', 'Install docker and docker-compose')
 
-.PHONY: setup
-setup:
+# Things that required to perform other targets
+.PHONY: prerequisite
+prerequisite:
 	sudo -E apt-get update
-	sudo -E apt-get install --no-install-recommends --yes jq unzip
+	sudo -E apt-get install --no-install-recommends --yes python3-pip
+	pip install ansible
+	ansible-playbook playbooks/prerequisite.yml
 
 .PHONY: bashrc
 bashrc:
