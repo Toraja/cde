@@ -1,0 +1,72 @@
+---
+- name: taskwarrior
+  hosts: localhost
+  vars:
+    apt_packages:
+      - cmake
+      - gcc
+      - g++
+      - uuid-dev
+    checkout_path: /tmp/taskwarrior
+  tasks:
+    - name: Check if taskwarrior is installed
+      ansible.builtin.shell: |
+          which task
+      changed_when: false
+      failed_when: false
+      register: taskwarrior_installed
+
+    - name: Check if taskwarrior is latest
+      when: taskwarrior_installed.rc == 0
+      block:
+        - name: Get installed taskwarrior version
+          ansible.builtin.shell: |
+            task --version
+          changed_when: false
+          register: installed_taskwarrior_version
+
+        - name: Get latest taskwarrior version
+          ansible.builtin.shell: |
+            curl -s https://api.github.com/repos/GothenburgBitFactory/taskwarrior/releases/latest | jq -r .tag_name
+          changed_when: false
+          register: latest_taskwarrior_version
+
+        - name: Check if latest is installed
+          ansible.builtin.shell: |
+            test "v{{ installed_taskwarrior_version.stdout }}" = "{{ latest_taskwarrior_version.stdout }}"
+          changed_when: false
+          failed_when: false
+          register: latest_taskwarrior_is_installed
+
+    - name: install taskwarrior
+      when: not (taskwarrior_installed.rc == 0 and latest_taskwarrior_is_installed.rc == 0)
+      block:
+        - name: install required packages
+          include_role:
+            name: apt
+        - name: Git checkout
+          ansible.builtin.git:
+            repo: https://github.com/GothenburgBitFactory/taskwarrior.git
+            dest: "{{ checkout_path }}"
+            depth: 1
+            single_branch: true
+            version: stable
+
+        - name: Build taskwarrior
+          ansible.builtin.shell: |
+            cmake -DCMAKE_BUILD_TYPE=release -DENABLE_SYNC=OFF .
+            make
+          args:
+            chdir: "{{ checkout_path }}"
+
+        - name: Install taskwarrior
+          become: yes
+          ansible.builtin.shell: |
+            make install
+          args:
+            chdir: "{{ checkout_path }}"
+
+        - name: Remove git repository
+          file:
+            state: absent
+            path: "{{ checkout_path }}"
