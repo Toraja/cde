@@ -1,6 +1,7 @@
 ---
 - name: taskwarrior
   hosts: localhost
+  tags: taskwarrior
   vars:
     apt_packages:
       - cmake
@@ -70,3 +71,48 @@
           file:
             state: absent
             path: "{{ checkout_path }}"
+
+- name: taskwarrior-tui
+  hosts: localhost
+  tags: taskwarrior-tui
+  vars:
+    download_path: /tmp/taskwarrior-tui.tar.gz
+  tasks:
+    - name: Check if taskwarrior-tui is installed
+      ansible.builtin.shell: |
+          which taskwarrior-tui
+      changed_when: false
+      failed_when: false
+      register: taskwarrior_tui_installed
+
+    - name: Check if taskwarrior is latest
+      when: taskwarrior_tui_installed.rc == 0
+      block:
+        - name: Get installed taskwarrior-tui version
+          ansible.builtin.shell: |
+            taskwarrior-tui --version | awk '{print $2}'
+          changed_when: false
+          register: installed_taskwarrior_tui_version
+
+        - name: Get latest taskwarrior-tui version
+          ansible.builtin.shell: |
+            curl -s https://api.github.com/repos/kdheepak/taskwarrior-tui/releases/latest | jq -r .tag_name
+          changed_when: false
+          register: latest_taskwarrior_tui_version
+
+        - name: Check if latest is installed
+          ansible.builtin.shell: |
+            test "v{{ installed_taskwarrior_tui_version.stdout }}" = "{{ latest_taskwarrior_tui_version.stdout }}"
+          changed_when: false
+          failed_when: false
+          register: latest_taskwarrior_tui_is_installed
+
+    - name: install taskwarrior-tui
+      become: yes
+      when: not (taskwarrior_tui_installed.rc == 0 and latest_taskwarrior_tui_is_installed.rc == 0)
+      block:
+        - name: Install taskwarrior-tui
+          ansible.builtin.shell: |
+            ../github-latest-release-installer.sh kdheepak taskwarrior-tui taskwarrior-tui-x86_64-unknown-linux-gnu.tar.gz "{{ download_path }}"
+            tar -xzf "{{ download_path }}" --directory=/usr/local/bin
+            rm "{{ download_path }}"
