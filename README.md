@@ -1,7 +1,7 @@
 # CDE - Containerised Develop Environment
 
 ## Things to do on Host machine
-Refer to `[this README](./host-setup/README.md)`
+Refer to [Host setup README](./host-setup/README.md)
 
 ### WSL
 - Do the setup and configuration illustrated in
