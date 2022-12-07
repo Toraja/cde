@@ -2,13 +2,6 @@
 - name: taskwarrior
   hosts: localhost
   tags: taskwarrior
-  vars:
-    apt_packages:
-      - cmake
-      - gcc
-      - g++
-      - uuid-dev
-    checkout_path: /tmp/taskwarrior
   tasks:
     - name: Check if taskwarrior is installed
       ansible.builtin.shell: |
@@ -40,9 +33,16 @@
           register: latest_taskwarrior_is_installed
 
     - name: install taskwarrior
-      when: not (taskwarrior_installed.rc == 0 and latest_taskwarrior_is_installed.rc == 0)
+      vars:
+        checkout_path: /tmp/taskwarrior
       block:
         - name: install required packages
+          vars:
+            apt_packages:
+              - cmake
+              - gcc
+              - g++
+              - uuid-dev
           include_role:
             name: apt
 
@@ -72,6 +72,7 @@
           file:
             state: absent
             path: "{{ checkout_path }}"
+      when: not (taskwarrior_installed.rc == 0 and latest_taskwarrior_is_installed.rc == 0)
 
     - name: Setup taskrc
       vars:
