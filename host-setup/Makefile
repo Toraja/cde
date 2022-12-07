@@ -136,6 +136,3 @@ docker-wsl:
 .PHONY: taskwarrior
 taskwarrior:
 	ansible-playbook playbooks/taskwarrior.yml
-	test -n "${TASKRC}" \
-		&& mkdir -p $$(dirname ${TASKRC}) \
-		&& cp taskrc ${TASKRC} || echo "Setup taskrc manually"

@@ -45,6 +45,7 @@
         - name: install required packages
           include_role:
             name: apt
+
         - name: Git checkout
           ansible.builtin.git:
             repo: https://github.com/GothenburgBitFactory/taskwarrior.git
@@ -71,6 +72,27 @@
           file:
             state: absent
             path: "{{ checkout_path }}"
+
+    - name: Setup taskrc
+      vars:
+        - taskrc_path: "{{ lookup('ansible.builtin.env', 'TASKRC') }}"
+      block:
+        - name: Check if taskrc exists
+          ansible.builtin.stat:
+            path: "{{ taskrc_path }}"
+          register: taskrc
+          when: taskrc_path != ""
+        - name: Copy taskrc
+          ansible.builtin.shell:
+            cmd: |
+              mkdir -p $(dirname ${TASKRC})
+              cp ../taskrc ${TASKRC} || echo "Setup taskrc manually"
+          when: taskrc.stat is defined and not taskrc.stat.exists
+        - name: Setup manually
+          ansible.builtin.debug:
+            msg:
+              - "Setup taskrc manually"
+          when: taskrc_path == ""
 
 - name: taskwarrior-tui
   hosts: localhost
