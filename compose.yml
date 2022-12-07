@@ -7,7 +7,6 @@ services:
       context: ./${PRIMARY_CDE:?}/ctx
       args:
         - USER=${USER:?}
-        - CPU_ARCH
         - BASE_IMAGE_NAME
         - BASE_IMAGE_TAG
       labels:
