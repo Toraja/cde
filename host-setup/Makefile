@@ -54,6 +54,7 @@ repositories:
 		&& ln -s $${ghq_root}/${github_repo_subpath}/toybox ~/toybox \
 		&& mv ~/cde $${ghq_root}/${github_repo_subpath} \
 		&& ln -s $${ghq_root}/${github_repo_subpath}/cde ~/cde
+	mkdir -p ~/.config/gh
 
 .PHONY: fish
 fish:

@@ -26,10 +26,15 @@ RUN apt-get update && apt-get install --no-install-recommends --yes \
         software-properties-common \
     && apt-add-repository ppa:fish-shell/release-3 \
     && apt-add-repository ppa:git-core/ppa \
+    # --- gh --- \
+    && curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg \
+    && chmod go+r /usr/share/keyrings/githubcli-archive-keyring.gpg \
+    && echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | tee /etc/apt/sources.list.d/github-cli.list > /dev/null \
+    # --- gh end --- \
     && apt-get update && apt-get install --no-install-recommends --yes \
         sudo less man-db locales tree openssh-client unzip wget gettext-base \
         python3-pip build-essential \
-        git git-lfs make xclip net-tools netcat fish vim tmux \
+        git git-lfs gh make xclip net-tools netcat fish vim tmux \
     && rm -rf /var/lib/apt/lists/* \
     # Without this, `man` complains that $LC_* is not set \
     && locale-gen en_US.UTF-8
@@ -91,6 +96,8 @@ RUN git clone https://github.com/Toraja/toybox.git \
     && ln -s ~/toybox/git/gitignore_global ~/.gitignore_global \
     && ln -s ~/toybox/git/custom-commands/bin/* ~/.local/bin/ \
     && ln -s ~/toybox/git/custom-commands/config/fish/* ~/.config/fish/conf.d/ \
+    # gh \
+    && ln -s ~/hosthome/.config/gh ~/.config/gh \
     # tmux \
     && git clone https://github.com/tmux-plugins/tpm ~/.config/tmux/plugins/tpm \
     && ~/.config/tmux/plugins/tpm/bin/install_plugins
