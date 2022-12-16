@@ -11,6 +11,7 @@ asdf-global-installer.sh \
     direnv \
     neovim \
     lua \
+    nodejs \
     grpcurl \
     ghq \
     fd \
@@ -28,6 +29,7 @@ asdf-global-installer.sh \
 asdf direnv setup --shell fish --version latest
 helm plugin install https://github.com/databus23/helm-diff
 luarocks completion fish > ~/.config/fish/completions/luarocks.fish
+npm install --global yaml-language-server
 kubectl completion fish > ~/.config/fish/completions/kubectl.fish
 kind completion fish > ~/.config/fish/completions/kind.fish
 k9s completion fish > ~/.config/fish/completions/k9s.fish
