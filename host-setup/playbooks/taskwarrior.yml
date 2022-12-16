@@ -139,3 +139,67 @@
             ../github-latest-release-installer.sh kdheepak taskwarrior-tui taskwarrior-tui-x86_64-unknown-linux-gnu.tar.gz "{{ download_path }}"
             tar -xzf "{{ download_path }}" --directory=/usr/local/bin
             rm "{{ download_path }}"
+
+- name: taskopen
+  hosts: localhost
+  tags: taskopen
+  vars:
+    binary: taskopen
+    installed_version_cmd: taskopen version | sed 's/^v//'
+    latest_version_cmd: |
+      git ls-remote --tags --refs https://github.com/jschlatow/taskopen.git |
+      awk '{ print $2 }' |
+      grep '^refs/tags/.*' |
+      sed 's/^refs\/tags\///' |
+      sed 's/^v//' |
+      awk '{ if ($1 ~ /-/) print; else print $0"_" ; }' |
+      sort -V |
+      sed 's/_$//' |
+      tail --lines 1
+  tasks:
+    - name: Check if binary is installed
+      ansible.builtin.shell: |
+        which {{ binary }}
+      changed_when: false
+      failed_when: false
+      register: binary_installed
+
+    - name: Check if latest is installed
+      when: binary_installed.rc == 0
+      block:
+        - name: Get installed version
+          ansible.builtin.shell: "{{ installed_version_cmd }}"
+          changed_when: false
+          register: installed_version
+
+        - name: Get latest version
+          ansible.builtin.shell: "{{ latest_version_cmd }}"
+          changed_when: false
+          register: latest_version
+
+        - name: Check if latest is installed
+          ansible.builtin.shell: |
+            test "{{ installed_version.stdout }}" = "{{ latest_version.stdout }}"
+          changed_when: false
+          failed_when: false
+          register: latest_version_is_installed
+
+    - name: Install binary
+      when: not (binary_installed.rc == 0 and latest_version_is_installed.rc == 0)
+      vars:
+        - install_prefix: /usr/local
+      ansible.builtin.shell: |
+        docker run --rm -v {{ install_prefix }}/bin:/dst nimlang/nim \
+          bash -c 'apt-get update &&
+            apt-get install --yes make &&
+            git clone --depth 1 --branch v{{ latest_version.stdout }} https://github.com/jschlatow/taskopen.git &&
+            cd taskopen &&
+            make PREFIX={{ install_prefix }} &&
+            mv taskopen /dst'
+
+    - name: Setup
+      ansible.builtin.shell:
+        cmd: |
+          mkdir -p $HOME/.config/taskopen/
+          ln -s $HOME/toybox/taskwarrior/taskopenrc $HOME/.config/taskopen/taskopenrc
+        creates: $HOME/.config/taskopen/taskopenrc
