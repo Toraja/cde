@@ -26,7 +26,8 @@ asdf-global-installer.sh \
     helm \
     helmfile
 
-asdf direnv setup --shell fish --version latest
+# temporarily disable asdf-direnv until it supports asdf v0.11
+# asdf direnv setup --shell fish --version latest
 helm plugin install https://github.com/databus23/helm-diff
 luarocks completion fish > ~/.config/fish/completions/luarocks.fish
 npm install --global yaml-language-server

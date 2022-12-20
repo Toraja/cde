@@ -79,8 +79,8 @@ RUN \
 
 COPY --chown=${USER}:${USER} ./helpers/install-asdf-plugins.sh /home/${USER}/.local/bin/
 ENV PATH="/home/${USER}/.krew/bin:$PATH"
-ARG ASDF_VERSION
-RUN git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch ${ASDF_VERSION} \
+RUN asdf_version=$(curl -s https://api.github.com/repos/asdf-vm/asdf/releases/latest | jq -r '.tag_name') \
+    && git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch ${asdf_version} \
     && mkdir -p ~/.config/fish/completions/ \
     && ln -s ~/.asdf/completions/asdf.fish ~/.config/fish/completions/ \
     && install-asdf-plugins.sh
