@@ -88,9 +88,9 @@ vim:
 tmux:
 	sudo -E apt-get update
 	sudo -E apt-get install --no-install-recommends --yes tmux
-	git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
-	echo 'source ~/toybox/tmux/tmux.conf' > ~/.tmux.conf
-	~/.tmux/plugins/tpm/bin/install_plugins
+	git clone https://github.com/tmux-plugins/tpm ~/.config/tmux/plugins/tpm
+	mkdir -p ~/.config/tmux/ && echo 'source ~/toybox/tmux/tmux.conf' > ~/.config/tmux/tmux.conf
+	~/.config/tmux/plugins/tpm/bin/install_plugins
 
 .PHONY: docker
 docker: docker-clean docker-add-repository docker-install-engine docker-setup
