@@ -22,12 +22,11 @@ RUN mkdir -p ~/go \
     && go install golang.org/x/tools/cmd/guru@latest \
     && go install github.com/josharian/impl@latest \
     && go install github.com/davidrjenni/reftools/cmd/fillstruct@latest \
-    && go install github.com/davidrjenni/reftools/cmd/fillswitch@latest \
     && go install github.com/go-delve/delve/cmd/dlv@latest \
     && go install github.com/onsi/ginkgo/v2/ginkgo@latest \
     && go install github.com/kyoh86/richgo@latest \
     && go install gotest.tools/gotestsum@latest \
-    && go install github.com/golang/mock@latest \
+    && go install github.com/golang/mock/mockgen@latest \
     && go install github.com/tmc/json-to-struct@latest
 VOLUME /home/${USER}/go
 SHELL ["/bin/sh", "-c"]
