@@ -27,6 +27,6 @@ RUN mkdir -p ~/go \
     && go install github.com/kyoh86/richgo@latest \
     && go install gotest.tools/gotestsum@latest \
     && go install github.com/golang/mock/mockgen@latest \
-    && go install github.com/tmc/json-to-struct@latest
-VOLUME /home/${USER}/go
+    && go install github.com/tmc/json-to-struct@latest \
+    && asdf reshim
 SHELL ["/bin/sh", "-c"]
