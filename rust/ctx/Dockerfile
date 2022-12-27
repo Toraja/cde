@@ -16,5 +16,6 @@ RUN source ~/.asdf/asdf.sh \
     # protoc is required by rust-analyzer \
     && asdf-global-installer.sh rust rust-analyzer protoc \
     && rustup completions fish > ~/.config/fish/completions/rustup.fish \
-    && rustup component add rls rust-src rust-analysis
+    && rustup component add rls rust-src rust-analysis \
+    && curl -LsSf https://get.nexte.st/latest/linux | tar zxf - -C $(dirname $(asdf which cargo))
 SHELL ["/bin/sh", "-c"]
