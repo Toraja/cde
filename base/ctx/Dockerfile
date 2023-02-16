@@ -101,7 +101,8 @@ RUN git clone https://github.com/Toraja/toybox.git \
     && git clone https://github.com/tmux-plugins/tpm ~/.config/tmux/plugins/tpm \
     && ~/.config/tmux/plugins/tpm/bin/install_plugins \
     # ranger \
-    && ln -s ~/toybox/ranger/rifle.conf ~/.config/ranger/
+    && ln -s ~/toybox/ranger/rifle.conf ~/.config/ranger/ \
+    && git clone https://github.com/alexanderjeurissen/ranger_devicons ~/.config/ranger/plugins/ranger_devicons
 
 # Setup symlink to host home directory to reduce bind mount
 # This also enables replacing those links with actual files when symlink is inappriate
