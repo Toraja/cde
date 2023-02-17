@@ -1,0 +1,15 @@
+services:
+  test:
+    build:
+      context: .
+      args:
+        - UID
+        - USER=${USER:?}
+    working_dir: /home/${USER:?}/cde/host-setup
+    volumes:
+      - type: bind
+        source: ./
+        target: /home/${USER:?}/cde/host-setup
+      - type: bind
+        source: ../base/ctx/home/.local/bin/github-latest-release-installer.sh
+        target: /home/${USER:?}/cde/host-setup/github-latest-release-installer.sh

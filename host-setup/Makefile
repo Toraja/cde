@@ -137,3 +137,15 @@ docker-wsl:
 .PHONY: taskwarrior
 taskwarrior:
 	ansible-playbook playbooks/taskwarrior.yml
+
+.PHONY: testenv
+testenv:
+	export UID && docker compose run --rm test
+
+.PHONY: testenv-build
+testenv-build:
+	export UID && docker compose build test
+
+.PHONY: review-test-base
+review-test-base:
+	docker pull ubuntu:latest
