@@ -13,8 +13,7 @@ primary_cde := $(lastword $(target_cde_list))
 compose_project_name := $(or $(pj), $(subst /,_,$(primary_cde)))
 host_name := cde.$(or $(pj), $(subst /,.,$(primary_cde)))
 # Specify COMPOSE_PROJECT_NAME to avoid the collision of container name and volume name between CDEs
-base_cmd = COMPOSE_PROJECT_NAME=$(compose_project_name) PRIMARY_CDE=$(primary_cde) CDE_HOSTNAME=$(host_name) \
-		   docker compose --file compose.yml $(compose_file_flags)
+base_cmd = docker compose --file compose.yml $(compose_file_flags)
 
 define validate_arg_cde
 	@if [[ -z "$(c)" ]]; then \
@@ -25,6 +24,13 @@ endef
 
 include .env $(envs)
 export
+export COMPOSE_PROJECT_NAME=$(compose_project_name)
+export PRIMARY_CDE=$(primary_cde)
+export CDE_HOSTNAME=$(host_name)
+export UID=$(shell id -u)
+export GID=$(shell id -g)
+export GROUP_NAME=$(shell groups | cut -d ' ' -f1)
+export DOCKER_GID=$(shell getent group docker | cut -d: -f3)
 
 .DEFAULT_GOAL := dummy
 

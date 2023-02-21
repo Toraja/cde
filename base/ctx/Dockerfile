@@ -35,7 +35,10 @@ RUN apt-get update && apt-get install --no-install-recommends --yes \
 
 ARG UID
 ARG USER
-RUN useradd --create-home --uid ${UID} --groups docker --shell /usr/bin/fish ${USER} \
+ARG GID
+ARG GROUP_NAME
+RUN groupadd --gid ${GID} ${GROUP_NAME} \
+    && useradd --create-home --uid ${UID} --gid ${GID} --groups ${DOCKER_GID} --shell /usr/bin/fish ${USER} \
     && echo "%"${USER}" ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/${USER}
 
 # Other nice-to-have tools
