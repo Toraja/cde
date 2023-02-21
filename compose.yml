@@ -43,9 +43,6 @@ services:
       - type: bind
         source: ~/workspace
         target: /home/${USER:?}/workspace
-      - type: bind
-        source: ~/.vim
-        target: /home/${USER:?}/.vim
     network_mode: "host"
 volumes:
   cde_cache:
