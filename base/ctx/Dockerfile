@@ -70,7 +70,7 @@ RUN \
     && mkdir -p ~/.cache ~/.local/share/nvim/site \
     # others \
     && github-latest-release-installer.sh -x docker compose docker-compose-linux-x86_64 ~/.docker/cli-plugins/docker-compose \
-    && github-latest-release-installer.sh -t sumneko lua-language-server 'lua-language-server-.*-linux-x64.tar.gz' ~/.local/opt/lua-language-server/
+    && github-latest-release-installer.sh -t LuaLS lua-language-server 'lua-language-server-.*-linux-x64.tar.gz' ~/.local/opt/lua-language-server/
 
 COPY --chown=${USER}:${USER} ./helpers/install-asdf-plugins.sh /home/${USER}/.local/bin/
 ENV PATH="/home/${USER}/.krew/bin:$PATH"
