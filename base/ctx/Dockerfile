@@ -68,6 +68,7 @@ ENV PATH="/home/${USER}/.local/bin:${PATH}"
 
 COPY --chown=${USER}:${USER} ./helpers/install-fish-plugins.fish /home/${USER}/.local/bin/
 RUN mkdir -p ~/tmp \
+    && github-latest-release-installer.sh -x docker buildx 'buildx-v.*.linux-amd64'  ~/.docker/cli-plugins/docker-buildx \
     && github-latest-release-installer.sh -x docker compose docker-compose-linux-x86_64 ~/.docker/cli-plugins/docker-compose \
     && github-latest-release-installer.sh -t LuaLS lua-language-server 'lua-language-server-.*-linux-x64.tar.gz' ~/.local/opt/lua-language-server/
 
