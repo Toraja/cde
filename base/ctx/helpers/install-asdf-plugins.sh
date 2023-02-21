@@ -45,10 +45,3 @@ curl -fsSL -o ~/.config/fish/completions/cheat.fish https://raw.githubuserconten
 
 krew-installer.sh
 kubectl krew install tree tail ns
-
-luarocks install fennel
-fnlfmt_version=0.2.3
-curl -fsSL https://git.sr.ht/~technomancy/fnlfmt/archive/${fnlfmt_version}.tar.gz | tar -xzf - \
-    && make -C fnlfmt-${fnlfmt_version} \
-    && mv fnlfmt-${fnlfmt_version}/fnlfmt ~/.local/bin \
-    && rm -rf fnlfmt-${fnlfmt_version}
