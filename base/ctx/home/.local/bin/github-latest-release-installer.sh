@@ -3,29 +3,57 @@
 set -euo pipefail
 
 usage() {
-    echo "USAGE:"
-    echo "    $(basename $0) [-hx] GITHUB_USER GITHUB_REPONAME ASSET_NAME DESTINATION"
+    echo "USAGE: $(basename $0) [-htTx] GITHUB_USER GITHUB_REPONAME ASSET_NAME DESTINATION"
+    echo "    DESTINATION is a path to output the downloaded file. If -t/T is specified, it is tread as directory into which tarball is extracted."
     echo "OPTIONS:"
-    echo "    -x Make downloaded file executable"
+    echo "    -t          Extract tarball into the destination. Mutually exclusive with -x."
+    echo "    -T MEMBER   Extract only the selected file in the tarball into the destination. Mutually exclusive with -x."
+    echo "    -x          Make downloaded file executable. Mutually exclusive with -t/T."
+}
+
+error() {
+    echo -e "\e[31m$@\e[0m"
 }
 
 executable=false
 untar=false
+tar_member=
 
-while getopts :htx opt; do
+while getopts :htT:x opt; do
     case ${opt} in
         x)
+            if $untar; then
+                error "-$opt is mutually exclusive with -t/T"
+                exit 1
+            fi
             executable=true
             ;;
         t)
+            if $executable; then
+                error "-$opt is mutually exclusive with -x"
+                exit 1
+            fi
             untar=true
             ;;
+        T)
+            if $executable; then
+                error "-$opt is mutually exclusive with -x"
+                exit 1
+            fi
+            untar=true
+            tar_member=$OPTARG
+            ;;
         h)
-            echo help
             usage
             exit 0
             ;;
+        :)
+            error "-$OPTARG requires argument"
+            usage
+            exit 1
+            ;;
         \?)
+            error "Invalid option: -$OPTARG"
             usage
             exit 1
             ;;
@@ -35,6 +63,7 @@ shift $((OPTIND-1))
 unset OPTIND
 
 if [[ $# -ne 4 ]]; then
+    error "Not enough arguments"
     usage
     exit 1
 fi
@@ -47,14 +76,14 @@ destination=$4
 download_url=$(curl https://api.github.com/repos/${github_user}/${github_reponame}/releases/latest \
     | jq -r '.assets[] | select( .name | match ("^'${asset_name}'$") ) | .browser_download_url')
 if [[ -z "$download_url" ]]; then
-    echo 'Failed to get download URL.'
+    error 'Failed to get download URL.'
     exit 1
 fi
 
 curl_cmd='curl -fsSL'
 if $untar; then
     mkdir -p $destination
-    $curl_cmd $download_url | tar xzf - -C $destination
+    $curl_cmd $download_url | tar xzf - -C $destination $tar_member
 else
     $curl_cmd --create-dirs -o $destination $download_url
 fi
