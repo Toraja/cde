@@ -164,6 +164,11 @@
       failed_when: false
       register: binary_installed
 
+    - name: Get latest version
+      ansible.builtin.shell: "{{ latest_version_cmd }}"
+      changed_when: false
+      register: latest_version
+
     - name: Check if latest is installed
       when: binary_installed.rc == 0
       block:
@@ -171,11 +176,6 @@
           ansible.builtin.shell: "{{ installed_version_cmd }}"
           changed_when: false
           register: installed_version
-
-        - name: Get latest version
-          ansible.builtin.shell: "{{ latest_version_cmd }}"
-          changed_when: false
-          register: latest_version
 
         - name: Check if latest is installed
           ansible.builtin.shell: |
