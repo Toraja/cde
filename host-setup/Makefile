@@ -134,6 +134,7 @@ docker-wsl:
 	sudo update-alternatives --set iptables /usr/sbin/iptables-legacy
 	sudo update-alternatives --set ip6tables /usr/sbin/ip6tables-legacy
 
+export TASKRC := ${HOME}/.config/taskwarrior/taskrc
 .PHONY: taskwarrior
 taskwarrior:
 	ansible-playbook --ask-become-pass playbooks/taskwarrior.yml
