@@ -1,6 +1,4 @@
-ARG BASE_IMAGE_NAME
-ARG BASE_IMAGE_TAG
-FROM ${BASE_IMAGE_NAME}:${BASE_IMAGE_TAG}
+FROM baseimage
 
 USER root
 
@@ -13,8 +11,8 @@ RUN apt-get update && apt-get install --no-install-recommends --yes \
 
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-ARG USER
-USER ${USER}
+ARG USER_NAME
+USER ${USER_NAME}
 
 # php-parser is required by phpctags
 RUN composer global require --dev \

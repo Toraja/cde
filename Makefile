@@ -22,15 +22,16 @@ define validate_arg_cde
 	fi
 endef
 
-include .env $(envs)
-export
 export COMPOSE_PROJECT_NAME=$(compose_project_name)
 export PRIMARY_CDE=$(primary_cde)
 export CDE_HOSTNAME=$(host_name)
-export UID=$(shell id -u)
-export GID=$(shell id -g)
+export USER_ID=$(shell id -u)
+export USER_NAME=$(shell whoami)
+export GROUD_ID=$(shell id -g)
 export GROUP_NAME=$(shell groups | cut -d ' ' -f1)
-export DOCKER_GID=$(shell getent group docker | cut -d: -f3)
+export DOCKER_GROUD_ID=$(shell getent group docker | cut -d: -f3)
+include .env $(envs)
+export
 
 .DEFAULT_GOAL := dummy
 
@@ -58,8 +59,8 @@ config: pre_process
 	$(base_cmd) config
 
 .PHONY: build
-build: pre_process
-	$(base_cmd) build
+build: docker_service
+	docker buildx bake $(t)
 
 .PHONY: up
 up: pre_process
