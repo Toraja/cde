@@ -1,6 +1,4 @@
-ARG BASE_IMAGE_NAME
-ARG BASE_IMAGE_TAG
-FROM ${BASE_IMAGE_NAME}:${BASE_IMAGE_TAG}
+FROM baseimage
 
 USER root
 
@@ -8,8 +6,8 @@ RUN apt-get update && apt-get upgrade --no-install-recommends --yes && apt-get i
     build-essential gdb \
     && rm -rf /var/lib/apt/lists/*
 
-ARG USER
-USER ${USER}
+ARG USER_NAME
+USER ${USER_NAME}
 
 SHELL ["/bin/bash", "-c"]
 RUN source ~/.asdf/asdf.sh \

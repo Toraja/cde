@@ -1,8 +1,0 @@
-services:
-  cde:
-    build:
-      args:
-        - UID=${UID:?}
-        - GID=${GID:?}
-        - GROUP_NAME=${GROUP_NAME:?}
-        - DOCKER_GID=${DOCKER_GID:?}

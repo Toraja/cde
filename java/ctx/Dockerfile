@@ -1,6 +1,4 @@
-ARG BASE_IMAGE_NAME
-ARG BASE_IMAGE_TAG
-FROM ${BASE_IMAGE_NAME}:${BASE_IMAGE_TAG}
+FROM baseimage
 
 USER root
 
@@ -10,8 +8,8 @@ RUN apt-get update && apt-get install --no-install-recommends --yes \
     openjdk-${VERSION}-jdk \
     && rm -rf /var/lib/apt/lists/*
 
-ARG USER
-USER ${USER}
+ARG USER_NAME
+USER ${USER_NAME}
 
 # Maybe it's better to do this manually in a bind mounted directory after image
 # is built because it takes very long time to complete.

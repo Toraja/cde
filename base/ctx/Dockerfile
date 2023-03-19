@@ -7,7 +7,7 @@ FROM ubuntu:${BASE_IMAGE_TAG:-rolling}
 RUN yes | unminimize
 # Official Debian and Ubuntu images automatically run apt-get clean, so explicit invocation is not required.
 # Set up to install docker
-ARG DOCKER_GID
+ARG DOCKER_GROUD_ID
 RUN apt-get update && apt-get upgrade --no-install-recommends --yes && apt-get install --no-install-recommends --yes \
     apt-transport-https ca-certificates curl gnupg lsb-release \
     && curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg \
@@ -15,8 +15,8 @@ RUN apt-get update && apt-get upgrade --no-install-recommends --yes && apt-get i
     && apt-get update && apt-get install --no-install-recommends --yes \
         docker-ce docker-ce-cli containerd.io docker-compose-plugin \
     && rm -rf /var/lib/apt/lists/* \
-    # Specify GID for docker as it differs depending on the environment (Docker Desktop etc.) \
-    && groupmod --gid ${DOCKER_GID} docker
+    # Specify GROUD_ID for docker as it differs depending on the environment (Docker Desktop etc.) \
+    && groupmod --gid ${DOCKER_GROUD_ID} docker
 
 # Must-have basic packages
 ## gettext-base installs envsubst
@@ -33,13 +33,13 @@ RUN apt-get update && apt-get install --no-install-recommends --yes \
     # Without this, `man` complains that $LC_* is not set \
     && locale-gen en_US.UTF-8
 
-ARG UID
-ARG USER
-ARG GID
+ARG USER_ID
+ARG USER_NAME
+ARG GROUD_ID
 ARG GROUP_NAME
-RUN groupadd --gid ${GID} ${GROUP_NAME} \
-    && useradd --create-home --uid ${UID} --gid ${GID} --groups ${DOCKER_GID} --shell /usr/bin/fish ${USER} \
-    && echo ${USER}" ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/${USER}
+RUN groupadd --gid ${GROUD_ID} ${GROUP_NAME} \
+    && useradd --create-home --uid ${USER_ID} --gid ${GROUD_ID} --groups ${DOCKER_GROUD_ID} --shell /usr/bin/fish ${USER_NAME} \
+    && echo ${USER_NAME}" ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/${USER_NAME}
 
 # Other nice-to-have tools
 RUN apt-get update && apt-get install --no-install-recommends --yes \
@@ -60,19 +60,19 @@ RUN apt-get update && apt-get install --no-install-recommends --yes \
     # pynvim is required by python plugins \
     && pip install pynvim
 
-USER ${USER}
-WORKDIR /home/${USER}
+USER ${USER_NAME}
+WORKDIR /home/${USER_NAME}
 
-COPY --chown=${USER}:${USER} ./home ./
-ENV PATH="/home/${USER}/.local/bin:${PATH}"
+COPY --chown=${USER_NAME}:${USER_NAME} ./home ./
+ENV PATH="/home/${USER_NAME}/.local/bin:${PATH}"
 
-COPY --chown=${USER}:${USER} ./helpers/install-fish-plugins.fish /home/${USER}/.local/bin/
+COPY --chown=${USER_NAME}:${USER_NAME} ./helpers/install-fish-plugins.fish /home/${USER_NAME}/.local/bin/
 RUN mkdir -p ~/tmp \
     && github-latest-release-installer.sh -x docker buildx 'buildx-v.*.linux-amd64'  ~/.docker/cli-plugins/docker-buildx \
     && github-latest-release-installer.sh -t LuaLS lua-language-server 'lua-language-server-.*-linux-x64.tar.gz' ~/.local/opt/lua-language-server/
 
-COPY --chown=${USER}:${USER} ./helpers/install-asdf-plugins.sh /home/${USER}/.local/bin/
-ENV PATH="/home/${USER}/.krew/bin:$PATH"
+COPY --chown=${USER_NAME}:${USER_NAME} ./helpers/install-asdf-plugins.sh /home/${USER_NAME}/.local/bin/
+ENV PATH="/home/${USER_NAME}/.krew/bin:$PATH"
 RUN asdf_version=$(curl -s https://api.github.com/repos/asdf-vm/asdf/releases/latest | jq -r '.tag_name') \
     && git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch ${asdf_version} \
     && mkdir -p ~/.config/fish/completions/ \

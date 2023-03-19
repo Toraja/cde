@@ -3,15 +3,6 @@ services:
     image: cde/${PRIMARY_CDE:?}
     environment:
       - GIT_HUB_SSH_KEY
-    build:
-      context: ./${PRIMARY_CDE:?}/ctx
-      args:
-        - USER=${USER:?}
-        - BASE_IMAGE_NAME
-        - BASE_IMAGE_TAG
-      labels:
-        # This has to be array instead of map. (With map, variables in key are not expanded)
-        - cde.${PRIMARY_CDE:?}=true
     hostname: ${CDE_HOSTNAME:?}
     extra_hosts:
       - ${CDE_HOSTNAME:?}:127.0.0.1
