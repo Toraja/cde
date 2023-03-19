@@ -30,7 +30,7 @@ prerequisite:
 	sudo -E apt-get update
 	sudo -E apt-get install --no-install-recommends --yes python3-pip
 	pip install ansible
-	ansible-playbook playbooks/prerequisite.yml
+	ansible-playbook --ask-become-pass playbooks/prerequisite.yml
 
 .PHONY: bashrc
 bashrc:
@@ -136,7 +136,7 @@ docker-wsl:
 
 .PHONY: taskwarrior
 taskwarrior:
-	ansible-playbook playbooks/taskwarrior.yml
+	ansible-playbook --ask-become-pass playbooks/taskwarrior.yml
 
 .PHONY: testenv
 testenv:
