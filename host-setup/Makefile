@@ -14,6 +14,8 @@ define echocyan
 	echo -e "\e[0;36m$(1)\e[0;0m"
 endef
 
+export PATH := ${HOME}/.local/bin:${PATH} 
+
 .PHONY: help
 help:
 	$(call printhelp, Target, Description)
