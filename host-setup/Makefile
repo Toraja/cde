@@ -76,13 +76,13 @@ vim:
 	./github-latest-release-installer.sh neovim neovim nvim-linux64.deb /tmp/xxx/nvim-linux64.deb && \
 		sudo apt install /tmp/xxx/nvim-linux64.deb && \
 		rm -rdf /tmp/xxx
-	mkdir -p ~/.vim/swap ~/.config/nvim
+	mkdir -p ~/.config/nvim
 	test -f ~/.config/nvim/init.vim || echo 'source ~/toybox/nvim/init.vim' > ~/.config/nvim/init.vim
 	test -f ~/.config/nvim/ginit.vim || echo 'source ~/toybox/nvim/ginit.vim' > ~/.config/nvim/ginit.vim
 	@# If DIPLAY is set, pip get stuck due to python keyring thingy
 	# DISPLAY= sudo -E pip install pynvim
-	git clone https://github.com/junegunn/vim-plug.git ~/.vim/bundle/vim-plug
-	nvim --headless -c PlugInstall -c qall
+	# Place fzf here as telescope.nvim requires it
+	./github-latest-release-installer.sh -t junegunn fzf 'fzf-.*-linux_amd64.tar.gz' ~/.local/bin/
 
 .PHONY: tmux
 tmux:
