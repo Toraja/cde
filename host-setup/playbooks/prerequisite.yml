@@ -1,5 +1,5 @@
 ---
-- name: install required packages
+- name: Install apt packages
   hosts: localhost
   vars:
     apt_packages:
@@ -8,3 +8,32 @@
   roles:
     - role: apt
       tags: ["apt"]
+
+- name: Install just
+  hosts: localhost
+  connection: local
+  vars:
+    just_install_dest: ~/.local/bin/
+  tasks:
+    - name: Check if just is installed
+      stat:
+        path: "{{ just_install_dest }}/just"
+      register: just_info
+    - name: Fetch just installer
+      ansible.builtin.uri:
+        url: https://just.systems/install.sh
+        return_content: yes
+      register: fetch_just_installer
+      when: not just_info.stat.exists
+    - name: Run just installer
+      ansible.builtin.shell:
+        cmd: bash -s -- --to {{ just_install_dest }}
+        stdin: "{{ fetch_just_installer.content }}"
+      register: run_just_installer
+      when: fetch_just_installer is not skipped
+    - name: Add just completions
+      ansible.builtin.shell: |
+        just --completions bash | sudo tee /etc/bash_completion.d/just > /dev/null
+        mkdir --parents ~/.config/fish/completions/
+        just --completions fish > ~/.config/fish/completions/just.fish
+      when: run_just_installer is not skipped
