@@ -21,6 +21,7 @@ asdf-global-installer.sh \
     cheat \
     fx \
     yq \
+    just \
     kubectl \
     kind \
     k9s \
@@ -28,6 +29,7 @@ asdf-global-installer.sh \
     helmfile
 
 asdf direnv setup --shell fish --version latest
+just --completions fish > ~/.config/fish/completions/just.fish
 helm plugin install https://github.com/databus23/helm-diff
 luarocks completion fish > ~/.config/fish/completions/luarocks.fish
 luarocks install busted
