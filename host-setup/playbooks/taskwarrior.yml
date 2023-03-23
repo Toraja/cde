@@ -5,7 +5,7 @@
   tasks:
     - name: Check if taskwarrior is installed
       ansible.builtin.shell: |
-          which task
+        which task
       changed_when: false
       failed_when: false
       register: taskwarrior_installed
@@ -39,6 +39,7 @@
         - name: install required packages
           vars:
             apt_packages:
+              - make
               - cmake
               - gcc
               - g++
@@ -103,7 +104,7 @@
   tasks:
     - name: Check if taskwarrior-tui is installed
       ansible.builtin.shell: |
-          which taskwarrior-tui
+        which taskwarrior-tui
       changed_when: false
       failed_when: false
       register: taskwarrior_tui_installed

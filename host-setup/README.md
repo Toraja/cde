@@ -9,10 +9,12 @@
   ```sh
   git clone git@personal.github.com:Toraja/cde.git ~/cde
   ```
-- Install `make` and run `make` in `host-setup` directory.
+- Install `just` and run recipes.
   ```sh
-  apt update && apt install make
-  ```
-  ```sh
-  make
+  PATH="$HOME/.local/bin:$PATH"
+  mkdir -p $HOME/.local/bin
+  curl --proto '=https' --tlsv1.2 -sSf https://just.systems/install.sh | bash -s -- --to $HOME/.local/bin
+  cd host-setup
+  just prerequisite
+  # just <recipes>
   ```
