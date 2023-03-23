@@ -5,35 +5,28 @@
   vars:
     just_install_dest: ~/.local/bin/
   tasks:
-  - name: Check if just is installed
-    stat:
-      path: '{{ just_install_dest }}/just'
-    register: just_info
-  - name: Fetch just installer
-    ansible.builtin.uri:
-      url: https://just.systems/install.sh
-      return_content: yes
-    register: just_installer
-    when: not just_info.stat.exists
+    - name: Check if just is installed
+      stat:
+        path: "{{ just_install_dest }}/just"
+      register: just_info
+    - name: Fetch just installer
+      ansible.builtin.uri:
+        url: https://just.systems/install.sh
+        return_content: yes
+      register: just_installer
+      when: not just_info.stat.exists
+    - name: Run just installer
+      ansible.builtin.shell:
+        cmd: bash -s -- --to {{ just_install_dest }}
+        stdin: "{{ just_installer.content }}"
+      when: just_installer is not skipped
 
-  - name: Run just installer
-    ansible.builtin.shell:
-      cmd: bash -s -- --to {{ just_install_dest }}
-      stdin: '{{ just_installer.content }}'
-    when: just_installer is not skipped
-
-- name: apt-get
+- name: install apt packages
   hosts: localhost
-  connection: local
-  become: true
-  tasks:
-    - name: install packages
-      apt:
-        pkg:
-          - xclip
-          - keychain
-        state: present
-        install_recommends: no
-        update_cache: true
-        cache_valid_time: 3600
-        force_apt_get: true
+  vars:
+    apt_packages:
+      - xclip
+      - keychain
+  roles:
+    - role: apt
+      tags: ["apt"]
