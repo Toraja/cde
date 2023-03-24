@@ -1,6 +1,7 @@
 set shell := ['/usr/bin/bash', '-c']
 
 export PATH :=  env_var('HOME') / '.local/bin:' +  env_var('PATH')
+export ANSIBLE_BECOME_PASSWORD_FILE := '.ansible_become_password'
 
 default:
 	@just --list --unsorted
@@ -14,7 +15,7 @@ prerequisite:
 	sudo -E apt-get update
 	sudo -E apt-get install --no-install-recommends --yes python3-pip
 	pip install ansible
-	ansible-playbook --ask-become-pass playbooks/prerequisite.yml
+	ansible-playbook playbooks/prerequisite.yml
 
 bashrc:
 	grep -q '# Added by host setup' ~/.bashrc || cat ./bashrc >> ~/.bashrc
@@ -107,10 +108,10 @@ docker-wsl:
 	sudo update-alternatives --set ip6tables /usr/sbin/ip6tables-legacy
 
 taskwarrior:
-	TASKRC=${HOME}/.config/taskwarrior/taskrc ansible-playbook --ask-become-pass playbooks/taskwarrior.yml
+	ansible-playbook playbooks/taskwarrior.yml
 
 misc:
-	ansible-playbook --ask-become-pass playbooks/misc.yml
+	ansible-playbook playbooks/misc.yml
 
 test:
 	export UID && docker compose run --rm test

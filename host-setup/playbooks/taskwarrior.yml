@@ -77,7 +77,7 @@
 
     - name: Setup taskrc
       vars:
-        - taskrc_path: "{{ lookup('ansible.builtin.env', 'TASKRC') }}"
+        - taskrc_path: "{{ lookup('ansible.builtin.env', 'HOME') }}/.config/taskwarrior/taskrc"
       block:
         - name: Check if taskrc exists
           ansible.builtin.stat:
@@ -87,8 +87,8 @@
         - name: Copy taskrc
           ansible.builtin.shell:
             cmd: |
-              mkdir -p $(dirname ${TASKRC})
-              cp ../taskrc ${TASKRC} || echo "Setup taskrc manually"
+              mkdir -p $(dirname {{ taskrc_path }})
+              cp ../taskrc {{ taskrc_path }} || echo "Setup taskrc manually"
           when: taskrc.stat is defined and not taskrc.stat.exists
         - name: Setup manually
           ansible.builtin.debug:
