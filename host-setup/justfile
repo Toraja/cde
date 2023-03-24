@@ -109,6 +109,9 @@ docker-wsl:
 taskwarrior:
 	TASKRC=${HOME}/.config/taskwarrior/taskrc ansible-playbook --ask-become-pass playbooks/taskwarrior.yml
 
+misc:
+	ansible-playbook --ask-become-pass playbooks/misc.yml
+
 test:
 	export UID && docker compose run --rm test
 
