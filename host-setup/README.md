@@ -4,10 +4,7 @@
   ```sh
   ssh-keygen -t ed25519 -C 'Toraja@users.noreply.github.com' -f "$HOME/.ssh/<key_file_name>"
   ```
-- Copy `.ssh` directory under `host-setup`
-  ```sh
-  cp .ssh ~
-  ```
+- Copy `.ssh/config` to your machine.
 - Clone this repository
   ```sh
   git clone git@personal.github.com:Toraja/cde.git ~/cde
@@ -18,8 +15,4 @@
   ```
   ```sh
   make
-  ```
-- Copy `.env` and set appropriate values.
-  ```sh
-  cp .env.example .env
   ```
