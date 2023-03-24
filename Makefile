@@ -29,7 +29,7 @@ export USER_ID=$(shell id -u)
 export USER_NAME=$(shell whoami)
 export GROUD_ID=$(shell id -g)
 export GROUP_NAME=$(shell groups | cut -d ' ' -f1)
-export DOCKER_GROUD_ID=$(shell getent group docker | cut -d: -f3)
+export DOCKER_GROUP_ID=$(shell getent group docker | cut -d: -f3)
 include .env $(envs)
 export
 
