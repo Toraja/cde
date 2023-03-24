@@ -3,6 +3,8 @@ FROM baseimage
 ARG USER_NAME
 USER ${USER_NAME}
 
+ENV CGO_ENABLED=0
+
 SHELL ["/bin/bash", "-c"]
 RUN mkdir -p ~/go \
     && source ~/.asdf/asdf.sh \
