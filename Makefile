@@ -58,10 +58,6 @@ custom: pre_process
 config: pre_process
 	$(base_cmd) config
 
-.PHONY: build
-build: docker_service
-	docker buildx bake $(t)
-
 .PHONY: up
 up: pre_process
 	$(base_cmd) up --no-recreate
