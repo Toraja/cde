@@ -1,4 +1,0 @@
-services:
-  cde:
-    environment:
-      - CGO_ENABLED=${CGO_ENABLED:-0}
