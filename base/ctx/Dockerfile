@@ -7,7 +7,7 @@ FROM ubuntu:${BASE_IMAGE_TAG:-rolling}
 RUN yes | unminimize
 # Official Debian and Ubuntu images automatically run apt-get clean, so explicit invocation is not required.
 # Set up to install docker
-ARG DOCKER_GROUD_ID
+ARG DOCKER_GROUP_ID
 RUN apt-get update && apt-get upgrade --no-install-recommends --yes && apt-get install --no-install-recommends --yes \
     apt-transport-https ca-certificates curl gnupg lsb-release \
     && curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg \
@@ -16,7 +16,7 @@ RUN apt-get update && apt-get upgrade --no-install-recommends --yes && apt-get i
         docker-ce docker-ce-cli containerd.io docker-compose-plugin \
     && rm -rf /var/lib/apt/lists/* \
     # Specify GROUD_ID for docker as it differs depending on the environment (Docker Desktop etc.) \
-    && groupmod --gid ${DOCKER_GROUD_ID} docker
+    && groupmod --gid ${DOCKER_GROUP_ID} docker
 
 # Must-have basic packages
 ## gettext-base installs envsubst
@@ -38,7 +38,7 @@ ARG USER_NAME
 ARG GROUD_ID
 ARG GROUP_NAME
 RUN groupadd --gid ${GROUD_ID} ${GROUP_NAME} \
-    && useradd --create-home --uid ${USER_ID} --gid ${GROUD_ID} --groups ${DOCKER_GROUD_ID} --shell /usr/bin/fish ${USER_NAME} \
+    && useradd --create-home --uid ${USER_ID} --gid ${GROUD_ID} --groups ${DOCKER_GROUP_ID} --shell /usr/bin/fish ${USER_NAME} \
     && echo ${USER_NAME}" ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/${USER_NAME}
 
 # Other nice-to-have tools

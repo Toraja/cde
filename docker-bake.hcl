@@ -21,7 +21,7 @@ target "common" {
 variable "USER_ID" {}
 variable "GROUD_ID" {}
 variable "GROUP_NAME" {}
-variable "DOCKER_GROUD_ID" {}
+variable "DOCKER_GROUP_ID" {}
 
 target "base" {
   inherits = ["common"]
@@ -30,7 +30,7 @@ target "base" {
     USER_ID = "${USER_ID}"
     GROUD_ID = "${GROUD_ID}"
     GROUP_NAME = "${GROUP_NAME}"
-    DOCKER_GROUD_ID = "${DOCKER_GROUD_ID}"
+    DOCKER_GROUP_ID = "${DOCKER_GROUP_ID}"
   }
   tags = ["${IMAGE_TAG_PREFIX}base"]
   labels = {
