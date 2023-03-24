@@ -1,6 +1,0 @@
-{
-  "base/*": {"type": "base"},
-  "go/*": {"type": "go"},
-  "java/*": {"type": "java"},
-  "php/*": {"type": "php"}
-}
