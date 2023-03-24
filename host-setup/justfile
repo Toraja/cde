@@ -75,8 +75,9 @@ tmux:
 docker: docker-clean docker-add-repository docker-install-engine docker-setup
 
 docker-clean:
-	@# docker-engine does not exist as package
 	sudo -E apt-get remove docker docker.io containerd runc
+	@# docker-engine might not exist as package
+	-sudo -E apt-get remove docker-engine
 
 docker-add-repository:
 	sudo -E apt-get update
