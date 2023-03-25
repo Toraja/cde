@@ -10,7 +10,7 @@ services:
         source: ./
         target: /home/${USER:?}/wd/
       - type: bind
-        source: ../base/ctx/home/.local/bin/github-latest-release-installer.sh
+        source: ../root/ctx/home/.local/bin/github-latest-release-installer.sh
         target: /home/${USER:?}/wd/github-latest-release-installer.sh
       - type: bind
         source: /home/${USER:?}/.ssh

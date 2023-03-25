@@ -1,14 +1,17 @@
-# --- common---
+# --- common ---
 variable "BASE_IMAGE" {
-  default = "target:base"
-}
-variable "IMAGE_TAG_PREFIX" {
-  default = "cde/"
-}
-variable "LABEL_PREFIX" {
-  default = "cde."
+  default = "target:root"
 }
 variable "USER_NAME" {}
+variable "ENV_PREFIX" {
+  default = "env/"
+}
+
+function "tagname" {
+  params = []
+  variadic_params = items
+  result = join("/", ["cde", join("/", items)])
+}
 
 target "common" {
   args = {
@@ -16,29 +19,26 @@ target "common" {
   }
 }
 
-# --- base---
+# --- root ---
 
 variable "USER_ID" {}
 variable "GROUD_ID" {}
 variable "GROUP_NAME" {}
 variable "DOCKER_GROUP_ID" {}
 
-target "base" {
+target "root" {
   inherits = ["common"]
-  context = "base/ctx"
+  context = "root/ctx"
   args = {
-    USER_ID = "${USER_ID}"
-    GROUD_ID = "${GROUD_ID}"
-    GROUP_NAME = "${GROUP_NAME}"
-    DOCKER_GROUP_ID = "${DOCKER_GROUP_ID}"
+    USER_ID = USER_ID
+    GROUD_ID = GROUD_ID
+    GROUP_NAME = GROUP_NAME
+    DOCKER_GROUP_ID = DOCKER_GROUP_ID
   }
-  tags = ["${IMAGE_TAG_PREFIX}base"]
-  labels = {
-    "${LABEL_PREFIX}base" = true
-  }
+  tags = [tagname("root")]
 }
 
-# --- go---
+# --- go ---
 
 variable "GO_BASE_IMAGE" {
   default = "${BASE_IMAGE}"
@@ -50,13 +50,10 @@ target "go" {
   contexts = {
     baseimage = "${GO_BASE_IMAGE}"
   }
-  tags = ["${IMAGE_TAG_PREFIX}go"]
-  labels = {
-    "${LABEL_PREFIX}go" = true
-  }
+  tags = [tagname("go")]
 }
 
-# --- python---
+# --- python ---
 
 variable "PYTHON_BASE_IMAGE" {
   default = "${BASE_IMAGE}"
@@ -68,13 +65,10 @@ target "python" {
   contexts = {
     baseimage = "${PYTHON_BASE_IMAGE}"
   }
-  tags = ["${IMAGE_TAG_PREFIX}python"]
-  labels = {
-    "${LABEL_PREFIX}python" = true
-  }
+  tags = [tagname("python")]
 }
 
-# --- rust---
+# --- rust ---
 
 variable "RUST_BASE_IMAGE" {
   default = "${BASE_IMAGE}"
@@ -86,8 +80,5 @@ target "rust" {
   contexts = {
     baseimage = "${RUST_BASE_IMAGE}"
   }
-  tags = ["${IMAGE_TAG_PREFIX}rust"]
-  labels = {
-    "${LABEL_PREFIX}rust" = true
-  }
+  tags = [tagname("rust")]
 }

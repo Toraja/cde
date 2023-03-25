@@ -18,7 +18,11 @@ default:
 
 [private]
 @docker_service:
-	helpers/start-docker-service.sh
+	if test -f helpers/start-docker-service.sh; then \
+		helpers/start-docker-service.sh; \
+	else \
+		cde/helpers/start-docker-service.sh; \
+	fi
 
 [private]
 @validate_cde cde:
@@ -28,8 +32,16 @@ default:
 	fi
 
 # Build specified targets.
-build +target: docker_service
-	docker buildx bake {{target}}
+build target bakeflag='': docker_service
+	#!/usr/bin/env fish
+	set target (string replace '/' '_' {{trim_start_match(trim_end_match(target, '/'), 'env/')}})
+	set flag --file docker-bake.hcl
+	set env_root (string replace --regex '([^/]+/[^/]+/).*' '$1' {{target}})
+	test -f $env_root/docker-bake.hcl && set flag $flag --file $env_root/docker-bake.hcl
+	docker buildx bake $flag {{bakeflag}} $target
+
+# Parse and print bake file
+build-print target: (build target '--print')
 
 config:
 	{{compose_cmd}} config --no-interpolate
