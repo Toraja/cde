@@ -1,1 +1,1 @@
-../base/ctx/home/.local/bin/github-latest-release-installer.sh
+../root/ctx/home/.local/bin/github-latest-release-installer.sh
