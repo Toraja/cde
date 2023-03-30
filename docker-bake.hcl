@@ -4,13 +4,18 @@ variable "BASE_IMAGE" {
 }
 variable "USER_NAME" {}
 variable "ENV_PREFIX" {
-  default = "env/"
+  default = "env"
 }
+variable "ENV_GROUP" {} # must be overwritten in docker-bake.hcl of each env
 
 function "tagname" {
   params = []
   variadic_params = items
-  result = join("/", ["cde", join("/", items)])
+  result = join("/", ["cde", ENV_GROUP, join("/", items)])
+}
+function "envgroupprefix" {
+  params = []
+  result = join("/", [ENV_PREFIX, ENV_GROUP])
 }
 
 target "common" {
@@ -38,5 +43,5 @@ target "root" {
     GROUP_NAME = GROUP_NAME
     DOCKER_GROUP_ID = DOCKER_GROUP_ID
   }
-  tags = [tagname("root")]
+  tags = ["${ENV_PREFIX}/root"]
 }
