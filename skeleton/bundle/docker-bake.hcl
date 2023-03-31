@@ -1,20 +1,21 @@
-variable "ENV_GROUP" {
-  default = "sample"
+variable "ENV_BUNDLE" {
+  default = "bundle"
 }
 
 variable "PROJECT_BASE_IMAGE" {
-  default = "target:sample_base"
+  default = "target:bundle_base"
 }
 
 # --- base ---
+# Use this if you need common setup for all the project
 
 variable "BASE_BASE_IMAGE" {
   default = "target:root"
 }
 
-target "sample_base" {
+target "bundle_base" {
   inherits = ["common"]
-  context = "${envgroupprefix()}/base/ctx"
+  context = "${envbundleprefix()}/base/ctx"
   contexts = {
     baseimage = "${BASE_BASE_IMAGE}"
   }
@@ -23,9 +24,9 @@ target "sample_base" {
 
 # --- project ---
 
-target "sample_project" {
+target "bundle_project" {
   inherits = ["common"]
-  context = "${envgroupprefix()}/project/ctx"
+  context = "${envbundleprefix()}/project/ctx"
   contexts = {
     baseimage = "${PROJECT_BASE_IMAGE}"
   }
