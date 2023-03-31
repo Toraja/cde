@@ -17,5 +17,5 @@
 If you have set up necessary files somewhere else, make a symlink to the location. +
 
 == Dockerfile
-By default, `catalogs` directory is given as addtional context during build. +
+By default, `catalog` directory is given as addtional context during build. +
 Pick things you need from it and run the installers.

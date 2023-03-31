@@ -23,7 +23,7 @@ target "common" {
     USER_NAME = "${USER_NAME}"
   }
   contexts = {
-    catalogs = "catalogs"
+    catalog = "catalog"
   }
 }
 
