@@ -6,16 +6,16 @@ variable "USER_NAME" {}
 variable "ENV_PREFIX" {
   default = "env"
 }
-variable "ENV_GROUP" {} # must be overwritten in docker-bake.hcl of each env
+variable "ENV_BUNDLE" {} # must be overwritten in docker-bake.hcl of each env
 
 function "tagname" {
   params = []
   variadic_params = items
-  result = join("/", ["cde", ENV_GROUP, join("/", items)])
+  result = join("/", ["cde", ENV_BUNDLE, join("/", items)])
 }
-function "envgroupprefix" {
+function "envbundleprefix" {
   params = []
-  result = join("/", [ENV_PREFIX, ENV_GROUP])
+  result = join("/", [ENV_PREFIX, ENV_BUNDLE])
 }
 
 target "common" {
