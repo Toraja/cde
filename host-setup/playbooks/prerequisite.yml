@@ -12,8 +12,11 @@
 - name: Install just
   hosts: localhost
   connection: local
+  tags: ["just"]
   vars:
     just_install_dest: ~/.local/bin/
+    just_bash_completion_path: /etc/bash_completion.d/just
+    just_fish_completion_path: ~/.config/fish/completions/just.fish
   tasks:
     - name: Check if just is installed
       stat:
@@ -22,7 +25,7 @@
     - name: Fetch just installer
       ansible.builtin.uri:
         url: https://just.systems/install.sh
-        return_content: yes
+        return_content: true
       register: fetch_just_installer
       when: not just_info.stat.exists
     - name: Run just installer
@@ -31,9 +34,20 @@
         stdin: "{{ fetch_just_installer.content }}"
       register: run_just_installer
       when: fetch_just_installer is not skipped
-    - name: Add just completions
+    - name: Check if just bash completion exists
+      stat:
+        path: "{{ just_bash_completion_path }}"
+      register: just_bash_completion
+    - name: Add just bash completion
       ansible.builtin.shell: |
-        just --completions bash | sudo tee /etc/bash_completion.d/just > /dev/null
+        just --completions bash | sudo tee {{ just_bash_completion_path }} > /dev/null
+      when: (not just_bash_completion.stat.exists) or run_just_installer is not skipped
+    - name: Check if just fish completion exists
+      stat:
+        path: "{{ just_fish_completion_path }}"
+      register: just_fish_completion
+    - name: Add just fish completion
+      ansible.builtin.shell: |
         mkdir --parents ~/.config/fish/completions/
-        just --completions fish > ~/.config/fish/completions/just.fish
-      when: run_just_installer is not skipped
+        just --completions fish > {{ just_fish_completion_path }}
+      when: (not just_fish_completion.stat.exists) or run_just_installer is not skipped
