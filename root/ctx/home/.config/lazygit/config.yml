@@ -1,0 +1,3 @@
+gui:
+  mouseEvents: false
+  showIcons: true

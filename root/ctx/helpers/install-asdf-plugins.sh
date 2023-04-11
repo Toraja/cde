@@ -14,6 +14,7 @@ asdf-global-installer.sh \
     nodejs \
     grpcurl \
     ghq \
+    lazygit \
     github-cli \
     fd \
     bat \
