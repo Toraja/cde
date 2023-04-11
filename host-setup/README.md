@@ -9,6 +9,7 @@
   ```sh
   git clone git@personal.github.com:Toraja/cde.git ~/cde
   ```
+- Add your sudo password to `.ansible_become_password` file.
 - Install `just` and run recipes.
   ```sh
   PATH="$HOME/.local/bin:$PATH"
