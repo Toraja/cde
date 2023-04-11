@@ -55,8 +55,8 @@ fish:
 	ln -s ~/toybox/fish/functions ~/.config/fish/myfuncs
 
 vim:
-	./github-latest-release-installer.sh neovim neovim nvim-linux64.deb /tmp/xxx/nvim-linux64.deb && \
-		sudo apt install /tmp/xxx/nvim-linux64.deb && \
+	./github-latest-release-installer.sh -t neovim neovim nvim-linux64.tar.gz /tmp/xxx/ && \
+	  cp -r /tmp/xxx/nvim-linux64/* ~/.local/ && \
 		rm -rdf /tmp/xxx
 	mkdir -p ~/.config/nvim
 	test -f ~/.config/nvim/init.vim || echo 'source ~/toybox/nvim/init.vim' > ~/.config/nvim/init.vim
