@@ -13,7 +13,7 @@
         tasks_from: latest_is_installed
 
     - name: install taskwarrior
-      when: not (binary_installed.rc == 0 and latest_installed.rc == 0)
+      when: not latest_binary_is_installed
       vars:
         checkout_path: /tmp/taskwarrior
       block:
@@ -67,8 +67,6 @@
 - name: taskwarrior-tui
   hosts: localhost
   tags: taskwarrior-tui
-  vars:
-    download_path: /tmp/taskwarrior-tui.tar.gz
   tasks:
     - name: Check if latest taskwarrior is installed
       vars:
@@ -80,14 +78,12 @@
         tasks_from: latest_is_installed
 
     - name: install taskwarrior-tui
-      when: not (binary_installed.rc == 0 and latest_installed.rc == 0)
+      when: not latest_binary_is_installed
       become: true
       block:
         - name: Install taskwarrior-tui
           ansible.builtin.shell: |
-            ../github-latest-release-installer.sh kdheepak taskwarrior-tui taskwarrior-tui-x86_64-unknown-linux-gnu.tar.gz "{{ download_path }}"
-            tar -xzf "{{ download_path }}" --directory=/usr/local/bin
-            rm "{{ download_path }}"
+            ../github-latest-release-installer.sh -t kdheepak taskwarrior-tui taskwarrior-tui-x86_64-unknown-linux-gnu.tar.gz /usr/local/bin
 
 - name: taskopen
   hosts: localhost
@@ -112,7 +108,7 @@
         tasks_from: latest_is_installed
 
     - name: Install taskopen
-      when: not (binary_installed.rc == 0 and latest_installed.rc == 0)
+      when: not latest_binary_is_installed
       vars:
         install_prefix: /usr/local
       ansible.builtin.shell: |

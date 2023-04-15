@@ -25,3 +25,7 @@
       changed_when: false
       failed_when: false
       register: latest_installed
+
+- name: Register latest version is installed
+  ansible.builtin.set_fact:
+    latest_binary_is_installed: "{{ binary_installed.rc == 0 and latest_installed is defined and latest_installed.rc == 0 }}"
