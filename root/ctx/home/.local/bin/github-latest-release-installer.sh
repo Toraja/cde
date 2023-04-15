@@ -74,7 +74,7 @@ asset_name=$3
 destination=$4
 
 download_url=$(curl https://api.github.com/repos/${github_user}/${github_reponame}/releases/latest \
-    | jq -r '.assets[] | select( .name | match ("^'${asset_name}'$") ) | .browser_download_url')
+    | jq --raw-output '.assets[] | select( .name | match ("^'${asset_name}'$") ) | .browser_download_url')
 if [[ -z "$download_url" ]]; then
     error 'Failed to get download URL.'
     exit 1
@@ -82,10 +82,10 @@ fi
 
 curl_cmd='curl -fsSL'
 if $untar; then
-    mkdir -p $destination
-    $curl_cmd $download_url | tar xzf - -C $destination $tar_member
+    mkdir --parents $destination
+    $curl_cmd $download_url | tar xzf - --directory $destination $tar_member
 else
-    $curl_cmd --create-dirs -o $destination $download_url
+    $curl_cmd --create-dirs --output $destination $download_url
 fi
 
 if $executable; then
