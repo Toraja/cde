@@ -3,36 +3,17 @@
   hosts: localhost
   tags: taskwarrior
   tasks:
-    - name: Check if taskwarrior is installed
-      ansible.builtin.shell: |
-        which task
-      changed_when: false
-      failed_when: false
-      register: taskwarrior_installed
-
-    - name: Check if taskwarrior is latest
-      when: taskwarrior_installed.rc == 0
-      block:
-        - name: Get installed taskwarrior version
-          ansible.builtin.shell: |
-            task --version
-          changed_when: false
-          register: installed_taskwarrior_version
-
-        - name: Get latest taskwarrior version
-          ansible.builtin.shell: |
-            curl -s https://api.github.com/repos/GothenburgBitFactory/taskwarrior/releases/latest | jq -r .tag_name
-          changed_when: false
-          register: latest_taskwarrior_version
-
-        - name: Check if latest is installed
-          ansible.builtin.shell: |
-            test "v{{ installed_taskwarrior_version.stdout }}" = "{{ latest_taskwarrior_version.stdout }}"
-          changed_when: false
-          failed_when: false
-          register: latest_taskwarrior_is_installed
+    - name: Check if latest taskwarrior is installed
+      vars:
+        binary_name: task
+        installed_version_cmd: task --version
+        latest_version_cmd: curl -s https://api.github.com/repos/GothenburgBitFactory/taskwarrior/releases/latest | jq -r .tag_name | cut -c 2-
+      include_role:
+        name: binary
+        tasks_from: latest_is_installed
 
     - name: install taskwarrior
+      when: not (binary_installed.rc == 0 and latest_installed.rc == 0)
       vars:
         checkout_path: /tmp/taskwarrior
       block:
@@ -73,21 +54,15 @@
           file:
             state: absent
             path: "{{ checkout_path }}"
-      when: not (taskwarrior_installed.rc == 0 and latest_taskwarrior_is_installed.rc == 0)
 
     - name: Setup taskrc
       vars:
         taskrc_path: "{{ lookup('ansible.builtin.env', 'HOME') }}/.config/taskwarrior/taskrc"
-      block:
-        - name: Check if taskrc exists
-          ansible.builtin.stat:
-            path: "{{ taskrc_path }}"
-          register: taskrc
-        - name: Copy taskrc
-          ansible.builtin.shell: |
-            mkdir -p $(dirname {{ taskrc_path }})
-            cp ../taskrc {{ taskrc_path }}
-          when: not taskrc.stat.exists
+      ansible.builtin.shell:
+        cmd: |
+          mkdir -p $(dirname {{ taskrc_path }})
+          cp ../taskrc {{ taskrc_path }}
+        creates: "{{ taskrc_path }}"
 
 - name: taskwarrior-tui
   hosts: localhost
@@ -95,38 +70,18 @@
   vars:
     download_path: /tmp/taskwarrior-tui.tar.gz
   tasks:
-    - name: Check if taskwarrior-tui is installed
-      ansible.builtin.shell: |
-        which taskwarrior-tui
-      changed_when: false
-      failed_when: false
-      register: taskwarrior_tui_installed
-
-    - name: Check if taskwarrior is latest
-      when: taskwarrior_tui_installed.rc == 0
-      block:
-        - name: Get installed taskwarrior-tui version
-          ansible.builtin.shell: |
-            taskwarrior-tui --version | awk '{print $2}'
-          changed_when: false
-          register: installed_taskwarrior_tui_version
-
-        - name: Get latest taskwarrior-tui version
-          ansible.builtin.shell: |
-            curl -s https://api.github.com/repos/kdheepak/taskwarrior-tui/releases/latest | jq -r .tag_name
-          changed_when: false
-          register: latest_taskwarrior_tui_version
-
-        - name: Check if latest is installed
-          ansible.builtin.shell: |
-            test "v{{ installed_taskwarrior_tui_version.stdout }}" = "{{ latest_taskwarrior_tui_version.stdout }}"
-          changed_when: false
-          failed_when: false
-          register: latest_taskwarrior_tui_is_installed
+    - name: Check if latest taskwarrior is installed
+      vars:
+        binary_name: taskwarrior-tui
+        installed_version_cmd: taskwarrior-tui --version | awk '{print $2}'
+        latest_version_cmd: curl -s https://api.github.com/repos/kdheepak/taskwarrior-tui/releases/latest | jq -r .tag_name | cut -c 2-
+      include_role:
+        name: binary
+        tasks_from: latest_is_installed
 
     - name: install taskwarrior-tui
+      when: not (binary_installed.rc == 0 and latest_installed.rc == 0)
       become: true
-      when: not (taskwarrior_tui_installed.rc == 0 and latest_taskwarrior_tui_is_installed.rc == 0)
       block:
         - name: Install taskwarrior-tui
           ansible.builtin.shell: |
@@ -137,49 +92,27 @@
 - name: taskopen
   hosts: localhost
   tags: taskopen
-  vars:
-    binary: taskopen
-    installed_version_cmd: taskopen version | sed 's/^v//'
-    latest_version_cmd: |
-      git ls-remote --tags --refs https://github.com/jschlatow/taskopen.git |
-      awk '{ print $2 }' |
-      grep '^refs/tags/.*' |
-      sed 's/^refs\/tags\///' |
-      sed 's/^v//' |
-      awk '{ if ($1 ~ /-/) print; else print $0"_" ; }' |
-      sort -V |
-      sed 's/_$//' |
-      tail --lines 1
   tasks:
-    - name: Check if binary is installed
-      ansible.builtin.shell: |
-        which {{ binary }}
-      changed_when: false
-      failed_when: false
-      register: binary_installed
+    - name: Check if latest taskopen is installed
+      vars:
+        binary_name: taskopen
+        installed_version_cmd: taskopen version | cut -c 2-
+        latest_version_cmd: |
+          git ls-remote --tags --refs https://github.com/jschlatow/taskopen.git |
+          awk '{ print $2 }' |
+          grep '^refs/tags/.*' |
+          sed 's/^refs\/tags\///' |
+          sed 's/^v//' |
+          awk '{ if ($1 ~ /-/) print; else print $0"_" ; }' |
+          sort -V |
+          sed 's/_$//' |
+          tail --lines 1
+      include_role:
+        name: binary
+        tasks_from: latest_is_installed
 
-    - name: Get latest version
-      ansible.builtin.shell: "{{ latest_version_cmd }}"
-      changed_when: false
-      register: latest_version
-
-    - name: Check if latest is installed
-      when: binary_installed.rc == 0
-      block:
-        - name: Get installed version
-          ansible.builtin.shell: "{{ installed_version_cmd }}"
-          changed_when: false
-          register: installed_version
-
-        - name: Check if latest is installed
-          ansible.builtin.shell: |
-            test "{{ installed_version.stdout }}" = "{{ latest_version.stdout }}"
-          changed_when: false
-          failed_when: false
-          register: latest_version_is_installed
-
-    - name: Install binary
-      when: not (binary_installed.rc == 0 and latest_version_is_installed.rc == 0)
+    - name: Install taskopen
+      when: not (binary_installed.rc == 0 and latest_installed.rc == 0)
       vars:
         install_prefix: /usr/local
       ansible.builtin.shell: |
@@ -191,9 +124,11 @@
             make PREFIX={{ install_prefix }} &&
             mv taskopen /dst'
 
-    - name: Setup
+    - name: Setup taskopenrc
+      vars:
+        taskopenrc_path: "{{ lookup('ansible.builtin.env', 'HOME') }}/.config/taskopen/taskopenrc"
       ansible.builtin.shell:
         cmd: |
-          mkdir -p $HOME/.config/taskopen/
-          ln -s $HOME/toybox/taskwarrior/taskopenrc $HOME/.config/taskopen/taskopenrc
-        creates: $HOME/.config/taskopen/taskopenrc
+          mkdir -p $(dirname {{ taskopenrc_path }})
+          ln -s $HOME/toybox/taskwarrior/taskopenrc {{ taskopenrc_path }}
+        creates: "{{ taskopenrc_path }}"

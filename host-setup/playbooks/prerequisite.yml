@@ -18,36 +18,49 @@
     just_bash_completion_path: /etc/bash_completion.d/just
     just_fish_completion_path: ~/.config/fish/completions/just.fish
   tasks:
-    - name: Check if just is installed
-      stat:
-        path: "{{ just_install_dest }}/just"
-      register: just_info
-    - name: Fetch just installer
-      ansible.builtin.uri:
-        url: https://just.systems/install.sh
-        return_content: true
-      register: fetch_just_installer
-      when: not just_info.stat.exists
-    - name: Run just installer
-      ansible.builtin.shell:
-        cmd: bash -s -- --to {{ just_install_dest }}
-        stdin: "{{ fetch_just_installer.content }}"
-      register: run_just_installer
-      when: fetch_just_installer is not skipped
-    - name: Check if just bash completion exists
-      stat:
-        path: "{{ just_bash_completion_path }}"
-      register: just_bash_completion
-    - name: Add just bash completion
-      ansible.builtin.shell: |
-        just --completions bash | sudo tee {{ just_bash_completion_path }} > /dev/null
-      when: (not just_bash_completion.stat.exists) or run_just_installer is not skipped
-    - name: Check if just fish completion exists
-      stat:
-        path: "{{ just_fish_completion_path }}"
-      register: just_fish_completion
-    - name: Add just fish completion
-      ansible.builtin.shell: |
-        mkdir --parents ~/.config/fish/completions/
-        just --completions fish > {{ just_fish_completion_path }}
-      when: (not just_fish_completion.stat.exists) or run_just_installer is not skipped
+    - name: Check if latest just is installed
+      vars:
+        binary_name: just
+        installed_version_cmd: just --version | awk '{ print $2 }'
+        latest_version_cmd: curl -s https://api.github.com/repos/casey/just/releases/latest | jq -r .tag_name
+      include_role:
+        name: binary
+        tasks_from: latest_is_installed
+
+    - name: Install just
+      when: not (binary_installed.rc == 0 and latest_installed.rc == 0)
+      block:
+        - name: Fetch just installer
+          ansible.builtin.uri:
+            url: https://just.systems/install.sh
+            return_content: true
+          register: fetch_just_installer
+
+        - name: Run just installer
+          ansible.builtin.shell:
+            cmd: bash -s -- --to {{ just_install_dest }} --force
+            stdin: "{{ fetch_just_installer.content }}"
+          register: run_just_installer
+
+    - name: Setup just completion
+      block:
+        - name: Check if just bash completion exists
+          stat:
+            path: "{{ just_bash_completion_path }}"
+          register: just_bash_completion
+
+        - name: Add just bash completion
+          when: (not just_bash_completion.stat.exists) or run_just_installer is not skipped
+          ansible.builtin.shell: |
+            just --completions bash | sudo tee {{ just_bash_completion_path }} > /dev/null
+
+        - name: Check if just fish completion exists
+          stat:
+            path: "{{ just_fish_completion_path }}"
+          register: just_fish_completion
+
+        - name: Add just fish completion
+          when: (not just_fish_completion.stat.exists) or run_just_installer is not skipped
+          ansible.builtin.shell: |
+            mkdir --parents ~/.config/fish/completions/
+            just --completions fish > {{ just_fish_completion_path }}
