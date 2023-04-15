@@ -43,5 +43,5 @@ target "root" {
     GROUP_NAME = GROUP_NAME
     DOCKER_GROUP_ID = DOCKER_GROUP_ID
   }
-  tags = ["${ENV_PREFIX}/root"]
+  tags = ["cde/root"]
 }
