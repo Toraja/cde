@@ -83,18 +83,11 @@
           ansible.builtin.stat:
             path: "{{ taskrc_path }}"
           register: taskrc
-          when: taskrc_path != ""
         - name: Copy taskrc
-          ansible.builtin.shell:
-            cmd: |
-              mkdir -p $(dirname {{ taskrc_path }})
-              cp ../taskrc {{ taskrc_path }} || echo "Setup taskrc manually"
-          when: taskrc.stat is defined and not taskrc.stat.exists
-        - name: Setup manually
-          ansible.builtin.debug:
-            msg:
-              - "Setup taskrc manually"
-          when: taskrc_path == ""
+          ansible.builtin.shell: |
+            mkdir -p $(dirname {{ taskrc_path }})
+            cp ../taskrc {{ taskrc_path }}
+          when: not taskrc.stat.exists
 
 - name: taskwarrior-tui
   hosts: localhost
