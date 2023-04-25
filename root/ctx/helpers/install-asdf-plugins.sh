@@ -11,6 +11,7 @@ asdf-global-installer.sh \
     direnv \
     neovim \
     lua \
+    stylua \
     nodejs \
     grpcurl \
     ghq \
