@@ -92,6 +92,8 @@ RUN git clone https://github.com/Toraja/toybox.git \
     && ln -s ~/toybox/git/custom-commands/config/fish/* ~/.config/fish/conf.d/ \
     # gh \
     && ln -s ~/hosthome/.config/gh ~/.config/gh \
+    # lazygit \
+    && mkdir -p ~/.config/lazygit/ && ln -s ~/toybox/lazygit/config.yml ~/.config/lazygit/ \
     # tmux \
     && git clone https://github.com/tmux-plugins/tpm ~/.config/tmux/plugins/tpm \
     && ~/.config/tmux/plugins/tpm/bin/install_plugins \
