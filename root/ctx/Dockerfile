@@ -50,13 +50,6 @@ RUN apt-get update && apt-get install --no-install-recommends --yes \
     && rm -rf /var/lib/apt/lists/* \
     && curl -fsSL https://raw.githubusercontent.com/jesseduffield/lazydocker/master/scripts/install_update_linux.sh | DIR=/usr/local/bin bash
 
-# vim plugin related
-RUN apt-get update && apt-get install --no-install-recommends --yes \
-        # TagBar: universal-ctags \
-        # telescope-fzf-native.nvim: gcc \
-        universal-ctags gcc \
-    && rm -rf /var/lib/apt/lists/*
-
 USER ${USER_NAME}
 WORKDIR /home/${USER_NAME}
 
