@@ -27,7 +27,7 @@ RUN apt-get update && apt-get install --no-install-recommends --yes \
     && apt-add-repository ppa:git-core/ppa \
     && apt-get update && apt-get install --no-install-recommends --yes \
         sudo less man-db locales tree openssh-client unzip wget gettext-base \
-        python3-pip build-essential \
+        pipx build-essential \
         git git-lfs gh make xclip net-tools netcat-openbsd fish vim tmux \
     && rm -rf /var/lib/apt/lists/* \
     # Without this, `man` complains that $LC_* is not set \
@@ -48,7 +48,6 @@ RUN apt-get update && apt-get install --no-install-recommends --yes \
         # these required by asdf \
         dirmngr gpg curl gawk \
     && rm -rf /var/lib/apt/lists/* \
-    && pip install httpie glances ansible yamllint \
     && curl -fsSL https://raw.githubusercontent.com/jesseduffield/lazydocker/master/scripts/install_update_linux.sh | DIR=/usr/local/bin bash
 
 # vim plugin related
@@ -58,7 +57,7 @@ RUN apt-get update && apt-get install --no-install-recommends --yes \
         universal-ctags gcc \
     && rm -rf /var/lib/apt/lists/* \
     # pynvim is required by python plugins \
-    && pip install pynvim
+    && pipx install pynvim
 
 USER ${USER_NAME}
 WORKDIR /home/${USER_NAME}
@@ -68,6 +67,7 @@ ENV PATH="/home/${USER_NAME}/.local/bin:${PATH}"
 
 COPY --chown=${USER_NAME}:${USER_NAME} ./helpers/install-fish-plugins.fish /home/${USER_NAME}/.local/bin/
 RUN mkdir -p ~/tmp \
+    && for p in httpie glances ansible yamllint; do pipx install $p; done \
     && github-latest-release-installer.sh -x docker buildx 'buildx-v.*.linux-amd64'  ~/.docker/cli-plugins/docker-buildx \
     && github-latest-release-installer.sh -t LuaLS lua-language-server 'lua-language-server-.*-linux-x64.tar.gz' ~/.local/opt/lua-language-server/ \
     && github-latest-release-installer.sh -T yamlfmt google yamlfmt 'yamlfmt_.*_Linux_x86_64.tar.gz' ~/.local/bin/
