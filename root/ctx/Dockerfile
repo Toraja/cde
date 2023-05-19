@@ -55,9 +55,7 @@ RUN apt-get update && apt-get install --no-install-recommends --yes \
         # TagBar: universal-ctags \
         # telescope-fzf-native.nvim: gcc \
         universal-ctags gcc \
-    && rm -rf /var/lib/apt/lists/* \
-    # pynvim is required by python plugins \
-    && pipx install pynvim
+    && rm -rf /var/lib/apt/lists/*
 
 USER ${USER_NAME}
 WORKDIR /home/${USER_NAME}
