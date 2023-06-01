@@ -9,7 +9,8 @@ sudo apt-get install --no-install-recommends --yes \
 
 source ${HOME}/.asdf/asdf.sh
 # protoc is required by rust-analyzer
-asdf-global-installer.sh rust rust-analyzer protoc
+asdf-global-installer.sh rust rust-analyzer protoc sccache
 rustup completions fish > ~/.config/fish/completions/rustup.fish
 rustup component add rust-src rust-analysis rustfmt clippy
-curl -LsSf https://get.nexte.st/latest/linux | tar zxf - -C $(dirname $(asdf which cargo))
+# required by nvim-neotest
+curl --location --silent --show-error --fail https://get.nexte.st/latest/linux | tar -zxf - --directory $(dirname $(asdf which cargo))
