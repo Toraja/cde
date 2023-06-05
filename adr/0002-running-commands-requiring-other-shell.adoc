@@ -1,7 +1,7 @@
 = Running commands requiring other shell
 :toc:
 
-* Status: accepted
+* Status: superseded by link:file://0005-set-shell-option-to-use-bash.adoc[0005-set-shell-option-to-use-bash.adoc]
 * Deciders: me
 
 == Context and Problem Statement

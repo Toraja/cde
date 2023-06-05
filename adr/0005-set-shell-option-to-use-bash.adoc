@@ -1,0 +1,48 @@
+= Running commands requiring other shell
+:toc:
+
+* Status: accepted
+* Deciders: me
+
+== Context and Problem Statement
+
+In some cases, bash options like `-e` is preferred to avoid unnecessary execution of commands. +
+
+== Decision Drivers
+
+* Look elegant
+* Does not increase the number of cached intermediate images too much
+
+== Considered Options
+
+* `set -e && ...` whenever necessary
+* Wrap commands in `SHELL ["/bin/bash", "-e", "-c"]` & `SHELL ["/bin/sh", "-c"]` whenever necessary
+* Set `SHELL ["/bin/bash", "-e", "-c"]` at the top of root image use it for all `RUN` instructions
+
+== Decision Outcome
+
+Chosen option: 3
+
+Reason: +
+* Simple and no or little change of existing `RUN` instructions is required.
+* Ubuntu images are shipped with bash, and bash is required in the final image.
+
+== Pros and Cons of the Options
+
+Pros and Cons for option 1 & 2 are illustrated in link:file://0002-set-shell-option-to-use-bash.adoc[0002-set-shell-option-to-use-bash.adoc].
+
+=== [option 3]
+
+==== Pros
+* Fewer lines of code in Dockerfile.
+
+==== Cons
+* Might require some fix to existing `RUN` instructions
+
+// optional
+== Links
+
+* [Link type] [Link to ADR]
+// example: Refined by [ADR-0005](0005-example.md)
+* …
+// numbers of links can vary

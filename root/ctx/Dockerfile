@@ -5,6 +5,9 @@ FROM ubuntu:${BASE_IMAGE_TAG:-rolling}
 
 # `unminimize` is required to use `man`
 RUN yes | unminimize
+
+SHELL ["/bin/bash", "-eo", "pipefail", "-c"]
+
 # Official Debian and Ubuntu images automatically run apt-get clean, so explicit invocation is not required.
 # Set up to install docker
 ARG DOCKER_GROUP_ID
