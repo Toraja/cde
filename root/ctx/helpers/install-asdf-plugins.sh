@@ -22,26 +22,13 @@ asdf-global-installer.sh \
     fx \
     yq \
     just \
-    kubectl \
-    kind \
-    k9s \
-    helm \
-    helmfile
 
 asdf direnv setup --shell fish --version latest
 just --completions fish > ~/.config/fish/completions/just.fish
-helm plugin install https://github.com/databus23/helm-diff
 npm install --global yaml-language-server
-kubectl completion fish > ~/.config/fish/completions/kubectl.fish
-kind completion fish > ~/.config/fish/completions/kind.fish
-k9s completion fish > ~/.config/fish/completions/k9s.fish
-helm completion fish > ~/.config/fish/completions/helm.fish
 eval $(asdf where fzf)/install --all
 
 git clone --depth 1 https://github.com/cheat/cheatsheets.git ~/.config/cheat/cheatsheets/community
 ln -s ~/toybox/cheat/conf.yml ~/.config/cheat/conf.yml
 ln -s ~/toybox/cheat/cheatsheets ~/.config/cheat/cheatsheets/personal
 curl -fsSL -o ~/.config/fish/completions/cheat.fish https://raw.githubusercontent.com/cheat/cheat/master/scripts/cheat.fish
-
-krew-installer.sh
-kubectl krew install tree tail ns

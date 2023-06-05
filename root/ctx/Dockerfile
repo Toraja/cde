@@ -64,7 +64,6 @@ RUN mkdir -p ~/tmp \
     && github-latest-release-installer.sh -T yamlfmt google yamlfmt 'yamlfmt_.*_Linux_x86_64.tar.gz' ~/.local/bin/
 
 COPY --chown=${USER_NAME}:${USER_NAME} ./helpers/install-asdf-plugins.sh /home/${USER_NAME}/.local/bin/
-ENV PATH="/home/${USER_NAME}/.krew/bin:$PATH"
 RUN asdf_version=$(curl -s https://api.github.com/repos/asdf-vm/asdf/releases/latest | jq -r '.tag_name') \
     && git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch ${asdf_version} \
     && mkdir -p ~/.config/fish/completions/ \
