@@ -20,14 +20,12 @@ RUN apt-get update && apt-get upgrade --no-install-recommends --yes && apt-get i
 
 # Must-have basic packages
 ## gettext-base installs envsubst
-## build-essential is required by lua
 RUN apt-get update && apt-get install --no-install-recommends --yes \
         software-properties-common \
     && apt-add-repository ppa:fish-shell/release-3 \
     && apt-add-repository ppa:git-core/ppa \
     && apt-get update && apt-get install --no-install-recommends --yes \
-        sudo less man-db locales tree openssh-client unzip wget gettext-base \
-        pipx build-essential \
+        sudo less man-db locales tree openssh-client unzip wget gettext-base pipx \
         git git-lfs gh make xclip net-tools netcat-openbsd fish vim tmux \
     && rm -rf /var/lib/apt/lists/* \
     # Without this, `man` complains that $LC_* is not set \
