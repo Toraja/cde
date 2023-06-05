@@ -58,7 +58,6 @@ COPY --chown=${USER_NAME}:${USER_NAME} ./helpers/install-fish-plugins.fish /home
 RUN mkdir -p ~/tmp \
     && for p in httpie glances ansible yamllint; do pipx install $p; done \
     && github-latest-release-installer.sh -x docker buildx 'buildx-v.*.linux-amd64'  ~/.docker/cli-plugins/docker-buildx \
-    && github-latest-release-installer.sh -t LuaLS lua-language-server 'lua-language-server-.*-linux-x64.tar.gz' ~/.local/opt/lua-language-server/ \
     && github-latest-release-installer.sh -T yamlfmt google yamlfmt 'yamlfmt_.*_Linux_x86_64.tar.gz' ~/.local/bin/
 
 COPY --chown=${USER_NAME}:${USER_NAME} ./helpers/install-asdf-plugins.sh /home/${USER_NAME}/.local/bin/
@@ -68,6 +67,10 @@ RUN asdf_version=$(curl -s https://api.github.com/repos/asdf-vm/asdf/releases/la
     && mkdir -p ~/.config/fish/completions/ \
     && ln -s ~/.asdf/completions/asdf.fish ~/.config/fish/completions/ \
     && install-asdf-plugins.sh
+
+COPY --from=catalog lang/lua /tmp/catalog/lua
+RUN for installer in /tmp/catalog/*/install.sh; do $installer; done && \
+    sudo rm -rf /tmp/catalog
 
 # Setup tools
 RUN git clone https://github.com/Toraja/toybox.git \
