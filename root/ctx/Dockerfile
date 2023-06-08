@@ -59,7 +59,7 @@ ENV PATH="/home/${USER_NAME}/.local/bin:${PATH}"
 
 COPY --chown=${USER_NAME}:${USER_NAME} ./helpers/install-fish-plugins.fish /home/${USER_NAME}/.local/bin/
 RUN mkdir -p ~/tmp \
-    && for p in httpie glances ansible yamllint; do pipx install $p; done \
+    && for p in httpie glances ansible-base yamllint; do pipx install $p; done \
     && github-latest-release-installer.sh -x docker buildx 'buildx-v.*.linux-amd64'  ~/.docker/cli-plugins/docker-buildx \
     && github-latest-release-installer.sh -T yamlfmt google yamlfmt 'yamlfmt_.*_Linux_x86_64.tar.gz' ~/.local/bin/
 
