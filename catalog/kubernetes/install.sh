@@ -13,6 +13,7 @@ kubectl completion fish > ~/.config/fish/completions/kubectl.fish
 kind completion fish > ~/.config/fish/completions/kind.fish
 helm completion fish > ~/.config/fish/completions/helm.fish
 helm plugin install https://github.com/databus23/helm-diff
+helmfile completion fish > ~/.config/fish/completions/helmfile.fish
 k9s completion fish > ~/.config/fish/completions/k9s.fish
 
 # install krew
