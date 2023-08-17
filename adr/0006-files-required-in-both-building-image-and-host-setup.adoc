@@ -1,0 +1,64 @@
+= Files required in both building image and host setup
+:toc:
+
+* Status: accepted
+* Deciders: me
+
+== Context and Problem Statement
+
+Host setup needs some of the files under `root/ctx/home/.local/bin`. +
+It's very awkward to access those binaries from host setup context.
+
+== Decision Drivers
+
+* Shared files can be placed somewhere outside the `root` context.
+* Does not look awkward
+
+== Considered Options
+
+* Use build context of docker buildx
+* Bind mount
+* Release those files and download them when necessary
+
+== Decision Outcome
+
+Chosen option: 3 +
+
+.Reason
+* Want to learn releasing
+* Write tools in other languages
+
+== Pros and Cons of the Options
+
+=== [option 1]
+
+==== Pros
+* Minimal work
+
+==== Cons
+* buildx is required and docker compose does not support it (which is not really a con as it is already introduced)
+
+=== [option 2]
+
+==== Pros
+* `COPY` instruction is not needed.
+
+==== Cons
+* Mounted directory covers up the files created during the build.
+
+=== [option 3]
+
+==== Pros
+* It is easier to use languages other than shell script.
+
+==== Cons
+* A lot of work to do.
+* Fixed versions of those files need to be released before they can be used in the build process.
+
+// optional
+== Links
+
+* [Link type] [Link to ADR]
+// example: Refined by [ADR-0005](0005-example.md)
+* …
+// numbers of links can vary
