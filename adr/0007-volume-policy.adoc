@@ -1,0 +1,32 @@
+= Volume Policy
+:toc:
+
+* Status: accepted
+* Deciders: me
+
+== Context and Problem Statement
+
+Here it is documented that when to use what kind of docker volume. +
+Written in free format as this is not about deciding which option is better.
+
+== Volume
+=== Bind mount
+* Need to sync between containers and host machine
+** Files for date/time and docker socket
+* Need to be accessed/modified on the host side as well
+** Files in this repository
+* Created/modified during container runtime and accidental deletion cannot be tolerated.
+** Files under workspace directory that are stored only locally.
+* It is difficult to produce during build process.
+** Credential files
+
+=== External volume
+* None of the condition for bind volume applies.
+* Need to share between different containers.
+* Accidental deletion by `docker-compose down -v` should be avoided.
+** Note that it is still prone to `docker volume prune` if the volume is not used by any container.
+** To avoild that, labels should be added to those volumes and `pruneFilter` should be set in `config.json`.
+
+=== Volume
+* None of the condition for other volume methods applies.
+* Need to persist across container life cycle (such as shell history)
