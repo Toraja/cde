@@ -6,6 +6,7 @@ usage() {
     echo "USAGE: $(basename $0) [-htTx] GITHUB_USER GITHUB_REPONAME ASSET_NAME DESTINATION"
     echo "    DESTINATION is a path to output the downloaded file. If -t/T is specified, it is tread as directory into which tarball is extracted."
     echo "OPTIONS:"
+    echo "    -s NUMBER   Equivalent of tar --strip-components"
     echo "    -t          Extract tarball into the destination. Mutually exclusive with -x."
     echo "    -T MEMBER   Extract only the selected file in the tarball into the destination. Mutually exclusive with -x."
     echo "    -x          Make downloaded file executable. Mutually exclusive with -t/T."
@@ -18,8 +19,9 @@ error() {
 executable=false
 untar=false
 tar_member=
+strip_components=false
 
-while getopts :htT:x opt; do
+while getopts :hs:tT:x opt; do
     case ${opt} in
         x)
             if $untar; then
@@ -27,6 +29,11 @@ while getopts :htT:x opt; do
                 exit 1
             fi
             executable=true
+            ;;
+        s)
+            untar=true
+            strip_components=true
+            strip_number=$OPTARG
             ;;
         t)
             if $executable; then
@@ -73,7 +80,7 @@ github_reponame=$2
 asset_name=$3
 destination=$4
 
-download_url=$(curl https://api.github.com/repos/${github_user}/${github_reponame}/releases/latest \
+download_url=$(curl -sSL https://api.github.com/repos/${github_user}/${github_reponame}/releases/latest \
     | jq --raw-output '.assets[] | select( .name | match ("^'${asset_name}'$") ) | .browser_download_url')
 if [[ -z "$download_url" ]]; then
     error 'Failed to get download URL.'
@@ -81,9 +88,13 @@ if [[ -z "$download_url" ]]; then
 fi
 
 curl_cmd='curl -fsSL'
+tar_cmd='tar xzf -'
+if $strip_components; then
+    tar_cmd="$tar_cmd --strip-components=$strip_number"
+fi
 if $untar; then
     mkdir --parents $destination
-    $curl_cmd $download_url | tar xzf - --directory $destination $tar_member
+    $curl_cmd $download_url | $tar_cmd --directory $destination $tar_member
 else
     $curl_cmd --create-dirs --output $destination $download_url
 fi
