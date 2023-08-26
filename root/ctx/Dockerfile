@@ -38,9 +38,10 @@ ARG USER_ID
 ARG USER_NAME
 ARG GROUD_ID
 ARG GROUP_NAME
-RUN groupadd --gid ${GROUD_ID} ${GROUP_NAME} \
-    && useradd --create-home --uid ${USER_ID} --gid ${GROUD_ID} --groups ${DOCKER_GROUP_ID} --shell /usr/bin/fish ${USER_NAME} \
-    && echo ${USER_NAME}" ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/${USER_NAME}
+RUN userdel --remove ubuntu && \
+    groupadd --gid ${GROUD_ID} ${GROUP_NAME} && \
+    useradd --create-home --uid ${USER_ID} --gid ${GROUD_ID} --groups ${DOCKER_GROUP_ID} --shell /usr/bin/fish ${USER_NAME} && \
+    echo ${USER_NAME}" ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/${USER_NAME}
 
 # Other nice-to-have tools
 RUN apt-get update && apt-get install --no-install-recommends --yes \
