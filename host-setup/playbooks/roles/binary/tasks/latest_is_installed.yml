@@ -6,6 +6,11 @@
   failed_when: false
   register: binary_installed
 
+- name: Get latest {{ binary_name }} version
+  ansible.builtin.shell: "{{ latest_version_cmd }}"
+  changed_when: false
+  register: latest_version
+
 - name: Check if {{ binary_name }} is latest
   when: binary_installed.rc == 0
   block:
@@ -14,11 +19,6 @@
       changed_when: false
       register: installed_version
 
-    - name: Get latest {{ binary_name }} version
-      ansible.builtin.shell: "{{ latest_version_cmd }}"
-      changed_when: false
-      register: latest_version
-
     - name: Check if latest is installed
       ansible.builtin.shell: |
         test "{{ installed_version.stdout }}" = "{{ latest_version.stdout }}"
@@ -26,6 +26,7 @@
       failed_when: false
       register: latest_installed
 
-- name: Register latest version is installed
+- name: Register info
   ansible.builtin.set_fact:
     latest_binary_is_installed: "{{ binary_installed.rc == 0 and latest_installed is defined and latest_installed.rc == 0 }}"
+    latest_binary_version: "{{ latest_version.stdout }}"
