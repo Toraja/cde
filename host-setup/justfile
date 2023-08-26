@@ -55,16 +55,7 @@ fish:
 	ln -s ~/toybox/fish/functions ~/.config/fish/myfuncs
 
 vim:
-	./github-latest-release-installer.sh -t neovim neovim nvim-linux64.tar.gz /tmp/xxx/ && \
-	  cp -r /tmp/xxx/nvim-linux64/* ~/.local/ && \
-		rm -rdf /tmp/xxx
-	mkdir -p ~/.config/nvim
-	test -f ~/.config/nvim/init.vim || echo 'source ~/toybox/nvim/init.vim' > ~/.config/nvim/init.vim
-	test -f ~/.config/nvim/ginit.vim || echo 'source ~/toybox/nvim/ginit.vim' > ~/.config/nvim/ginit.vim
-	@# If DIPLAY is set, pip get stuck due to python keyring thingy
-	# DISPLAY= sudo -E pip install pynvim
-	# Install fzf here as telescope.nvim requires it
-	./github-latest-release-installer.sh -t junegunn fzf 'fzf-.*-linux_amd64.tar.gz' ~/.local/bin/
+	ansible-playbook playbooks/vim.yml
 
 tmux:
 	sudo -E apt-get update

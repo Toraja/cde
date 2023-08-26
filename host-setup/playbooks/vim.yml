@@ -1,0 +1,89 @@
+- name: neovim
+  hosts: localhost
+  tags: neovim
+  vars:
+    nvim_conf_path: "{{ lookup('ansible.builtin.env', 'HOME') }}/.config/nvim"
+  tasks:
+    - name: Check if latest is installed
+      vars:
+        binary_name: nvim
+        installed_version_cmd: nvim --version | head -1 | cut -d ' ' -f 2
+        latest_version_cmd: curl -s https://api.github.com/repos/neovim/neovim/releases | jq --raw-output .[].tag_name | sort -V | tail -1
+      include_role:
+        name: binary
+        tasks_from: latest_is_installed
+
+    - name: Install
+      when: not latest_binary_is_installed
+      block:
+        - name: Install
+          vars:
+            workdir: /tmp/xxx
+          ansible.builtin.shell: |
+            ../github-latest-release-installer.sh -t neovim neovim nvim-linux64.tar.gz {{ workdir }}
+            cp -r {{ workdir }}/nvim-linux64/* ~/.local/
+            rm -rdf {{ workdir }}
+
+    - name: setup
+      block:
+        - name: create nvim directory
+          ansible.builtin.file:
+            path: "{{ nvim_conf_path }}"
+            state: directory
+
+        - name: setup init.vim
+          ansible.builtin.blockinfile:
+            path: "{{ nvim_conf_path }}/init.vim"
+            marker: '" {mark} ANSIBLE MANAGED BLOCK'
+            block: |
+              source ~/toybox/nvim/init.vim
+              " --- add machine dependent settings below ---
+            create: true
+
+        - name: setup ginit.vim
+          ansible.builtin.blockinfile:
+            path: "{{ nvim_conf_path }}/ginit.vim"
+            marker: '" {mark} ANSIBLE MANAGED BLOCK'
+            block: |
+              source ~/toybox/nvim/ginit.vim
+              " --- add machine dependent settings below ---
+            create: true
+
+    - name: Tools required by plugins
+      block:
+        - name: Check if latest fzf is installed
+          vars:
+            binary_name: fzf
+            installed_version_cmd: fzf --version | cut -d ' ' -f 1
+            latest_version_cmd: curl -s https://api.github.com/repos/junegunn/fzf/releases/latest | jq --raw-output .tag_name
+          include_role:
+            name: binary
+            tasks_from: latest_is_installed
+
+        - name: Install fzf
+          when: not latest_binary_is_installed
+          block:
+            - name: Install
+              ansible.builtin.shell: |
+                ./github-latest-release-installer.sh -t junegunn fzf 'fzf-{{ latest_binary_version }}-linux_amd64.tar.gz' ~/.local/bin/
+
+        - name: Check if latest fd is installed
+          vars:
+            binary_name: fd
+            installed_version_cmd: fd --version | cut -d ' ' -f 2
+            latest_version_cmd: curl -s https://api.github.com/repos/sharkdp/fd/releases/latest | jq --raw-output .tag_name | cut -c 2-
+          include_role:
+            name: binary
+            tasks_from: latest_is_installed
+
+        - name: Install fd
+          when: not latest_binary_is_installed
+          block:
+            - name: Install
+              vars:
+                workdir: /tmp/xxx
+              become: true
+              ansible.builtin.shell: |
+                ../github-latest-release-installer.sh sharkdp fd fd-musl_{{ latest_binary_version }}_amd64.deb {{ workdir }}/fd-musl_amd64.deb
+                dpkg --install {{ workdir }}/fd-musl_amd64.deb
+                rm -rdf {{ workdir }}
