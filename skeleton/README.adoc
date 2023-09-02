@@ -3,19 +3,12 @@
 == Setup
 
 === From scratch
-. Copy `bundle` directory into `env` directory and rename it to anything you like.
-. Replace `bundle` in `docker-bake.hcl` with the directory name.
-. Likewise, rename `project` directory and replace `project` in `docker-bake.hcl` with the directory name.
-** If you only have single project and wish to avoid extra hierarcy in
-  directory structure, move things inside `project` directory up to `bundle`
-  directory and modify `context` in `docker-bake.hcl` accordingly.
-** On the contrary, if you have more projects to add within the same `bundle`,
-  duplicate `project` directory and modify `Dockerfile` in it. +
-  Also, add the target for project in `docker-bake.hcl`.
+. Run `just new-env <bundle> <project>`.
+. Follow the instruction output by the command above.
 
-=== Use external setup
-If you have set up as described in `From scratch` somewhere else other than the `env` directory of this repository,
-make a symlink to the location in `env` directory.
+=== Store/Use external env
+You can create new env by following the procedure described in `From scratch`, and move it to somewhere else. +
+To use the env, create symlink to the location in `env` directory.
 
 == Dockerfile
 By default, `catalog` directory is given as addtional context during build. +

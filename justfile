@@ -17,6 +17,10 @@ default:
 	echo -e "\e[0;31m{{args}}\e[0;0m"
 
 [private]
+@echocyan args:
+	echo -e "\e[0;36m{{args}}\e[0;0m"
+
+[private]
 @docker_service:
 	if test -f helpers/start-docker-service.sh; then \
 		helpers/start-docker-service.sh; \
@@ -66,3 +70,21 @@ stop cde: (compose cde 'stop')
 down cde: (compose cde 'down')
 
 destroy cde: (compose cde 'down -v')
+
+new-env bundle project:
+	#!/usr/bin/env bash
+	new_bundle=false
+	test -d env/{{bundle}} || new_bundle=true
+	set -euo pipefail
+	if $new_bundle; then
+		cp --recursive skeleton/bundle/ env/{{bundle}}
+		mv env/{{bundle}}/project env/{{bundle}}/{{project}}
+	else
+		cp --recursive skeleton/bundle/project env/{{bundle}}/{{project}}
+	fi
+	sed --in-place --expression 's/xxx-bundle/{{bundle}}/g' --expression 's/yyy-project/{{project}}/g' env/{{bundle}}/docker-bake.hcl
+	just echocyan "Setup is almost done!"
+	just echocyan "Modify 'env/{{bundle}}/{{project}}/ctx/Dockerfile' as you like"
+	if $new_bundle; then \
+		just echocyan "And if you don't need common setup for your projects, remove 'base' section and change default image of 'PROJECT_BASE_IMAGE' in 'docker-bake.hcl'"; \
+	fi

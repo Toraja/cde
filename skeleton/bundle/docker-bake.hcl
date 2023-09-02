@@ -1,9 +1,9 @@
 variable "ENV_BUNDLE" {
-  default = "bundle"
+  default = "xxx-bundle"
 }
 
 variable "PROJECT_BASE_IMAGE" {
-  default = "target:bundle_base"
+  default = "target:xxx-bundle_base"
 }
 
 # --- base ---
@@ -13,7 +13,7 @@ variable "BASE_BASE_IMAGE" {
   default = "target:root"
 }
 
-target "bundle_base" {
+target "xxx-bundle_base" {
   inherits = ["common"]
   context = "${envbundleprefix()}/base/ctx"
   contexts = {
@@ -24,11 +24,11 @@ target "bundle_base" {
 
 # --- project ---
 
-target "bundle_project" {
+target "xxx-bundle_yyy-project" {
   inherits = ["common"]
-  context = "${envbundleprefix()}/project/ctx"
+  context = "${envbundleprefix()}/yyy-project/ctx"
   contexts = {
     baseimage = "${PROJECT_BASE_IMAGE}"
   }
-  tags = [tagname("project")]
+  tags = [tagname("yyy-project")]
 }
