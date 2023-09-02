@@ -14,7 +14,8 @@
   Also, add the target for project in `docker-bake.hcl`.
 
 === Use external setup
-If you have set up necessary files somewhere else, make a symlink to the location. +
+If you have set up as described in `From scratch` somewhere else other than the `env` directory of this repository,
+make a symlink to the location in `env` directory.
 
 == Dockerfile
 By default, `catalog` directory is given as addtional context during build. +
