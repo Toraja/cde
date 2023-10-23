@@ -2,6 +2,7 @@
 variable "BASE_IMAGE" {
   default = "target:root"
 }
+variable "BASE_IMAGE_TAG" {}
 variable "USER_NAME" {}
 variable "ENV_PREFIX" {
   default = "env"
@@ -42,6 +43,7 @@ target "root" {
     GROUD_ID = GROUD_ID
     GROUP_NAME = GROUP_NAME
     DOCKER_GROUP_ID = DOCKER_GROUP_ID
+    BASE_IMAGE_TAG = BASE_IMAGE_TAG
   }
   tags = ["cde/root"]
 }
