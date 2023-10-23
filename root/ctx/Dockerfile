@@ -13,10 +13,13 @@ SHELL ["/bin/bash", "-eo", "pipefail", "-c"]
 ARG DOCKER_GROUP_ID
 RUN apt-get update && apt-get upgrade --no-install-recommends --yes && apt-get install --no-install-recommends --yes \
     apt-transport-https ca-certificates curl gnupg lsb-release \
-    && curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg \
-    && echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null \
+    && install -m 0755 -d /etc/apt/keyrings \
+    && curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /etc/apt/keyrings/docker.gpg \
+    && chmod a+r /etc/apt/keyrings/docker.gpg \
+    && echo "deb [arch="$(dpkg --print-architecture)" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu "$(. /etc/os-release && echo "$VERSION_CODENAME")" stable" | \
+        tee /etc/apt/sources.list.d/docker.list > /dev/null \
     && apt-get update && apt-get install --no-install-recommends --yes \
-        docker-ce docker-ce-cli containerd.io docker-compose-plugin \
+        docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin \
     && rm -rf /var/lib/apt/lists/* \
     # Specify GROUD_ID for docker as it differs depending on the environment (Docker Desktop etc.) \
     && groupmod --gid ${DOCKER_GROUP_ID} docker
@@ -61,7 +64,6 @@ ENV PATH="/home/${USER_NAME}/.local/bin:${PATH}"
 COPY --chown=${USER_NAME}:${USER_NAME} ./helpers/install-fish-plugins.fish /home/${USER_NAME}/.local/bin/
 RUN mkdir -p ~/tmp \
     && for p in httpie glances ansible-base yamllint; do pipx install $p; done \
-    && github-latest-release-installer.sh -x docker buildx 'buildx-v.*.linux-amd64'  ~/.docker/cli-plugins/docker-buildx \
     && github-latest-release-installer.sh -T yamlfmt google yamlfmt 'yamlfmt_.*_Linux_x86_64.tar.gz' ~/.local/bin/
 
 COPY --chown=${USER_NAME}:${USER_NAME} ./helpers/install-asdf-plugins.sh /home/${USER_NAME}/.local/bin/
@@ -103,7 +105,7 @@ RUN git clone https://github.com/Toraja/toybox.git \
 # This also enables replacing those links with actual files when symlink is inappriate
 RUN rm -rf ~/toybox \
     && ln -s ~/hosthome/.ssh ~/.ssh \
-    && ln -s ~/hosthome/.docker/config.json ~/.docker/config.json \
+    && mkdir --parents ~/.docker && ln -s ~/hosthome/.docker/config.json ~/.docker/config.json \
     && ln -s ~/workspace/personal.github.com/Toraja/toybox ~/toybox
 
 CMD ["tail", "-f", "/dev/null"]
