@@ -3,9 +3,11 @@ set -eo pipefail
 
 sudo apt-get update
 sudo apt-get upgrade --no-install-recommends --yes
+# pkg-config: required by rust-openssl crate which reqwest crate depends on
 sudo apt-get install --no-install-recommends --yes \
     build-essential \
-    gdb
+    gdb \
+    pkg-config
 
 source ${HOME}/.asdf/asdf.sh
 # protoc is required by rust-analyzer
