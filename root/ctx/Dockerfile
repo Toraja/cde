@@ -32,7 +32,7 @@ RUN apt-get update && apt-get install --no-install-recommends --yes \
     && apt-add-repository ppa:git-core/ppa \
     && apt-get update && apt-get install --no-install-recommends --yes \
         sudo less man-db locales tree openssh-client unzip wget gettext-base pipx \
-        git git-lfs gh make xclip net-tools netcat-openbsd dnsutils fish vim tmux \
+        git git-lfs make xclip net-tools netcat-openbsd dnsutils fish vim tmux \
     && rm -rf /var/lib/apt/lists/* \
     # Without this, `man` complains that $LC_* is not set \
     && locale-gen en_US.UTF-8
