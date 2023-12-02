@@ -108,4 +108,7 @@ RUN rm -rf ~/toybox \
     && mkdir --parents ~/.docker && ln -s ~/hosthome/.docker/config.json ~/.docker/config.json \
     && ln -s ~/workspace/personal.github.com/Toraja/toybox ~/toybox
 
+# Create directories for volume mount destination so that owner:group of those directories are not root.
+RUN mkdir --parents ~/.cache ~/.local/{share,state}
+
 CMD ["tail", "-f", "/dev/null"]
