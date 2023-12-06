@@ -22,6 +22,7 @@ asdf-global-installer.sh \
     fx \
     yq \
     just \
+    glow
 
 asdf direnv setup --shell fish --version latest
 just --completions fish > ~/.config/fish/completions/just.fish
