@@ -1,3 +1,3 @@
-source ~/toybox/nvim/init.vim
+source ~/toybox/nvim/init.lua
 
 " --- add machine dependent setting below ---
