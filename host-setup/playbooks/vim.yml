@@ -36,7 +36,7 @@
             path: "{{ nvim_conf_path }}/init.vim"
             marker: '" {mark} ANSIBLE MANAGED BLOCK'
             block: |
-              source ~/toybox/nvim/init.vim
+              source ~/toybox/nvim/init.lua
               " --- add machine dependent settings below ---
             create: true
 
