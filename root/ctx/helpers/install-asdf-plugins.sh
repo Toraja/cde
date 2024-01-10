@@ -28,6 +28,13 @@ asdf direnv setup --shell fish --version latest
 just --completions fish > ~/.config/fish/completions/just.fish
 npm install --global yaml-language-server
 eval $(asdf where fzf)/install --all
+# NOTE: remove fish_user_key_bindings.fish created by fzf installer.
+# It is loaded when (and somehow only when) script with fish shebang is executed.
+# Since fzf_key_bindings is only loaded in interactive mode, fish complains that
+# fzf_key_bindings function is not found.
+# With installer's --no-key-bindings option, fzf_key_bindings function will not be defind
+# and fzf widget will be unavaliable entirely.
+rm -f ~/.config/fish/functions/fish_user_key_bindings.fish
 
 git clone --depth 1 https://github.com/cheat/cheatsheets.git ~/.config/cheat/cheatsheets/community
 ln -s ~/toybox/cheat/conf.yml ~/.config/cheat/conf.yml
