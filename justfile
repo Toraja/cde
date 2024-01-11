@@ -5,7 +5,7 @@ compose_cmd := 'docker compose --file compose.yml'
 
 export USER_ID := `id -u`
 export USER_NAME := `whoami`
-export GROUD_ID := `id -g`
+export GROUP_ID := `id -g`
 export GROUP_NAME := `groups | cut -d ' ' -f1`
 export DOCKER_GROUP_ID := `getent group docker | cut -d: -f3`
 

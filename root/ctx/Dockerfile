@@ -21,7 +21,7 @@ RUN apt-get update && apt-get upgrade --no-install-recommends --yes && apt-get i
     && apt-get update && apt-get install --no-install-recommends --yes \
         docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin \
     && rm -rf /var/lib/apt/lists/* \
-    # Specify GROUD_ID for docker as it differs depending on the environment (Docker Desktop etc.) \
+    # Specify GROUP_ID for docker as it differs depending on the environment (Docker Desktop etc.) \
     && groupmod --gid ${DOCKER_GROUP_ID} docker
 
 # Must-have basic packages
@@ -39,11 +39,11 @@ RUN apt-get update && apt-get install --no-install-recommends --yes \
 
 ARG USER_ID
 ARG USER_NAME
-ARG GROUD_ID
+ARG GROUP_ID
 ARG GROUP_NAME
 RUN userdel --remove ubuntu && \
-    groupadd --gid ${GROUD_ID} ${GROUP_NAME} && \
-    useradd --create-home --uid ${USER_ID} --gid ${GROUD_ID} --groups ${DOCKER_GROUP_ID} --shell /usr/bin/fish ${USER_NAME} && \
+    groupadd --gid ${GROUP_ID} ${GROUP_NAME} && \
+    useradd --create-home --uid ${USER_ID} --gid ${GROUP_ID} --groups ${DOCKER_GROUP_ID} --shell /usr/bin/fish ${USER_NAME} && \
     echo ${USER_NAME}" ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/${USER_NAME}
 
 # Other nice-to-have tools

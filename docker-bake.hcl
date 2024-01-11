@@ -21,7 +21,10 @@ function "envbundleprefix" {
 
 target "common" {
   args = {
+    USER_ID = USER_ID
     USER_NAME = "${USER_NAME}"
+    GROUP_ID = GROUP_ID
+    GROUP_NAME = GROUP_NAME
   }
   contexts = {
     catalog = "catalog"
@@ -31,7 +34,7 @@ target "common" {
 # --- root ---
 
 variable "USER_ID" {}
-variable "GROUD_ID" {}
+variable "GROUP_ID" {}
 variable "GROUP_NAME" {}
 variable "DOCKER_GROUP_ID" {}
 
@@ -39,9 +42,6 @@ target "root" {
   inherits = ["common"]
   context = "root/ctx"
   args = {
-    USER_ID = USER_ID
-    GROUD_ID = GROUD_ID
-    GROUP_NAME = GROUP_NAME
     DOCKER_GROUP_ID = DOCKER_GROUP_ID
     BASE_IMAGE_TAG = BASE_IMAGE_TAG
   }
