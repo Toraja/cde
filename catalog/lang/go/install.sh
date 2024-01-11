@@ -1,9 +1,11 @@
 #!/bin/bash
 set -eo pipefail
 
+go_version=${1:-latest}
+
 mkdir -p ${HOME}/go
 source ${HOME}/.asdf/asdf.sh
-asdf-global-installer.sh golang
+asdf-global-installer.sh golang:${go_version}
 go install mvdan.cc/gofumpt@latest
 go install github.com/segmentio/golines@latest
 go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
