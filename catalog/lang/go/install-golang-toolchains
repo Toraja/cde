@@ -1,0 +1,33 @@
+#!/bin/bash
+set -eo pipefail
+
+echo intalling toolchains ...
+
+# `asdf global` must be called here because the post install hook is called
+# just after `asdf install` and the plugin version is not included in .tool-versions.
+asdf global golang ${1}
+
+which install-golang-extra-toolchains > /dev/null && source install-golang-extra-toolchains
+
+# installing via `go install` is not recommended
+# ref: https://golangci-lint.run/usage/install/#install-from-source
+curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin ${GOLANGCI_LINT_VERSION}
+go install -v golang.org/x/tools/cmd/goimports@latest
+go install -v golang.org/x/tools/cmd/gorename@latest
+go install -v golang.org/x/tools/gopls@latest
+go install -v golang.org/x/tools/cmd/callgraph@latest
+go install -v golang.org/x/tools/cmd/guru@latest
+go install -v github.com/segmentio/golines@latest
+go install -v github.com/fatih/gomodifytags@latest
+go install -v github.com/cweill/gotests/...@latest
+go install -v github.com/koron/iferr@latest
+go install -v github.com/josharian/impl@latest
+go install -v github.com/davidrjenni/reftools/cmd/fillstruct@latest
+go install -v github.com/go-delve/delve/cmd/dlv@latest
+go install -v github.com/onsi/ginkgo/v2/ginkgo@latest
+go install -v github.com/tmc/json-to-struct@latest
+go install -v gotest.tools/gotestsum@latest
+go install -v go.uber.org/mock/mockgen@${MOCKGEN_VERSION:-latest}
+go install -v mvdan.cc/gofumpt@latest
+
+asdf reshim golang
