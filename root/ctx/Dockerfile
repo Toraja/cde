@@ -48,8 +48,7 @@ RUN userdel --remove ubuntu && \
 
 # Other nice-to-have tools
 RUN apt-get update && apt-get install --no-install-recommends --yes \
-        # file required by ranger \
-        keychain jq ripgrep file ranger skopeo \
+        keychain jq ripgrep skopeo \
         # these required by asdf \
         dirmngr gpg curl gawk \
     && rm -rf /var/lib/apt/lists/* \
@@ -64,7 +63,8 @@ ENV PATH="/home/${USER_NAME}/.local/bin:${PATH}"
 COPY --chown=${USER_NAME}:${USER_NAME} ./helpers/install-fish-plugins.fish /home/${USER_NAME}/.local/bin/
 RUN mkdir -p ~/tmp \
     && for p in httpie glances ansible-base yamllint; do pipx install $p; done \
-    && github-latest-release-installer.sh -T yamlfmt google yamlfmt 'yamlfmt_.*_Linux_x86_64.tar.gz' ~/.local/bin/
+    && github-latest-release-installer.sh -T yamlfmt google yamlfmt 'yamlfmt_.*_Linux_x86_64.tar.gz' ~/.local/bin/ \
+    && bash <(curl -s https://raw.githubusercontent.com/kamiyaa/joshuto/master/utils/install.sh)
 
 COPY --chown=${USER_NAME}:${USER_NAME} ./helpers/install-asdf-plugins.sh /home/${USER_NAME}/.local/bin/
 RUN asdf_version=$(curl -s https://api.github.com/repos/asdf-vm/asdf/releases/latest | jq -r '.tag_name') \
@@ -96,8 +96,11 @@ RUN git clone https://github.com/Toraja/toybox.git \
     # tmux \
     && git clone https://github.com/tmux-plugins/tpm ~/.config/tmux/plugins/tpm \
     && ~/.config/tmux/plugins/tpm/bin/install_plugins \
-    # ranger \
-    && git clone https://github.com/alexanderjeurissen/ranger_devicons ~/.config/ranger/plugins/ranger_devicons \
+    # joshuto \
+    && ln -s ~/toybox/joshuto ~/.config/ \
+    && curl -fsSL https://raw.githubusercontent.com/kamiyaa/joshuto/main/config/preview_file.sh > ~/.local/bin/joshuto_preview_file.sh \
+    && chmod 755 ~/.local/bin/joshuto_preview_file.sh \
+    && joshuto completions fish > ~/.config/fish/completions/joshuto.fish \
     # yamlfmt & yamllint \
     && ln -s ~/toybox/{yamlfmt,yamllint} ~/.config/
 
