@@ -16,9 +16,11 @@ asdf-global-installer.sh \
     lazygit \
     github-cli \
     fd \
+    ripgrep \
     bat \
     fzf \
     cheat \
+    jq \
     fx \
     yq \
     just \
