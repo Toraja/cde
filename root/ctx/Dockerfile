@@ -48,7 +48,8 @@ RUN userdel --remove ubuntu && \
 
 # Other nice-to-have tools
 RUN apt-get update && apt-get install --no-install-recommends --yes \
-        keychain jq ripgrep skopeo \
+        # file required by joshuto \
+        keychain jq ripgrep file skopeo \
         # these required by asdf \
         dirmngr gpg curl gawk \
     && rm -rf /var/lib/apt/lists/* \
