@@ -99,8 +99,6 @@ RUN git clone https://github.com/Toraja/toybox.git \
     && ~/.config/tmux/plugins/tpm/bin/install_plugins \
     # joshuto \
     && ln -s ~/toybox/joshuto ~/.config/ \
-    && curl -fsSL https://raw.githubusercontent.com/kamiyaa/joshuto/main/config/preview_file.sh > ~/.local/bin/joshuto_preview_file.sh \
-    && chmod 755 ~/.local/bin/joshuto_preview_file.sh \
     && joshuto completions fish > ~/.config/fish/completions/joshuto.fish \
     # yamlfmt & yamllint \
     && ln -s ~/toybox/{yamlfmt,yamllint} ~/.config/
