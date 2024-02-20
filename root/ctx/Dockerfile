@@ -63,7 +63,7 @@ ENV PATH="/home/${USER_NAME}/.local/bin:${PATH}"
 
 COPY --chown=${USER_NAME}:${USER_NAME} ./helpers/install-fish-plugins.fish /home/${USER_NAME}/.local/bin/
 RUN mkdir -p ~/tmp \
-    && for p in httpie glances ansible-base yamllint; do pipx install $p; done \
+    && for p in httpie glances yamllint; do pipx install $p; done \
     && github-latest-release-installer.sh -T yamlfmt google yamlfmt 'yamlfmt_.*_Linux_x86_64.tar.gz' ~/.local/bin/ \
     && bash <(curl -s https://raw.githubusercontent.com/kamiyaa/joshuto/master/utils/install.sh)
 
@@ -75,6 +75,7 @@ RUN asdf_version=$(curl -s https://api.github.com/repos/asdf-vm/asdf/releases/la
     && install-asdf-plugins.sh
 
 COPY --from=catalog lang/lua /tmp/catalog/lua
+COPY --from=catalog ansible /tmp/catalog/ansible
 RUN for installer in /tmp/catalog/*/install.sh; do $installer; done && \
     sudo rm -rf /tmp/catalog
 
