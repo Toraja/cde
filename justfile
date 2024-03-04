@@ -54,8 +54,8 @@ compose cde +args: (validate_cde cde)
 	#!/usr/bin/env fish
 	# Specify COMPOSE_PROJECT_NAME (which is the service name by default) to avoid the collision of container name and volume name between CDEs
 	set cde {{trim_start_match(trim_end_match(cde, '/'), 'env/')}}
+	set --query COMPOSE_PROJECT_NAME || set --export COMPOSE_PROJECT_NAME (string replace '/' '_' "$cde")
 	PRIMARY_CDE=$cde \
-	COMPOSE_PROJECT_NAME=(string replace '/' '_' "$cde") \
 	CDE_HOSTNAME=(string replace '/' '.' "$cde") \
 	{{compose_cmd}} {{args}}
 
