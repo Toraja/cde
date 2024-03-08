@@ -3,7 +3,13 @@ variable "BASE_IMAGE" {
   default = "target:root"
 }
 variable "BASE_IMAGE_TAG" {}
+variable "HOME" {}
+variable "USER_ID" {}
 variable "USER_NAME" {}
+variable "GROUP_ID" {}
+variable "GROUP_NAME" {}
+variable "DOCKER_GROUP_ID" {}
+
 variable "ENV_PREFIX" {
   default = "env"
 }
@@ -22,7 +28,7 @@ function "envbundleprefix" {
 target "common" {
   args = {
     USER_ID = USER_ID
-    USER_NAME = "${USER_NAME}"
+    USER_NAME = USER_NAME
     GROUP_ID = GROUP_ID
     GROUP_NAME = GROUP_NAME
   }
@@ -32,11 +38,6 @@ target "common" {
 }
 
 # --- root ---
-
-variable "USER_ID" {}
-variable "GROUP_ID" {}
-variable "GROUP_NAME" {}
-variable "DOCKER_GROUP_ID" {}
 
 target "root" {
   inherits = ["common"]
