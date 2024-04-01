@@ -48,7 +48,7 @@ RUN userdel --remove ubuntu && \
 
 # Other nice-to-have tools
 RUN apt-get update && apt-get install --no-install-recommends --yes \
-        # file required by joshuto, jq required by github-latest-release-installer \
+        # file required by yazi, jq required by github-latest-release-installer \
         keychain file skopeo jq \
         # these required by asdf \
         dirmngr gpg curl gawk \
@@ -62,20 +62,23 @@ COPY --chown=${USER_NAME}:${USER_NAME} ./home ./
 ENV PATH="/home/${USER_NAME}/.local/bin:${PATH}"
 
 COPY --chown=${USER_NAME}:${USER_NAME} ./helpers/install-fish-plugins.fish /home/${USER_NAME}/.local/bin/
-RUN mkdir -p ~/tmp \
+RUN mkdir -p ~/tmp && mkdir -p ~/.config/fish/completions/ \
     && for p in httpie glances yamllint; do pipx install $p; done \
     && github-latest-release-installer.sh -T yamlfmt google yamlfmt 'yamlfmt_.*_Linux_x86_64.tar.gz' ~/.local/bin/ \
-    && bash <(curl -s https://raw.githubusercontent.com/kamiyaa/joshuto/master/utils/install.sh)
+    && github-latest-release-installer.sh sxyazi yazi 'yazi-x86_64-unknown-linux-gnu.zip' /tmp/yazi.zip \
+    && unzip -d /tmp/ /tmp/yazi.zip \
+    && mv /tmp/yazi-x86_64-unknown-linux-gnu/yazi ~/.local/bin \
+    && mv /tmp/yazi-x86_64-unknown-linux-gnu/completions/yazi.fish ~/.config/fish/completions/
 
 COPY --chown=${USER_NAME}:${USER_NAME} ./helpers/install-asdf-plugins.sh /home/${USER_NAME}/.local/bin/
 RUN asdf_version=$(curl -s https://api.github.com/repos/asdf-vm/asdf/releases/latest | jq -r '.tag_name') \
     && git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch ${asdf_version} \
-    && mkdir -p ~/.config/fish/completions/ \
     && ln -s ~/.asdf/completions/asdf.fish ~/.config/fish/completions/ \
     && install-asdf-plugins.sh
 
 COPY --from=catalog lang/lua /tmp/catalog/lua
 COPY --from=catalog ansible /tmp/catalog/ansible
+COPY --from=catalog lang/toml /tmp/catalog/toml
 RUN for installer in /tmp/catalog/*/install.sh; do $installer; done && \
     sudo rm -rf /tmp/catalog
 
@@ -98,9 +101,10 @@ RUN git clone https://github.com/Toraja/toybox.git \
     # tmux \
     && git clone https://github.com/tmux-plugins/tpm ~/.config/tmux/plugins/tpm \
     && ~/.config/tmux/plugins/tpm/bin/install_plugins \
-    # joshuto \
-    && ln -s ~/toybox/joshuto ~/.config/ \
-    && joshuto completions fish > ~/.config/fish/completions/joshuto.fish \
+    # yazi \
+    && mkdir ~/.config/yazi/plugins \
+    && ln -s ~/toybox/yazi/*.{lua,toml} ~/.config/yazi/ \
+    && ln -s ~/toybox/yazi/plugins/* ~/.config/yazi/plugins/ \
     # yamlfmt & yamllint \
     && ln -s ~/toybox/{yamlfmt,yamllint} ~/.config/
 
