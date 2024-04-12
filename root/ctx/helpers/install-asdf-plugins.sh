@@ -27,6 +27,7 @@ asdf-global-installer.sh \
     glow
 
 asdf direnv setup --shell fish --version latest
+bash -c 'cd && asdf direnv local'
 just --completions fish > ~/.config/fish/completions/just.fish
 npm install --global yaml-language-server
 eval $(asdf where fzf)/install --all
