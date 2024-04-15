@@ -102,7 +102,7 @@ RUN git clone https://github.com/Toraja/toybox.git \
     && git clone https://github.com/tmux-plugins/tpm ~/.config/tmux/plugins/tpm \
     && ~/.config/tmux/plugins/tpm/bin/install_plugins \
     # yazi \
-    && mkdir ~/.config/yazi/plugins \
+    && mkdir -p ~/.config/yazi/plugins \
     && ln -s ~/toybox/yazi/*.{lua,toml} ~/.config/yazi/ \
     && ln -s ~/toybox/yazi/plugins/* ~/.config/yazi/plugins/ \
     # yamlfmt & yamllint \
