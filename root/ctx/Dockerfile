@@ -1,3 +1,19 @@
+FROM rust:latest as taskwarrior
+
+SHELL ["/bin/bash", "-eo", "pipefail", "-c"]
+
+RUN apt-get update && apt-get upgrade --no-install-recommends --yes && apt-get install --no-install-recommends --yes \
+    make cmake gcc g++ uuid-dev && \
+    rm -rf /var/lib/apt/lists/*
+
+# taskwarrior is installed at /usr/local/bin/task
+RUN git clone --depth 1 --branch v3.0.2 https://github.com/GothenburgBitFactory/taskwarrior.git /taskwarrior && \
+    cd /taskwarrior && \
+    cmake -DCMAKE_BUILD_TYPE=release -DENABLE_SYNC=OFF . && \
+    make && \
+    make install && \
+    rm -rdf /taskwarrior
+
 # Simply assigning default value in ARG instruction does not work, maybe because an environment variable
 # with the same name is defined in compose file...  So use variable substitution instead.
 ARG BASE_IMAGE_TAG
@@ -82,6 +98,10 @@ COPY --from=catalog lang/toml /tmp/catalog/toml
 RUN for installer in /tmp/catalog/*/install.sh; do $installer; done && \
     sudo rm -rf /tmp/catalog
 
+# taskwarrior
+COPY --from=taskwarrior --chown=${USER_NAME}:${USER_NAME} /usr/local/bin/task /home/${USER_NAME}/.local/bin/task
+RUN github-latest-release-installer.sh -t kdheepak taskwarrior-tui taskwarrior-tui-x86_64-unknown-linux-gnu.tar.gz ~/.local/bin
+
 # Setup tools
 RUN git clone https://github.com/Toraja/toybox.git \
     # fish \
@@ -105,6 +125,13 @@ RUN git clone https://github.com/Toraja/toybox.git \
     && mkdir -p ~/.config/yazi/plugins \
     && ln -s ~/toybox/yazi/*.{lua,toml} ~/.config/yazi/ \
     && ln -s ~/toybox/yazi/plugins/* ~/.config/yazi/plugins/ \
+    # taskwarrior \
+    && mkdir -p ~/.local/share/taskwarrior/ \
+    && ln -s ~/hosthome/.local/share/taskwarrior/task ~/.local/share/taskwarrior/task \
+    # tasktnote \
+    && mkdir -p ~/.local/share/taskopen/ \
+    && ln -s ~/toybox/taskwarrior/tasknote ~/.local/bin/tasknote \
+    && ln -s ~/hosthome/.local/share/taskopen/notes ~/.local/share/taskopen/notes \
     # yamlfmt & yamllint \
     && ln -s ~/toybox/{yamlfmt,yamllint} ~/.config/
 
