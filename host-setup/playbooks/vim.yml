@@ -4,7 +4,7 @@
   vars:
     nvim_conf_path: "{{ lookup('ansible.builtin.env', 'HOME') }}/.config/nvim"
   tasks:
-    - name: Check if latest is installed
+    - name: Check if latest neovim is installed
       vars:
         binary_name: nvim
         installed_version_cmd: nvim --version | head -1 | cut -d ' ' -f 2
@@ -13,7 +13,7 @@
         name: binary
         tasks_from: latest_is_installed
 
-    - name: Install
+    - name: Install neovim
       when: not latest_binary_is_installed
       vars:
         workdir: /tmp/xxx
@@ -22,14 +22,14 @@
         cp -r {{ workdir }}/nvim-linux64/* ~/.local/
         rm -rdf {{ workdir }}
 
-    - name: setup
+    - name: Setup neovim
       block:
-        - name: create nvim directory
+        - name: Create nvim directory
           ansible.builtin.file:
             path: "{{ nvim_conf_path }}"
             state: directory
 
-        - name: setup init.vim
+        - name: Setup init.vim
           ansible.builtin.blockinfile:
             path: "{{ nvim_conf_path }}/init.vim"
             marker: '" {mark} ANSIBLE MANAGED BLOCK'
@@ -38,7 +38,7 @@
               " --- add machine dependent settings below ---
             create: true
 
-        - name: setup ginit.vim
+        - name: Setup ginit.vim
           ansible.builtin.blockinfile:
             path: "{{ nvim_conf_path }}/ginit.vim"
             marker: '" {mark} ANSIBLE MANAGED BLOCK'

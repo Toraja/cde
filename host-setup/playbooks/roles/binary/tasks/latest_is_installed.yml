@@ -19,7 +19,7 @@
       changed_when: false
       register: installed_version
 
-    - name: Check if latest is installed
+    - name: Check if latest {{ binary_name }} is installed
       ansible.builtin.shell: |
         test "{{ installed_version.stdout }}" = "{{ latest_version.stdout }}"
       changed_when: false
