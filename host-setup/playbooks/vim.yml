@@ -61,7 +61,7 @@
         - name: Install fzf
           when: not latest_binary_is_installed
           ansible.builtin.shell: |
-            ./github-latest-release-installer.sh -t junegunn fzf 'fzf-{{ latest_binary_version }}-linux_amd64.tar.gz' ~/.local/bin/
+            ../github-latest-release-installer.sh -t junegunn fzf 'fzf-{{ latest_binary_version }}-linux_amd64.tar.gz' ~/.local/bin/
 
         - name: Check if latest fd is installed
           vars:
