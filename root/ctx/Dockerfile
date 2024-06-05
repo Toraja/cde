@@ -109,7 +109,8 @@ RUN git clone https://github.com/Toraja/toybox.git \
     && ln -s ~/toybox/fish/functions ~/.config/fish/myfuncs \
     && ln -s ~/toybox/fish/conf.d/* ~/.config/fish/conf.d/ \
     # git \
-    && ln -s ~/toybox/git/gitignore_global ~/.gitignore_global \
+    && mkdir -p ~/.config/git \
+    && ln -s ~/toybox/git/gitignore_global ~/.config/git/ignore \
     && ln -s ~/toybox/git/custom-commands/bin/* ~/.local/bin/ \
     && ln -s ~/toybox/git/custom-commands/config/fish/* ~/.config/fish/conf.d/ \
     # gh \
