@@ -4,7 +4,7 @@ set -euo pipefail
 
 usage() {
     echo "USAGE: $(basename $0) [-htTx] GITHUB_USER GITHUB_REPONAME ASSET_NAME DESTINATION"
-    echo "    DESTINATION is a path to output the downloaded file. If -t/T is specified, it is tread as directory into which tarball is extracted."
+    echo "    DESTINATION is a path to output the downloaded file. If -t/T is specified, it is treated as directory into which tarball is extracted."
     echo "OPTIONS:"
     echo "    -s NUMBER   Equivalent of tar --strip-components"
     echo "    -t          Extract tarball into the destination. Mutually exclusive with -x."
