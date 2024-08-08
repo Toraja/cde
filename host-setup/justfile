@@ -27,20 +27,31 @@ cde_repo_url := 'git@' + github_host_user / 'cde.git'
 
 # Clone necessary repositories, setup gitconfig and create symlinks to the repositories
 repositories:
-	./github-latest-release-installer.sh x-motemen ghq ghq_linux_amd64.zip /tmp/ghq_linux_amd64.zip \
-		&& unzip /tmp/ghq_linux_amd64.zip -d /tmp/ \
-		&& mkdir -p ~/.local/bin/ \
-		&& mv /tmp/ghq_linux_amd64/ghq ~/.local/bin/ \
-		&& rm -rdf /tmp/ghq_linux_amd64*
-	git clone {{toybox_repo_url}} ~/toybox
-	cat ./gitconfig > ~/.gitconfig
-	ghq_root=$(~/.local/bin/ghq root) \
-		&& mkdir -p ${ghq_root}/{{github_repo_subpath}} \
-		&& mv ~/toybox ${ghq_root}/{{github_repo_subpath}} \
-		&& ln -s ${ghq_root}/{{github_repo_subpath}}/toybox ~/toybox \
-		&& mv ~/cde ${ghq_root}/{{github_repo_subpath}} \
-		&& ln -s ${ghq_root}/{{github_repo_subpath}}/cde ~/cde
-	mkdir -p ~/.config/gh
+	#!/usr/bin/env bash
+	if ! ghq --version; then
+		./github-latest-release-installer.sh x-motemen ghq ghq_linux_amd64.zip /tmp/ghq_linux_amd64.zip && \
+			unzip /tmp/ghq_linux_amd64.zip -d /tmp/ && \
+			mkdir --parents ~/.local/bin/ && \
+			mv /tmp/ghq_linux_amd64/ghq ~/.local/bin/ && \
+			rm --recursive --dir --force /tmp/ghq_linux_amd64*
+	fi
+	if [[ ! -d ~/toybox ]]; then
+		git clone {{toybox_repo_url}} ~/toybox
+	fi
+	if ! diff --brief ./gitconfig ~/.gitconfig; then
+		cat ./gitconfig > ~/.gitconfig
+	fi
+	ghq_root=$(~/.local/bin/ghq root)
+	if [[ -d ~/toybox && ! -L ~/toybox ]]
+		mkdir --parents ${ghq_root}/{{github_repo_subpath}} && \
+			mv ~/toybox ${ghq_root}/{{github_repo_subpath}} && \
+			ln --symbolic ${ghq_root}/{{github_repo_subpath}}/toybox ~/toybox
+	fi
+	if [[ -d ~/cde && ! -L ~/cde ]]; then
+		mv ~/cde ${ghq_root}/{{github_repo_subpath}} && \
+			ln --symbolic ${ghq_root}/{{github_repo_subpath}}/cde ~/cde
+	fi
+	mkdir --parents ~/.config/gh
 
 fish:
 	sudo -E apt-get update
