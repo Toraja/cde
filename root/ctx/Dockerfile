@@ -1,4 +1,6 @@
-FROM rust:latest as taskwarrior
+ARG BASE_IMAGE_TAG
+
+FROM rust:latest AS taskwarrior
 
 SHELL ["/bin/bash", "-eo", "pipefail", "-c"]
 
@@ -14,10 +16,7 @@ RUN git clone --depth 1 --branch v3.0.2 https://github.com/GothenburgBitFactory/
     make install && \
     rm -rdf /taskwarrior
 
-# Simply assigning default value in ARG instruction does not work, maybe because an environment variable
-# with the same name is defined in compose file...  So use variable substitution instead.
-ARG BASE_IMAGE_TAG
-FROM ubuntu:${BASE_IMAGE_TAG:-rolling}
+FROM ubuntu:${BASE_IMAGE_TAG}
 
 # `unminimize` is required to use `man`
 RUN yes | unminimize
