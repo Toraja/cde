@@ -6,3 +6,14 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
+clap = { version = "4.4", features = ["derive"] }
+serde = { version = "1.0", features = ["derive"] }
+reqwest = { version = "0.11", features = ["blocking", "json"] }
+anyhow = { version = "1.0" }
+tempfile = { version = "3.8" }
+sha2 = { version = "0.10" }
+hex-literal = { version = "0.4" }
+
+[dev-dependencies]
+scopeguard = "1.2.0"
+rstest = "0.22.0"
