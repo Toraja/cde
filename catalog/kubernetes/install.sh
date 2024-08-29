@@ -8,6 +8,7 @@ asdf-global-installer.sh \
     k9s \
     helm \
     helmfile
+github-latest-release-installer.sh -x mrjosh helm-ls helm_ls_linux_amd64 ~/.local/bin/helm_ls
 
 kubectl completion fish > ~/.config/fish/completions/kubectl.fish
 kind completion fish > ~/.config/fish/completions/kind.fish
