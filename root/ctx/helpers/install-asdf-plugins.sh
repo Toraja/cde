@@ -23,8 +23,7 @@ asdf-global-installer.sh \
     jq \
     fx \
     yq \
-    just \
-    glow
+    just
 
 asdf direnv setup --shell fish --version latest
 bash -c 'cd && asdf direnv local'
