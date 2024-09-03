@@ -2,7 +2,6 @@
 set -eo pipefail
 
 sudo apt-get update
-sudo apt-get upgrade --no-install-recommends --yes
 sudo apt-get install --no-install-recommends --yes \
     libedit-dev \
     zlib1g \

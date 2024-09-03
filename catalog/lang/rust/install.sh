@@ -4,7 +4,6 @@ set -eo pipefail
 rust_version=${1:-latest}
 
 sudo apt-get update
-sudo apt-get upgrade --no-install-recommends --yes
 # pkg-config: required by rust-openssl crate which reqwest crate depends on
 sudo apt-get install --no-install-recommends --yes \
     build-essential \
