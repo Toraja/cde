@@ -8,9 +8,6 @@ services:
       - ${CDE_HOSTNAME:?}:127.0.0.1
     volumes:
       - type: volume
-        source: cde_cache
-        target: /home/${USER:?}/.cache
-      - type: volume
         source: cde_local_share
         target: /home/${USER:?}/.local/share
       - type: volume
@@ -39,9 +36,6 @@ services:
         target: /home/${USER:?}/workspace
     network_mode: "host"
 volumes:
-  cde_cache:
-    labels:
-      prune: false
   cde_local_share:
     labels:
       prune: false

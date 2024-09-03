@@ -143,6 +143,6 @@ RUN rm -rf ~/toybox \
     && ln -s ~/workspace/personal.github.com/Toraja/toybox ~/toybox
 
 # Create directories for volume mount destination so that owner:group of those directories are not root.
-RUN mkdir --parents ~/.cache ~/.local/{share,state}
+RUN mkdir --parents ~/.local/{share,state}
 
 CMD ["tail", "-f", "/dev/null"]
