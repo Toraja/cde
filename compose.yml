@@ -8,14 +8,8 @@ services:
       - ${CDE_HOSTNAME:?}:127.0.0.1
     volumes:
       - type: volume
-        source: cde_local_share
-        target: /home/${USER:?}/.local/share
-      - type: volume
-        source: cde_local_state
-        target: /home/${USER:?}/.local/state
-      # bind socket file so that the same docker can be used inside containers
-      # (actually docker client command cannot connect to daemon without this,
-      # even when daemon is started inside container)
+        source: cde_single
+        target: /home/${USER:?}/.cde/mnt/single
       - type: bind
         source: /var/run/docker.sock
         target: /var/run/docker.sock
@@ -36,9 +30,6 @@ services:
         target: /home/${USER:?}/workspace
     network_mode: "host"
 volumes:
-  cde_local_share:
-    labels:
-      prune: false
-  cde_local_state:
+  cde_single:
     labels:
       prune: false

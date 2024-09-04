@@ -25,10 +25,20 @@ asdf-global-installer.sh \
     yq \
     just
 
+mkdir --parents ~/.cde/mnt/single/.local/share/direnv
+ln -s ~/.cde/mnt/single/.local/share/direnv ~/.local/share/
 asdf direnv setup --shell fish --version latest
 bash -c 'cd && asdf direnv local'
+
+mkdir --parents  ~/.local/{share,state}/nvim/ ~/.cde/mnt/single/.local/state/nvim/ ~/hosthome/.local/{share,state}/nvim/lazy/
+ln -sf ~/.cde/mnt/single/.local/state/nvim/{shada,trust} ~/.local/state/nvim/
+ln -s ~/hosthome/.local/share/nvim/lazy ~/.local/share/nvim/
+ln -s ~/hosthome/.local/state/nvim/lazy ~/.local/state/nvim/
+
 just --completions fish > ~/.config/fish/completions/just.fish
+
 npm install --global yaml-language-server
+
 eval $(asdf where fzf)/install --all
 # NOTE: remove fish_user_key_bindings.fish created by fzf installer.
 # It is loaded when (and somehow only when) script with fish shebang is executed.

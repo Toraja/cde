@@ -107,6 +107,8 @@ RUN git clone https://github.com/Toraja/toybox.git \
     && install-fish-plugins.fish \
     && ln -s ~/toybox/fish/functions ~/.config/fish/myfuncs \
     && ln -s ~/toybox/fish/conf.d/* ~/.config/fish/conf.d/ \
+    && mkdir --parents ~/.cde/mnt/single/.local/share/fish/ \
+    && ln -sf ~/.cde/mnt/single/.local/share/fish/fish_history ~/.local/share/fish/ \
     # git \
     && mkdir -p ~/.config/git \
     && ln -s ~/toybox/git/gitignore_global ~/.config/git/ignore \
@@ -121,6 +123,8 @@ RUN git clone https://github.com/Toraja/toybox.git \
     # tmux \
     && git clone https://github.com/tmux-plugins/tpm ~/.config/tmux/plugins/tpm \
     && ~/.config/tmux/plugins/tpm/bin/install_plugins \
+    && mkdir --parents ~/.cde/mnt/single/.local/share/tmux/resurrect/ ~/.local/share/tmux/ \
+    && ln -sf ~/.cde/mnt/single/.local/share/tmux/resurrect ~/.local/share/tmux/ \
     # yazi \
     && mkdir -p ~/.config/yazi/plugins \
     && ln -s ~/toybox/yazi/*.{lua,toml} ~/.config/yazi/ \
@@ -144,5 +148,6 @@ RUN rm -rf ~/toybox \
 
 # Create directories for volume mount destination so that owner:group of those directories are not root.
 RUN mkdir --parents ~/.local/{share,state}
+RUN mkdir --parents ~/.cde/mnt/single/.local/{share,state}
 
 CMD ["tail", "-f", "/dev/null"]
