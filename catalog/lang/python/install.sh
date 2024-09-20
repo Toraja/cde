@@ -14,3 +14,5 @@ source ${HOME}/.asdf/asdf.sh
 asdf-global-installer.sh python
 
 for package in pyright pipenv poetry ruff; do pipx install $package; done
+
+poetry completions fish > ~/.config/fish/completions/poetry.fish
