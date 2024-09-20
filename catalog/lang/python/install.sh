@@ -13,4 +13,4 @@ sudo apt-get install --no-install-recommends --yes \
 source ${HOME}/.asdf/asdf.sh
 asdf-global-installer.sh python
 
-for package in pyright pipenv poetry; do pipx install $package; done
+for package in pyright pipenv poetry ruff; do pipx install $package; done
