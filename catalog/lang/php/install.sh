@@ -23,5 +23,5 @@ composer global require --dev \
     phpstan/phpstan \
     phpmd/phpmd \
     squizlabs/php_codesniffer
-# phpactor is installed via vim's plugin manager since phpactor is likely to cause
-# conflicts with other packages.
+
+github-latest-release-installer.sh -x phpactor phpactor phpactor.phar ~/.local/bin/phpactor
