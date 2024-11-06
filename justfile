@@ -8,6 +8,7 @@ export USER_NAME := `whoami`
 export GROUP_ID := `id -g`
 export GROUP_NAME := `groups | cut -d ' ' -f1`
 export DOCKER_GROUP_ID := `getent group docker | cut -d: -f3`
+export BASE_IMAGE_TAG := `echo ${BASE_IMAGE_TAG:-rolling}`
 
 default:
 	@just --list --unsorted
@@ -38,6 +39,8 @@ default:
 # Build specified targets.
 build target bakeflag='': docker_service
 	#!/usr/bin/env fish
+	docker pull ubuntu:$BASE_IMAGE_TAG
+	docker pull rust:latest
 	set target (string replace '/' '_' {{trim_start_match(trim_end_match(target, '/'), 'env/')}})
 	set flag --file docker-bake.hcl
 	set env_root (string replace --regex '([^/]+/[^/]+/).*' '$1' {{target}})
