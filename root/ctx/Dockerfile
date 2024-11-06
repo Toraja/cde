@@ -19,14 +19,16 @@ RUN git clone --depth 1 --branch v3.0.2 https://github.com/GothenburgBitFactory/
 FROM ubuntu:${BASE_IMAGE_TAG}
 
 # `unminimize` is required to use `man`
-RUN yes | unminimize
+RUN apt-get update && apt-get upgrade --no-install-recommends --yes && apt-get install --no-install-recommends --yes \
+    unminimize \
+    && yes | unminimize
 
 SHELL ["/bin/bash", "-eo", "pipefail", "-c"]
 
 # Official Debian and Ubuntu images automatically run apt-get clean, so explicit invocation is not required.
 # Set up to install docker
 ARG DOCKER_GROUP_ID
-RUN apt-get update && apt-get upgrade --no-install-recommends --yes && apt-get install --no-install-recommends --yes \
+RUN apt-get update && apt-get install --no-install-recommends --yes \
     apt-transport-https ca-certificates curl gnupg lsb-release \
     && install -m 0755 -d /etc/apt/keyrings \
     && curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /etc/apt/keyrings/docker.gpg \
