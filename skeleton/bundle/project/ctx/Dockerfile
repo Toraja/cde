@@ -13,4 +13,4 @@ RUN /tmp/catalog/go/install.sh
 COPY --from=catalog lang/rust /tmp/catalog/rust
 RUN /tmp/catalog/rust/install.sh
 
-RUN sudo rm -rf ${HOME}/catalog
+RUN sudo rm --recursive --force ${HOME}/catalog
