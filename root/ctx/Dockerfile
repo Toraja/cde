@@ -9,7 +9,7 @@ RUN apt-get update && apt-get upgrade --no-install-recommends --yes && apt-get i
     rm -rf /var/lib/apt/lists/*
 
 # taskwarrior is installed at /usr/local/bin/task
-RUN git clone --depth 1 --branch v3.0.2 https://github.com/GothenburgBitFactory/taskwarrior.git /taskwarrior && \
+RUN git clone --depth 1 --branch v3.2.0 https://github.com/GothenburgBitFactory/taskwarrior.git /taskwarrior && \
     cd /taskwarrior && \
     cmake -DCMAKE_BUILD_TYPE=release -DENABLE_SYNC=OFF . && \
     make && \
