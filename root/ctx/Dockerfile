@@ -82,10 +82,12 @@ COPY --chown=${USER_NAME}:${USER_NAME} ./helpers/install-fish-plugins.fish /home
 RUN mkdir -p ~/tmp && mkdir -p ~/.config/fish/completions/ \
     && for p in httpie glances yamllint; do pipx install $p; done \
     && github-latest-release-installer.sh -T yamlfmt google yamlfmt 'yamlfmt_.*_Linux_x86_64.tar.gz' ~/.local/bin/ \
-    && github-latest-release-installer.sh sxyazi yazi 'yazi-x86_64-unknown-linux-gnu.zip' /tmp/yazi.zip \
-    && unzip -d /tmp/ /tmp/yazi.zip \
-    && mv /tmp/yazi-x86_64-unknown-linux-gnu/yazi ~/.local/bin \
-    && mv /tmp/yazi-x86_64-unknown-linux-gnu/completions/yazi.fish ~/.config/fish/completions/
+    && yazi_tmp=/tmp/yazi \
+    && github-latest-release-installer.sh sxyazi yazi 'yazi-x86_64-unknown-linux-gnu.zip' ${yazi_tmp}/yazi.zip \
+    && unzip -d ${yazi_tmp} ${yazi_tmp}/yazi.zip \
+    && mv ${yazi_tmp}/yazi-x86_64-unknown-linux-gnu/{yazi,ya} ~/.local/bin \
+    && mv ${yazi_tmp}/yazi-x86_64-unknown-linux-gnu/completions/{yazi,ya}.fish ~/.config/fish/completions/ \
+    && rm --recursive --force ${yazi_tmp}
 
 COPY --chown=${USER_NAME}:${USER_NAME} ./helpers/install-asdf-plugins.sh /home/${USER_NAME}/.local/bin/
 RUN asdf_version=$(curl -s https://api.github.com/repos/asdf-vm/asdf/releases/latest | jq -r '.tag_name') \
@@ -130,7 +132,13 @@ RUN git clone https://github.com/Toraja/toybox.git \
     # yazi \
     && mkdir -p ~/.config/yazi/plugins \
     && ln -s ~/toybox/yazi/*.{lua,toml} ~/.config/yazi/ \
-    && ln -s ~/toybox/yazi/plugins/* ~/.config/yazi/plugins/ \
+    && ya pack -a yazi-rs/plugins:smart-enter \
+    && ya pack -a yazi-rs/plugins:full-border \
+    && ya pack -a yazi-rs/plugins:smart-filter \
+    && ya pack -a yazi-rs/plugins:chmod \
+    && ya pack -a yazi-rs/plugins:git \
+    && ya pack -a yazi-rs/plugins:max-preview \
+    && ya pack -a yazi-rs/plugins:hide-preview \
     # taskwarrior \
     && mkdir -p ~/.local/share/taskwarrior/ \
     && ln -s ~/hosthome/.local/share/taskwarrior/task ~/.local/share/taskwarrior/task \
