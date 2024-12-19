@@ -39,6 +39,7 @@ just --completions fish > ~/.config/fish/completions/just.fish
 
 npm install --global vscode-langservers-extracted
 npm install --global yaml-language-server
+npm install --global json5
 
 eval $(asdf where fzf)/install --all
 # NOTE: remove fish_user_key_bindings.fish created by fzf installer.
