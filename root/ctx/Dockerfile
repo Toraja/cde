@@ -66,7 +66,7 @@ RUN userdel --remove ubuntu && \
 # Other nice-to-have tools
 RUN apt-get update && apt-get install --no-install-recommends --yes \
         # file required by yazi, jq required by github-latest-release-installer \
-        keychain file skopeo jq \
+        keychain file skopeo jq pwgen \
         # these required by asdf \
         dirmngr gpg curl gawk \
     && rm --recursive --force /var/lib/apt/lists/* \
