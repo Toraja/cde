@@ -4,7 +4,8 @@ FROM rust:latest AS taskwarrior
 
 SHELL ["/bin/bash", "-eo", "pipefail", "-c"]
 
-RUN apt-get update && apt-get upgrade --no-install-recommends --yes && apt-get install --no-install-recommends --yes \
+# upgrading tzdata will fail because a relate file is bind-mounted
+RUN apt-mark hold tzdata && apt-get update && apt-get upgrade --no-install-recommends --yes && apt-get install --no-install-recommends --yes \
     make cmake gcc g++ uuid-dev && \
     rm --recursive --force /var/lib/apt/lists/*
 
