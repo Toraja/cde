@@ -5,7 +5,7 @@ FROM rust:latest AS taskwarrior
 SHELL ["/bin/bash", "-eo", "pipefail", "-c"]
 
 # upgrading tzdata will fail because a relate file is bind-mounted
-RUN apt-mark hold tzdata && apt-get update && apt-get upgrade --no-install-recommends --yes && apt-get install --no-install-recommends --yes \
+RUN apt-get update && apt-get upgrade --no-install-recommends --yes && apt-get install --no-install-recommends --yes \
     make cmake gcc g++ uuid-dev && \
     rm --recursive --force /var/lib/apt/lists/*
 
@@ -20,7 +20,7 @@ RUN git clone --depth 1 --branch v3.2.0 https://github.com/GothenburgBitFactory/
 FROM ubuntu:${BASE_IMAGE_TAG}
 
 # `unminimize` is required to use `man`
-RUN apt-get update && apt-get upgrade --no-install-recommends --yes && apt-get install --no-install-recommends --yes \
+RUN apt-get update && apt-mark hold tzdata && apt-get upgrade --no-install-recommends --yes && apt-get install --no-install-recommends --yes \
     unminimize \
     && yes | unminimize
 
