@@ -1,5 +1,5 @@
 #!/bin/bash
 set -eo pipefail
 
-source ${HOME}/.asdf/asdf.sh
+export PATH="$HOME/.asdf/shims:$PATH"
 asdf-global-installer.sh terraform terraform-ls

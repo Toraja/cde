@@ -88,12 +88,12 @@ RUN mkdir --parents ~/tmp && mkdir --parents ~/.config/fish/completions/ \
     && unzip -d ${yazi_tmp} ${yazi_tmp}/yazi.zip \
     && mv ${yazi_tmp}/yazi-x86_64-unknown-linux-gnu/{yazi,ya} ~/.local/bin \
     && mv ${yazi_tmp}/yazi-x86_64-unknown-linux-gnu/completions/{yazi,ya}.fish ~/.config/fish/completions/ \
-    && rm --recursive --force ${yazi_tmp}
+    && rm --recursive --force ${yazi_tmp} \
+    && curl --fail --silent --location https://direnv.net/install.sh | bash
 
 COPY --chown=${USER_NAME}:${USER_NAME} ./helpers/install-asdf-plugins.sh /home/${USER_NAME}/.local/bin/
-RUN asdf_version=$(curl --silent https://api.github.com/repos/asdf-vm/asdf/releases/latest | jq --raw-output '.tag_name') \
-    && git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch ${asdf_version} \
-    && ln --symbolic ~/.asdf/completions/asdf.fish ~/.config/fish/completions/ \
+RUN github-latest-release-installer.sh -t asdf-vm asdf 'asdf-.*-linux-amd64.tar.gz' ~/.local/bin \
+    && asdf completion fish > ~/.config/fish/completions/asdf.fish \
     && install-asdf-plugins.sh
 
 COPY --from=catalog lang/lua /tmp/catalog/lua
@@ -140,6 +140,10 @@ RUN git clone https://github.com/Toraja/toybox.git \
     && ya pack -a yazi-rs/plugins:git \
     && ya pack -a yazi-rs/plugins:max-preview \
     && ya pack -a yazi-rs/plugins:hide-preview \
+    # direnv \
+    && mkdir --parents ~/.cde/mnt/single/.local/share/direnv \
+    && ln --symbolic ~/.cde/mnt/single/.local/share/direnv ~/.local/share/ \
+    && direnv hook fish > ~/.config/fish/conf.d/direnv.fish \
     # taskwarrior \
     && mkdir --parents ~/.local/share/taskwarrior/ \
     && ln --symbolic ~/hosthome/.local/share/taskwarrior/task ~/.local/share/taskwarrior/task \

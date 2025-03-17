@@ -2,13 +2,10 @@
 
 set -e
 
-source ~/.asdf/asdf.sh
-
 # tmux is installed via apt because it requireds build dependencies and asdf does not resolve the dependency.
 # For the record, those dependencies are zip, unzip, automake as well as packages written on
 # https://github.com/tmux/tmux/wiki/Installing#from-source-tarball .
 asdf-global-installer.sh \
-    direnv \
     neovim \
     nodejs \
     grpcurl \
@@ -25,10 +22,7 @@ asdf-global-installer.sh \
     yq \
     just
 
-mkdir --parents ~/.cde/mnt/single/.local/share/direnv
-ln -s ~/.cde/mnt/single/.local/share/direnv ~/.local/share/
-asdf direnv setup --shell fish --version latest
-bash -c 'cd && asdf direnv local'
+export PATH="$HOME/.asdf/shims:$PATH"
 
 mkdir --parents  ~/.local/{share,state}/nvim/ ~/.cde/mnt/single/.local/state/nvim/ ~/hosthome/.local/{share,state}/nvim/lazy/
 ln -sf ~/.cde/mnt/single/.local/state/nvim/{shada,trust} ~/.local/state/nvim/

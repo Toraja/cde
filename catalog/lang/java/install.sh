@@ -2,7 +2,7 @@
 set -eo pipefail
 
 # XXX not tested
-source ${HOME}/.asdf/asdf.sh
+export PATH="$HOME/.asdf/shims:$PATH"
 asdf-global-installer.sh java
 # taken from https://github.com/halcyon/asdf-java/blob/master/set-java-home.fish
 cat << _EOF_ > ${HOME}/.config/fish/conf.d/java.fish

@@ -12,7 +12,7 @@ sudo apt-get install --no-install-recommends --yes \
     libsqlite3-dev \
     liblzma-dev
 
-source ${HOME}/.asdf/asdf.sh
+export PATH="$HOME/.asdf/shims:$PATH"
 asdf-global-installer.sh python
 
 for package in pyright pipenv poetry ruff; do pipx install $package; done

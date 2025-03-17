@@ -9,7 +9,7 @@ sudo apt-get install --no-install-recommends --yes \
     build-essential \
     pkg-config
 
-source ${HOME}/.asdf/asdf.sh
+export PATH="$HOME/.asdf/shims:$PATH"
 # protoc is required by rust-analyzer
 asdf-global-installer.sh rust:${rust_version} protoc sccache
 rustup completions fish > ~/.config/fish/completions/rustup.fish

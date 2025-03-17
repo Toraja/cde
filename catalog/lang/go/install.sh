@@ -10,6 +10,6 @@ setup_hook() {
 }
 
 mkdir -p ${HOME}/go
-source ${HOME}/.asdf/asdf.sh
+export PATH="$HOME/.asdf/shims:$PATH"
 setup_hook
 asdf-global-installer.sh golang:${go_version} richgo

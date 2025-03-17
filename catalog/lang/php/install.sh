@@ -11,7 +11,7 @@ sudo apt-get install --no-install-recommends --yes \
     libxml2-dev \
     libsqlite3-dev
 
-source ${HOME}/.asdf/asdf.sh
+export PATH="$HOME/.asdf/shims:$PATH"
 # XXX Installation fails with error: No package 'openssl' found
 # Installing 'openssl' with apt-get does not solve it.
 asdf-global-installer.sh php

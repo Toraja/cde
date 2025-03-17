@@ -3,9 +3,9 @@ set -eo pipefail
 
 echo intalling toolchains ...
 
-# `asdf global` must be called here because the post install hook is called
+# `asdf set` must be called here because the post install hook is called
 # just after `asdf install` and the plugin version is not included in .tool-versions.
-asdf global golang ${1}
+asdf set --home golang ${1}
 
 which install-golang-extra-toolchains > /dev/null && source install-golang-extra-toolchains
 

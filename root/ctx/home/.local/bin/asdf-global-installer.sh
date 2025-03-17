@@ -20,7 +20,7 @@ for plugin in $@; do
     fi
 
     # force successful exit in case the plugin has already been added
-    asdf plugin-add $plugin_name || true
+    asdf plugin add $plugin_name || true
     asdf install $plugin_name $plugin_ver
-    asdf global $plugin_name $plugin_ver
+    asdf set --home $plugin_name $plugin_ver
 done
