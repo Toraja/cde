@@ -6,11 +6,12 @@ SHELL ["/bin/bash", "-eo", "pipefail", "-c"]
 
 # upgrading tzdata will fail because a relate file is bind-mounted
 RUN apt-get update && apt-get upgrade --no-install-recommends --yes && apt-get install --no-install-recommends --yes \
-    make cmake gcc g++ uuid-dev && \
+    make cmake gcc g++ uuid-dev jq && \
     rm --recursive --force /var/lib/apt/lists/*
 
 # taskwarrior is installed at /usr/local/bin/task
-RUN git clone --depth 1 --branch v3.2.0 https://github.com/GothenburgBitFactory/taskwarrior.git /taskwarrior && \
+RUN version=$(curl --silent https://api.github.com/repos/GothenburgBitFactory/taskwarrior/releases/latest | jq --raw-output '.tag_name') && \
+    git clone --depth 1 --branch $version https://github.com/GothenburgBitFactory/taskwarrior.git /taskwarrior && \
     cd /taskwarrior && \
     cmake -DCMAKE_BUILD_TYPE=release -DENABLE_SYNC=OFF . && \
     make && \
