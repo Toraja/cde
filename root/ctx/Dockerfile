@@ -21,7 +21,7 @@ RUN version=$(curl --silent https://api.github.com/repos/GothenburgBitFactory/ta
 FROM ubuntu:${BASE_IMAGE_TAG}
 
 # `unminimize` is required to use `man`
-RUN apt-get update && apt-mark hold tzdata && apt-get upgrade --no-install-recommends --yes && apt-get install --no-install-recommends --yes \
+RUN apt-get update && apt-get upgrade --no-install-recommends --yes && apt-get install --no-install-recommends --yes \
     unminimize \
     && yes | unminimize
 

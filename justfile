@@ -61,6 +61,7 @@ compose cde +args: (validate_cde cde)
 	set --query COMPOSE_PROJECT_NAME || set --export COMPOSE_PROJECT_NAME (string replace '/' '_' "$cde")
 	PRIMARY_CDE=$cde \
 	CDE_HOSTNAME=(string replace '/' '.' "$cde") \
+	TZ=(cat /etc/timezone) \
 	{{compose_cmd}} {{args}}
 
 up cde: (compose cde 'up --no-recreate --no-build --pull never')

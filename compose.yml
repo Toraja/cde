@@ -3,6 +3,7 @@ services:
     image: cde/${PRIMARY_CDE:?}
     environment:
       - GIT_HUB_SSH_KEY
+      - TZ
     hostname: ${CDE_HOSTNAME:?}
     extra_hosts:
       - ${CDE_HOSTNAME:?}:127.0.0.1
@@ -13,13 +14,6 @@ services:
       - type: bind
         source: /var/run/docker.sock
         target: /var/run/docker.sock
-      # Binding below two timezone file sync timezone of containers to the host machine
-      - type: bind
-        source: /etc/timezone
-        target: /etc/timezone
-      - type: bind
-        source: /etc/localtime
-        target: /etc/localtime
       - type: bind
         source: "~"
         target: /home/${USER:?}/hosthome
