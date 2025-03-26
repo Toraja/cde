@@ -47,7 +47,7 @@ RUN apt-get update && apt-get install --no-install-recommends --yes \
 ## gettext-base installs envsubst
 RUN apt-get update && apt-get install --no-install-recommends --yes \
         software-properties-common \
-    && apt-add-repository ppa:fish-shell/release-3 \
+    && apt-add-repository ppa:fish-shell/release-4 \
     && apt-add-repository ppa:git-core/ppa \
     && apt-get update && apt-get install --no-install-recommends --yes \
         sudo less man-db locales tree openssh-client unzip wget gettext-base pipx \
