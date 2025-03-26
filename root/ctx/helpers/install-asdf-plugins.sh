@@ -31,9 +31,7 @@ ln -s ~/hosthome/.local/state/nvim/lazy ~/.local/state/nvim/
 
 just --completions fish > ~/.config/fish/completions/just.fish
 
-npm install --global vscode-langservers-extracted
-npm install --global yaml-language-server
-npm install --global json5
+npm install --global vscode-langservers-extracted yaml-language-server json5
 
 fzf --fish > ~/.config/fish/conf.d/fzf.fish
 
