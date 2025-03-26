@@ -3,9 +3,8 @@
 set --local FAIL_EVENT fail
 function create_fish_dirs --on-event $FAIL_EVENT
     # `curl` complains SSL error under certain environment (VPN etc).
-    # Skip installing fisher in such case and create directories otherwise
-    # created by installing plugins as these must exist for later commands.
-    mkdir -p ~/.config/fish/completions ~/.config/fish/conf.d
+    # Skip installing fisher in such case and do things which would have done otherwise
+    # if plugins were successfully installed. (such as creating directories)
 end
 
 curl -fsSL https://git.io/fisher | source
