@@ -23,7 +23,6 @@ fisher install \
     laughedelic/fish_logo \
     markcial/upto \
     joehillen/to-fish \
-    evanlucas/fish-kubectl-completions \
     edc/bass
 or begin
     emit $FAIL_EVENT
