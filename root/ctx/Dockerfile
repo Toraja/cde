@@ -77,9 +77,19 @@ WORKDIR /home/${USER_NAME}
 COPY --chown=${USER_NAME}:${USER_NAME} ./home ./
 ENV PATH="/home/${USER_NAME}/.local/bin:${PATH}"
 
-COPY --chown=${USER_NAME}:${USER_NAME} ./helpers/install-fish-plugins.fish /home/${USER_NAME}/.local/bin/
-RUN mkdir --parents ~/tmp && mkdir --parents ~/.config/fish/completions/ \
-    && for p in httpie glances; do pipx install $p; done
+# Setup tools installed by apt
+RUN mkdir --parents ~/tmp && \
+    # fish \
+    mkdir --parents ~/.config/fish/completions/ ~/.config/fish/conf.d && \
+    ln --symbolic ~/toybox/fish/functions ~/.config/fish/myfuncs && \
+    _fisher-install.fish && \
+    # git \
+    mkdir --parents ~/.config/git && \
+    ln --symbolic ~/toybox/git/gitignore_global ~/.config/git/ignore && \
+    # pipx \
+    register-python-argcomplete --shell fish pipx > ~/.config/fish/completions/pipx.fish
+
+RUN for p in httpie glances; do pipx install $p; done
 
 # COPY --chown=${USER_NAME}:${USER_NAME} ./helpers/install-asdf-plugins.sh /home/${USER_NAME}/.local/bin/
 # RUN github-latest-release-installer.sh -t asdf-vm asdf 'asdf-.*-linux-amd64.tar.gz' ~/.local/bin \
@@ -99,40 +109,32 @@ RUN --mount=type=secret,id=GITHUB_TOKEN,env=GITHUB_TOKEN \
 
 # taskwarrior
 COPY --from=taskwarrior --chown=${USER_NAME}:${USER_NAME} /usr/local/bin/task /home/${USER_NAME}/.local/bin/task
-RUN github-latest-release-installer.sh -t kdheepak taskwarrior-tui taskwarrior-tui-x86_64-unknown-linux-gnu.tar.gz ~/.local/bin
-
-# Setup tools
-RUN git clone https://github.com/Toraja/toybox.git \
-    # fish \
-    && install-fish-plugins.fish \
-    && ln --symbolic ~/toybox/fish/functions ~/.config/fish/myfuncs \
-    && ln --symbolic ~/toybox/fish/conf.d/* ~/.config/fish/conf.d/ \
-    # git \
-    && mkdir --parents ~/.config/git \
-    && ln --symbolic ~/toybox/git/gitignore_global ~/.config/git/ignore \
-    && ln --symbolic ~/toybox/git/custom-commands/bin/* ~/.local/bin/ \
-    && ln --symbolic ~/toybox/git/custom-commands/config/fish/* ~/.config/fish/conf.d/ \
-    # pipx \
-    && register-python-argcomplete --shell fish pipx > ~/.config/fish/completions/pipx.fish \
-    # tmux \
-    && git clone https://github.com/tmux-plugins/tpm ~/.config/tmux/plugins/tpm \
-    && ~/.config/tmux/plugins/tpm/bin/install_plugins \
-    && mkdir --parents ~/.cde/mnt/single/.local/share/tmux/resurrect/ ~/.local/share/tmux/ \
-    && ln --symbolic --force ~/.cde/mnt/single/.local/share/tmux/resurrect ~/.local/share/tmux/ \
+RUN github-latest-release-installer.sh -t kdheepak taskwarrior-tui taskwarrior-tui-x86_64-unknown-linux-gnu.tar.gz ~/.local/bin && \
     # taskwarrior \
-    && mkdir --parents ~/.local/share/taskwarrior/ \
-    && ln --symbolic ~/hosthome/.local/share/taskwarrior/task ~/.local/share/taskwarrior/task \
+    mkdir --parents ~/.local/share/taskwarrior/ && \
+    ln --symbolic ~/hosthome/.local/share/taskwarrior/task ~/.local/share/taskwarrior/task && \
     # tasktnote \
-    && mkdir --parents ~/.local/share/taskopen/ \
-    && ln --symbolic ~/toybox/taskwarrior/tasknote ~/.local/bin/tasknote \
-    && ln --symbolic ~/hosthome/.local/share/taskopen/notes ~/.local/share/taskopen/notes
+    mkdir --parents ~/.local/share/taskopen/ && \
+    ln --symbolic ~/toybox/taskwarrior/tasknote ~/.local/bin/tasknote && \
+    ln --symbolic ~/hosthome/.local/share/taskopen/notes ~/.local/share/taskopen/notes
+
+# Things which requires toybox repo
+RUN git clone https://github.com/Toraja/toybox.git && \
+    ln --symbolic ~/toybox/fish/conf.d/* ~/.config/fish/conf.d/ && \
+    ln --symbolic ~/toybox/git/custom-commands/bin/* ~/.local/bin/ && \
+    ln --symbolic ~/toybox/git/custom-commands/config/fish/* ~/.config/fish/conf.d/ && \
+    # tmux: tmp's install_plugins requires tmux.conf in toybox which is sourced from $XDG_CONFIG_HOME/tmux/tmux.conf \
+    git clone https://github.com/tmux-plugins/tpm ~/.config/tmux/plugins/tpm && \
+    ~/.config/tmux/plugins/tpm/bin/install_plugins && \
+    mkdir --parents ~/.cde/mnt/single/.local/share/tmux/resurrect/ ~/.local/share/tmux/ && \
+    ln --symbolic --force ~/.cde/mnt/single/.local/share/tmux/resurrect ~/.local/share/tmux/ && \
+    rm --recursive --force ~/toybox
 
 # Setup symlink to host home directory to reduce bind mount
 # This also enables replacing those links with actual files when symlink is inappriate
-RUN rm --recursive --force ~/toybox \
-    && ln --symbolic ~/hosthome/.ssh ~/.ssh \
-    && mkdir --parents ~/.docker && ln --symbolic ~/hosthome/.docker/config.json ~/.docker/config.json \
-    && ln --symbolic ~/workspace/personal.github.com/Toraja/toybox ~/toybox
+RUN ln --symbolic ~/hosthome/.ssh ~/.ssh && \
+    mkdir --parents ~/.docker && ln --symbolic ~/hosthome/.docker/config.json ~/.docker/config.json && \
+    ln --symbolic ~/workspace/personal.github.com/Toraja/toybox ~/toybox
 
 # Create directories for volume mount destination so that owner:group of those directories are not root.
 RUN mkdir --parents ~/.local/{share,state}
