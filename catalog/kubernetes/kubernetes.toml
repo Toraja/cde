@@ -1,0 +1,8 @@
+[tools]
+kubectl = { version = 'latest', postinstall = 'mise exec kubectl -- kubectl completion fish > ~/.config/fish/completions/kubectl.fish' }
+# TODO: installing krew must be done as postinstall for kubectl
+# krew = { version = 'latest', postinstall = 'mise exec kubectl krew -- kubectl krew install tree tail ns && echo "fish_add_path ~/.krew/bin" >> ~/.config/fish/conf.d/krew.fish' }
+kind = { version = 'latest', postinstall = 'mise exec kind -- kind completion fish > ~/.config/fish/completions/kind.fish' }
+k9s = { version = 'latest', postinstall = 'mise exec k9s -- k9s completion fish > ~/.config/fish/completions/k9s.fish' }
+helm = { version = 'latest', postinstall = 'mise exec helm --command "helm completion fish > ~/.config/fish/completions/helm.fish && helm plugin install https://github.com/databus23/helm-diff"' }
+helmfile = { version = 'latest', postinstall = 'mise exec helmfile -- helmfile completion fish > ~/.config/fish/completions/helmfile.fish' }

@@ -1,0 +1,3 @@
+[tools]
+terraform = { version = 'latest' }
+terraform-ls = { version = 'latest' }

@@ -36,6 +36,9 @@ target "common" {
     GROUP_ID = GROUP_ID
     GROUP_NAME = GROUP_NAME
   }
+  secret = [
+    { type = "env", id = "GITHUB_TOKEN" },
+  ]
   contexts = {
     catalog = "catalog"
   }

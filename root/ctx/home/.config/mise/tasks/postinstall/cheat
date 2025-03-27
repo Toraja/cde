@@ -1,0 +1,9 @@
+#!/bin/bash
+
+set -e
+
+rm --recursive --force ~/.config/cheat/cheatsheets/community
+git clone --depth 1 https://github.com/cheat/cheatsheets.git ~/.config/cheat/cheatsheets/community
+ln --symbolic --force ~/toybox/cheat/conf.yml ~/.config/cheat/conf.yml
+ln --symbolic --force ~/toybox/cheat/cheatsheets ~/.config/cheat/cheatsheets/personal
+curl --fail --silent --show-error --location --clobber --output ~/.config/fish/completions/cheat.fish https://raw.githubusercontent.com/cheat/cheat/master/scripts/cheat.fish

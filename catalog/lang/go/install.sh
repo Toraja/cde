@@ -2,14 +2,9 @@
 set -eo pipefail
 
 script_dir=$(dirname "$0")
-go_version=${1:-latest}
+# TODO: is it possible to override golang version in mise.toml?
+# go_version=${1:-latest}
 
-setup_hook() {
-    echo 'post_asdf_install_golang = install-golang-toolchains $@' >> ~/.asdfrc
-    cp $script_dir/install-golang-toolchains ~/.local/bin/
-}
-
-mkdir -p ${HOME}/go
-export PATH="$HOME/.asdf/shims:$PATH"
-setup_hook
-asdf-global-installer.sh golang:${go_version} richgo
+cp -- $script_dir/go.toml ~/.config/mise/conf.d/
+cp -- $script_dir/go ~/.config/mise/tasks/postinstall/
+mkdir --parents ${HOME}/go

@@ -69,10 +69,7 @@ RUN userdel --remove ubuntu && \
 RUN apt-get update && apt-get install --no-install-recommends --yes \
         # file required by yazi, jq required by github-latest-release-installer \
         keychain file skopeo jq pwgen \
-        # these required by asdf \
-        dirmngr gpg curl gawk \
-    && rm --recursive --force /var/lib/apt/lists/* \
-    && curl --fail --silent --show-error --location https://raw.githubusercontent.com/jesseduffield/lazydocker/master/scripts/install_update_linux.sh | DIR=/usr/local/bin bash
+    && rm --recursive --force /var/lib/apt/lists/*
 
 USER ${USER_NAME}
 WORKDIR /home/${USER_NAME}
@@ -82,25 +79,22 @@ ENV PATH="/home/${USER_NAME}/.local/bin:${PATH}"
 
 COPY --chown=${USER_NAME}:${USER_NAME} ./helpers/install-fish-plugins.fish /home/${USER_NAME}/.local/bin/
 RUN mkdir --parents ~/tmp && mkdir --parents ~/.config/fish/completions/ \
-    && for p in httpie glances yamllint; do pipx install $p; done \
-    && github-latest-release-installer.sh -T yamlfmt google yamlfmt 'yamlfmt_.*_Linux_x86_64.tar.gz' ~/.local/bin/ \
-    && yazi_tmp=/tmp/yazi \
-    && github-latest-release-installer.sh sxyazi yazi 'yazi-x86_64-unknown-linux-gnu.zip' ${yazi_tmp}/yazi.zip \
-    && unzip -d ${yazi_tmp} ${yazi_tmp}/yazi.zip \
-    && mv ${yazi_tmp}/yazi-x86_64-unknown-linux-gnu/{yazi,ya} ~/.local/bin \
-    && mv ${yazi_tmp}/yazi-x86_64-unknown-linux-gnu/completions/{yazi,ya}.fish ~/.config/fish/completions/ \
-    && rm --recursive --force ${yazi_tmp} \
-    && curl --fail --silent --location https://direnv.net/install.sh | bash
+    && for p in httpie glances; do pipx install $p; done
 
-COPY --chown=${USER_NAME}:${USER_NAME} ./helpers/install-asdf-plugins.sh /home/${USER_NAME}/.local/bin/
-RUN github-latest-release-installer.sh -t asdf-vm asdf 'asdf-.*-linux-amd64.tar.gz' ~/.local/bin \
-    && asdf completion fish > ~/.config/fish/completions/asdf.fish \
-    && install-asdf-plugins.sh
+# COPY --chown=${USER_NAME}:${USER_NAME} ./helpers/install-asdf-plugins.sh /home/${USER_NAME}/.local/bin/
+# RUN github-latest-release-installer.sh -t asdf-vm asdf 'asdf-.*-linux-amd64.tar.gz' ~/.local/bin \
+#     && asdf completion fish > ~/.config/fish/completions/asdf.fish
+    # && install-asdf-plugins.sh
+
+RUN curl https://mise.run | sh && \
+    mise completion fish > ~/.config/fish/completions/mise.fish && \
+    mise activate fish > ~/.config/fish/conf.d/mise.fish
 
 COPY --from=catalog lang/lua /tmp/catalog/lua
 COPY --from=catalog ansible /tmp/catalog/ansible
-COPY --from=catalog lang/toml /tmp/catalog/toml
-RUN for installer in /tmp/catalog/*/install.sh; do $installer; done && \
+RUN --mount=type=secret,id=GITHUB_TOKEN,env=GITHUB_TOKEN \
+    for installer in /tmp/catalog/*/install.sh; do $installer; done && \
+    mise install && \
     sudo rm --recursive --force /tmp/catalog
 
 # taskwarrior
@@ -118,40 +112,20 @@ RUN git clone https://github.com/Toraja/toybox.git \
     && ln --symbolic ~/toybox/git/gitignore_global ~/.config/git/ignore \
     && ln --symbolic ~/toybox/git/custom-commands/bin/* ~/.local/bin/ \
     && ln --symbolic ~/toybox/git/custom-commands/config/fish/* ~/.config/fish/conf.d/ \
-    # gh \
-    && ln --symbolic ~/hosthome/.config/gh ~/.config/gh \
     # pipx \
     && register-python-argcomplete --shell fish pipx > ~/.config/fish/completions/pipx.fish \
-    # lazygit \
-    && mkdir --parents ~/.config/lazygit/ && ln --symbolic ~/toybox/lazygit/config.yml ~/.config/lazygit/ \
     # tmux \
     && git clone https://github.com/tmux-plugins/tpm ~/.config/tmux/plugins/tpm \
     && ~/.config/tmux/plugins/tpm/bin/install_plugins \
     && mkdir --parents ~/.cde/mnt/single/.local/share/tmux/resurrect/ ~/.local/share/tmux/ \
     && ln --symbolic --force ~/.cde/mnt/single/.local/share/tmux/resurrect ~/.local/share/tmux/ \
-    # yazi \
-    && mkdir --parents ~/.config/yazi/plugins \
-    && ln --symbolic ~/toybox/yazi/*.{lua,toml} ~/.config/yazi/ \
-    && ya pack -a yazi-rs/plugins:smart-enter \
-    && ya pack -a yazi-rs/plugins:full-border \
-    && ya pack -a yazi-rs/plugins:smart-filter \
-    && ya pack -a yazi-rs/plugins:chmod \
-    && ya pack -a yazi-rs/plugins:git \
-    && ya pack -a yazi-rs/plugins:max-preview \
-    && ya pack -a yazi-rs/plugins:hide-preview \
-    # direnv \
-    && mkdir --parents ~/.cde/mnt/single/.local/share/direnv \
-    && ln --symbolic ~/.cde/mnt/single/.local/share/direnv ~/.local/share/ \
-    && direnv hook fish > ~/.config/fish/conf.d/direnv.fish \
     # taskwarrior \
     && mkdir --parents ~/.local/share/taskwarrior/ \
     && ln --symbolic ~/hosthome/.local/share/taskwarrior/task ~/.local/share/taskwarrior/task \
     # tasktnote \
     && mkdir --parents ~/.local/share/taskopen/ \
     && ln --symbolic ~/toybox/taskwarrior/tasknote ~/.local/bin/tasknote \
-    && ln --symbolic ~/hosthome/.local/share/taskopen/notes ~/.local/share/taskopen/notes \
-    # yamlfmt & yamllint \
-    && ln --symbolic ~/toybox/{yamlfmt,yamllint} ~/.config/
+    && ln --symbolic ~/hosthome/.local/share/taskopen/notes ~/.local/share/taskopen/notes
 
 # Setup symlink to host home directory to reduce bind mount
 # This also enables replacing those links with actual files when symlink is inappriate

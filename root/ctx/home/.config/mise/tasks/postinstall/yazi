@@ -1,0 +1,13 @@
+#!/bin/bash
+
+set -e
+
+mkdir --parents ~/.config/yazi/plugins
+ln --symbolic --force ~/toybox/yazi/*.{lua,toml} ~/.config/yazi/
+mise exec yazi --command 'ya pack -a yazi-rs/plugins:smart-enter && \
+  ya pack -a yazi-rs/plugins:full-border && \
+  ya pack -a yazi-rs/plugins:smart-filter && \
+  ya pack -a yazi-rs/plugins:chmod && \
+  ya pack -a yazi-rs/plugins:git && \
+  ya pack -a yazi-rs/plugins:max-preview && \
+  ya pack -a yazi-rs/plugins:hide-preview'

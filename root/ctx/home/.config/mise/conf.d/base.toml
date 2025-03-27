@@ -1,0 +1,24 @@
+[tools]
+bat = { version = 'latest' }
+cheat = { version = 'latest', postinstall = 'mise run postinstall:cheat' }
+direnv = { version = 'latest', postinstall = 'mise run postinstall:direnv' }
+fd = { version = 'latest' }
+fx = { version = 'latest' }
+fzf = { version = 'latest', postinstall = 'mise exec fzf -- fzf --fish > ~/.config/fish/conf.d/fzf.fish' }
+ghq = { version = 'latest' }
+github-cli = { version = 'latest', postinstall = 'ln --symbolic --force ~/hosthome/.config/gh ~/.config/gh' }
+grpcurl = { version = 'latest' }
+jq = { version = 'latest' }
+just = { version = 'latest', postinstall = 'mise exec just -- just --completions fish > ~/.config/fish/completions/just.fish' }
+lazydocker = { version = 'latest' }
+lazygit = { version = 'latest', postinstall = 'mkdir --parents ~/.config/lazygit/ && ln --symbolic --force ~/toybox/lazygit/config.yml ~/.config/lazygit/' }
+# installing nvim 0.11.0 fails due to missing hash file
+neovim = { version = '0.10.4', postinstall = 'mise run postinstall:neovim' }
+nodejs = { version = 'latest', postinstall = 'npm install --global vscode-langservers-extracted yaml-language-server json5' }
+ripgrep = { version = 'latest' }
+taplo = { version = 'latest' }
+usage = { version = 'latest' }
+yamlfmt = { version = 'latest', postinstall = 'ln --symbolic --force ~/toybox/yamlfmt ~/.config/' }
+yamllint = { version = 'latest', postinstall = 'ln --symbolic --force ~/toybox/yamllint ~/.config/' }
+yazi = { version = 'latest', postinstall = 'mise run postinstall:yazi' }
+yq = { version = 'latest' }
