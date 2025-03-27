@@ -113,8 +113,6 @@ RUN git clone https://github.com/Toraja/toybox.git \
     && install-fish-plugins.fish \
     && ln --symbolic ~/toybox/fish/functions ~/.config/fish/myfuncs \
     && ln --symbolic ~/toybox/fish/conf.d/* ~/.config/fish/conf.d/ \
-    && mkdir --parents ~/.cde/mnt/single/.local/share/fish/ \
-    && ln --symbolic --force ~/.cde/mnt/single/.local/share/fish/fish_history ~/.local/share/fish/ \
     # git \
     && mkdir --parents ~/.config/git \
     && ln --symbolic ~/toybox/git/gitignore_global ~/.config/git/ignore \
@@ -165,5 +163,6 @@ RUN rm --recursive --force ~/toybox \
 # Create directories for volume mount destination so that owner:group of those directories are not root.
 RUN mkdir --parents ~/.local/{share,state}
 RUN mkdir --parents ~/.cde/mnt/single/.local/{share,state}
+RUN mkdir --parents ~/.local/share/fish
 
 CMD ["tail", "-f", "/dev/null"]
