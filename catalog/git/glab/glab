@@ -1,0 +1,10 @@
+#!/bin/bash
+
+set -e
+
+# Must specify backend name if the tool is installed with non-default backend
+mise exec asdf:glab -- glab completion --shell fish > ~/.config/fish/completions/glab.fish
+# Delete config dir auto-created by glab command, as `ln` creates symlink inside the directory
+# when link path exists and a directory.
+rm --recursive --force ~/.config/glab-cli
+ln --symbolic --force ~/hosthome/.config/glab-cli ~/.config/glab-cli
