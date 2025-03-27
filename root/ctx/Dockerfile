@@ -137,8 +137,6 @@ RUN ln --symbolic ~/hosthome/.ssh ~/.ssh && \
     ln --symbolic ~/workspace/personal.github.com/Toraja/toybox ~/toybox
 
 # Create directories for volume mount destination so that owner:group of those directories are not root.
-RUN mkdir --parents ~/.local/{share,state}
-RUN mkdir --parents ~/.cde/mnt/single/.local/{share,state}
-RUN mkdir --parents ~/.local/share/fish
+RUN mkdir --parents ~/.cde/mnt/single ~/.local/share/fish
 
 CMD ["tail", "-f", "/dev/null"]
