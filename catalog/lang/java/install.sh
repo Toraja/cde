@@ -18,6 +18,6 @@ _EOF_
 # Maybe it's better to do this manually in a bind mounted directory after image
 # is built because it takes really long time to complete.
 # Though the document on github does not specify, build fails with `-DskipTests` option.
-git clone https://github.com/eclipse/eclipse.jdt.ls.git ${HOME}/tmp/eclipse.jdt.ls
+git clone --depth 1 https://github.com/eclipse/eclipse.jdt.ls.git ${HOME}/tmp/eclipse.jdt.ls
 cd ${HOME}/tmp/eclipse.jdt.ls
 ./mvnw clean verify -DskipTests

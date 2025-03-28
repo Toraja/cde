@@ -71,7 +71,7 @@ vim:
 tmux:
 	sudo --preserve-env apt-get update
 	sudo --preserve-env apt-get install --no-install-recommends --yes tmux
-	git clone https://github.com/tmux-plugins/tpm ~/.config/tmux/plugins/tpm
+	git clone --depth 1 https://github.com/tmux-plugins/tpm ~/.config/tmux/plugins/tpm
 	mkdir --parents ~/.config/tmux/ && echo 'source ~/toybox/tmux/tmux.conf' > ~/.config/tmux/tmux.conf
 	~/.config/tmux/plugins/tpm/bin/install_plugins
 

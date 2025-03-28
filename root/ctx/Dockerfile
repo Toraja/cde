@@ -119,12 +119,12 @@ RUN github-latest-release-installer.sh -t kdheepak taskwarrior-tui taskwarrior-t
     ln --symbolic ~/hosthome/.local/share/taskopen/notes ~/.local/share/taskopen/notes
 
 # Things which requires toybox repo
-RUN git clone https://github.com/Toraja/toybox.git && \
+RUN git clone --depth 1 https://github.com/Toraja/toybox.git && \
     ln --symbolic ~/toybox/fish/conf.d/* ~/.config/fish/conf.d/ && \
     ln --symbolic ~/toybox/git/custom-commands/bin/* ~/.local/bin/ && \
     ln --symbolic ~/toybox/git/custom-commands/config/fish/* ~/.config/fish/conf.d/ && \
     # tmux: tmp's install_plugins requires tmux.conf in toybox which is sourced from $XDG_CONFIG_HOME/tmux/tmux.conf \
-    git clone https://github.com/tmux-plugins/tpm ~/.config/tmux/plugins/tpm && \
+    git clone --depth 1 https://github.com/tmux-plugins/tpm ~/.config/tmux/plugins/tpm && \
     ~/.config/tmux/plugins/tpm/bin/install_plugins && \
     mkdir --parents ~/.cde/mnt/single/.local/share/tmux/resurrect/ ~/.local/share/tmux/ && \
     ln --symbolic --force ~/.cde/mnt/single/.local/share/tmux/resurrect ~/.local/share/tmux/ && \
