@@ -91,11 +91,6 @@ RUN mkdir --parents ~/tmp && \
 
 RUN for p in httpie glances; do pipx install $p; done
 
-# COPY --chown=${USER_NAME}:${USER_NAME} ./helpers/install-asdf-plugins.sh /home/${USER_NAME}/.local/bin/
-# RUN github-latest-release-installer.sh -t asdf-vm asdf 'asdf-.*-linux-amd64.tar.gz' ~/.local/bin \
-#     && asdf completion fish > ~/.config/fish/completions/asdf.fish
-    # && install-asdf-plugins.sh
-
 RUN curl https://mise.run | sh && \
     mise completion fish > ~/.config/fish/completions/mise.fish && \
     mise activate fish > ~/.config/fish/conf.d/mise.fish
