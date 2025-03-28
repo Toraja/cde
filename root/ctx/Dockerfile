@@ -78,16 +78,26 @@ COPY --chown=${USER_NAME}:${USER_NAME} ./home ./
 ENV PATH="/home/${USER_NAME}/.local/bin:${PATH}"
 
 # Setup tools installed by apt
+# toybox is cloned here as some of them requires it for setup
 RUN mkdir --parents ~/tmp && \
+    git clone --depth 1 https://github.com/Toraja/toybox.git && \
     # fish \
     mkdir --parents ~/.config/fish/completions/ ~/.config/fish/conf.d && \
     ln --symbolic ~/toybox/fish/functions ~/.config/fish/myfuncs && \
+    ln --symbolic ~/toybox/fish/conf.d/* ~/.config/fish/conf.d/ && \
     _fisher-install.fish && \
     # git \
     mkdir --parents ~/.config/git && \
     ln --symbolic ~/toybox/git/gitignore_global ~/.config/git/ignore && \
+    ln --symbolic ~/toybox/git/custom-commands/bin/* ~/.local/bin/ && \
+    ln --symbolic ~/toybox/git/custom-commands/config/fish/* ~/.config/fish/conf.d/ && \
     # pipx \
-    register-python-argcomplete --shell fish pipx > ~/.config/fish/completions/pipx.fish
+    register-python-argcomplete --shell fish pipx > ~/.config/fish/completions/pipx.fish && \
+    # tmux: tmp's install_plugins requires tmux.conf in toybox which is sourced from $XDG_CONFIG_HOME/tmux/tmux.conf \
+    git clone --depth 1 https://github.com/tmux-plugins/tpm ~/.config/tmux/plugins/tpm && \
+    ~/.config/tmux/plugins/tpm/bin/install_plugins && \
+    mkdir --parents ~/.cde/mnt/single/.local/share/tmux/resurrect/ ~/.local/share/tmux/ && \
+    ln --symbolic --force ~/.cde/mnt/single/.local/share/tmux/resurrect ~/.local/share/tmux/
 
 RUN for p in httpie glances; do pipx install $p; done
 
@@ -113,25 +123,16 @@ RUN github-latest-release-installer.sh -t kdheepak taskwarrior-tui taskwarrior-t
     ln --symbolic ~/toybox/taskwarrior/tasknote ~/.local/bin/tasknote && \
     ln --symbolic ~/hosthome/.local/share/taskopen/notes ~/.local/share/taskopen/notes
 
-# Things which requires toybox repo
-RUN git clone --depth 1 https://github.com/Toraja/toybox.git && \
-    ln --symbolic ~/toybox/fish/conf.d/* ~/.config/fish/conf.d/ && \
-    ln --symbolic ~/toybox/git/custom-commands/bin/* ~/.local/bin/ && \
-    ln --symbolic ~/toybox/git/custom-commands/config/fish/* ~/.config/fish/conf.d/ && \
-    # tmux: tmp's install_plugins requires tmux.conf in toybox which is sourced from $XDG_CONFIG_HOME/tmux/tmux.conf \
-    git clone --depth 1 https://github.com/tmux-plugins/tpm ~/.config/tmux/plugins/tpm && \
-    ~/.config/tmux/plugins/tpm/bin/install_plugins && \
-    mkdir --parents ~/.cde/mnt/single/.local/share/tmux/resurrect/ ~/.local/share/tmux/ && \
-    ln --symbolic --force ~/.cde/mnt/single/.local/share/tmux/resurrect ~/.local/share/tmux/ && \
-    rm --recursive --force ~/toybox
-
-# Setup symlink to host home directory to reduce bind mount
-# This also enables replacing those links with actual files when symlink is inappriate
-RUN ln --symbolic ~/hosthome/.ssh ~/.ssh && \
+# misc setup
+RUN \
+    # Remove toybox here as some of the tools installed by mise expect toybox to setup \
+    rm --recursive --force ~/toybox && \
+    # Setup symlink to host home directory to reduce bind mount \
+    # This also enables replacing those links with actual files when symlink is inappriate \
+    ln --symbolic ~/hosthome/.ssh ~/.ssh && \
     mkdir --parents ~/.docker && ln --symbolic ~/hosthome/.docker/config.json ~/.docker/config.json && \
-    ln --symbolic ~/workspace/personal.github.com/Toraja/toybox ~/toybox
-
-# Create directories for volume mount destination so that owner:group of those directories are not root.
-RUN mkdir --parents ~/.cde/mnt/single ~/.local/share/fish
+    ln --symbolic ~/workspace/personal.github.com/Toraja/toybox ~/toybox && \
+    # Create directories for volume mount destination so that owner:group of those directories are not root \
+    mkdir --parents ~/.cde/mnt/single ~/.local/share/fish
 
 CMD ["tail", "-f", "/dev/null"]
