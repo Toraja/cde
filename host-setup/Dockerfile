@@ -14,7 +14,7 @@ RUN : ${UID:?not defined} && \
     useradd --create-home --uid "${UID}" "${USER}" && \
     echo "%"${USER}" ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/${USER}
 
-ENV PATH="${PATH}:/home/${USER}/.local/bin"
+ENV PATH="${PATH}:/home/${USER}/.local/bin" USER="${USER}"
 USER ${USER}
 COPY --chown=${USER}:${USER} ./ /home/${USER}/wd/
 WORKDIR /home/${USER}/wd/
