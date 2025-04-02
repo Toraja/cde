@@ -3,6 +3,7 @@ services:
     build:
       context: .
       args:
+        # UID should not be mandatory as it is not env var by default and docker compose will fail
         - UID
         - USER=${USER:?}
         - IMAGE_TAG

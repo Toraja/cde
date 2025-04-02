@@ -117,6 +117,7 @@ misc:
 
 [group('Test')]
 test:
+	@# UID is a readonly variable, so it cannot be reassigned as in UID=${UID}
 	export UID && docker compose run --rm test
 
 [group('Test')]
