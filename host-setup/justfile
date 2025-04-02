@@ -119,7 +119,8 @@ test:
 	export UID && docker compose run --rm test
 
 build-testenv:
-	export UID && docker compose build test
+build-testenv image-tag='':
+	export UID && IMAGE_TAG={{image-tag}} docker compose build test
 
 renew-test-base:
 	docker pull ubuntu:latest

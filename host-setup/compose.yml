@@ -5,6 +5,7 @@ services:
       args:
         - UID
         - USER=${USER:?}
+        - IMAGE_TAG
     volumes:
       - type: bind
         source: ./

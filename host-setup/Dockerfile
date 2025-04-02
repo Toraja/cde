@@ -1,4 +1,5 @@
-FROM ubuntu:latest
+ARG IMAGE_TAG=latest
+FROM ubuntu:${IMAGE_TAG}
 
 RUN yes | unminimize
 
