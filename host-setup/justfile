@@ -120,7 +120,8 @@ test:
 
 build-testenv:
 build-testenv image-tag='':
-	export UID && IMAGE_TAG={{image-tag}} docker compose build test
+	@# COMPOSE_BAKE=true delegates build to docker bake
+	export UID && COMPOSE_BAKE=true IMAGE_TAG={{image-tag}} docker compose build test
 
 renew-test-base:
 	docker pull ubuntu:latest
