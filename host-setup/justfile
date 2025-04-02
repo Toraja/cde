@@ -115,13 +115,15 @@ taskwarrior:
 misc:
 	ansible-playbook playbooks/misc.yml
 
+[group('Test')]
 test:
 	export UID && docker compose run --rm test
 
-build-testenv:
+[group('Test')]
 build-testenv image-tag='':
 	@# COMPOSE_BAKE=true delegates build to docker bake
 	export UID && COMPOSE_BAKE=true IMAGE_TAG={{image-tag}} docker compose build test
 
+[group('Test')]
 renew-test-base:
 	docker pull ubuntu:latest
