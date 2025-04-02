@@ -1,4 +1,4 @@
-- name: neovim
+- name: Install and setup neovim
   hosts: localhost
   tags: neovim
   vars:
@@ -9,7 +9,7 @@
         binary_name: nvim
         installed_version_cmd: nvim --version | head -1 | cut -d ' ' -f 2
         latest_version_cmd: curl -s https://api.github.com/repos/neovim/neovim/releases | jq --raw-output .[].tag_name | sort -V | tail -1
-      include_role:
+      ansible.builtin.include_role:
         name: binary
         tasks_from: latest_is_installed
 
@@ -28,6 +28,7 @@
           ansible.builtin.file:
             path: "{{ nvim_conf_path }}"
             state: directory
+            mode: "0644"
 
         - name: Setup init.vim
           ansible.builtin.blockinfile:
@@ -37,6 +38,7 @@
               source ~/toybox/nvim/init.lua
               " --- add machine dependent settings below ---
             create: true
+            mode: "0644"
 
         - name: Setup ginit.vim
           ansible.builtin.blockinfile:
@@ -46,6 +48,7 @@
               source ~/toybox/nvim/ginit.vim
               " --- add machine dependent settings below ---
             create: true
+            mode: "0644"
 
     - name: Tools required by plugins
       block:
@@ -54,7 +57,7 @@
             binary_name: fzf
             installed_version_cmd: fzf --version | cut -d ' ' -f 1
             latest_version_cmd: curl -s https://api.github.com/repos/junegunn/fzf/releases/latest | jq --raw-output .tag_name
-          include_role:
+          ansible.builtin.include_role:
             name: binary
             tasks_from: latest_is_installed
 
@@ -68,7 +71,7 @@
             binary_name: fd
             installed_version_cmd: fd --version | cut -d ' ' -f 2
             latest_version_cmd: curl -s https://api.github.com/repos/sharkdp/fd/releases/latest | jq --raw-output .tag_name | cut -c 2-
-          include_role:
+          ansible.builtin.include_role:
             name: binary
             tasks_from: latest_is_installed
 

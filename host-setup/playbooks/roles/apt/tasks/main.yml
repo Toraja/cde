@@ -1,7 +1,6 @@
----
-- name: install or upgrade packages
+- name: Install or upgrade packages
   become: true
-  apt:
+  ansible.builtin.apt:
     name: "{{ apt_packages }}"
     state: latest
     install_recommends: false

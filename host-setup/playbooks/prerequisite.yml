@@ -1,4 +1,3 @@
----
 - name: Install apt packages
   hosts: localhost
   vars:
@@ -19,7 +18,7 @@
         binary_name: just-x
         installed_version_cmd: just --version | awk '{ print $2 }'
         latest_version_cmd: curl -s https://api.github.com/repos/casey/just/releases/latest | jq -r .tag_name
-      include_role:
+      ansible.builtin.include_role:
         name: binary
         tasks_from: latest_is_installed
 
@@ -33,7 +32,7 @@
           register: fetch_just_installer
 
         - name: Run just installer
-          ansible.builtin.shell:
+          ansible.builtin.command:
             cmd: bash -s -- --to ~/.local/bin/ --force
             stdin: "{{ fetch_just_installer.content }}"
           register: run_just_installer
@@ -44,7 +43,7 @@
           vars:
             just_bash_completion_path: /etc/bash_completion.d/just
           when: just_bash_completion_path is not exists or run_just_installer is not skipped
-          ansible.builtin.shell: |
+          ansible.builtin.command: |
             just --completions bash | sudo tee {{ just_bash_completion_path }} > /dev/null
 
         - name: Add just fish completion

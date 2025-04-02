@@ -1,4 +1,3 @@
----
 - name: Check if {{ binary_name }} is installed
   ansible.builtin.shell: |
     which {{ binary_name }}

@@ -1,5 +1,4 @@
----
-- name: taskwarrior
+- name: Install and setup taskwarrior
   hosts: localhost
   tags: taskwarrior
   tasks:
@@ -8,16 +7,16 @@
         binary_name: task
         installed_version_cmd: task --version
         latest_version_cmd: curl -s https://api.github.com/repos/GothenburgBitFactory/taskwarrior/releases/latest | jq -r .tag_name | cut -c 2-
-      include_role:
+      ansible.builtin.include_role:
         name: binary
         tasks_from: latest_is_installed
 
-    - name: install taskwarrior
+    - name: Install taskwarrior
       when: not latest_binary_is_installed
       vars:
         checkout_path: /tmp/taskwarrior
       block:
-        - name: install required packages
+        - name: Install required packages
           vars:
             apt_packages:
               - make
@@ -25,7 +24,7 @@
               - gcc
               - g++
               - uuid-dev
-          include_role:
+          ansible.builtin.include_role:
             name: apt
 
         - name: Git checkout
@@ -51,7 +50,7 @@
             chdir: "{{ checkout_path }}"
 
         - name: Remove git repository
-          file:
+          ansible.builtin.file:
             state: absent
             path: "{{ checkout_path }}"
 
@@ -71,7 +70,7 @@
         dest: ~/.local/share/taskwarrior/task
         state: link
 
-- name: taskwarrior-tui
+- name: Install and setup taskwarrior-tui
   hosts: localhost
   tags: taskwarrior-tui
   tasks:
@@ -80,11 +79,11 @@
         binary_name: taskwarrior-tui
         installed_version_cmd: taskwarrior-tui --version | awk '{print $2}'
         latest_version_cmd: curl -s https://api.github.com/repos/kdheepak/taskwarrior-tui/releases/latest | jq -r .tag_name | cut -c 2-
-      include_role:
+      ansible.builtin.include_role:
         name: binary
         tasks_from: latest_is_installed
 
-    - name: install taskwarrior-tui
+    - name: Install taskwarrior-tui
       when: not latest_binary_is_installed
       become: true
       block:
@@ -92,7 +91,7 @@
           ansible.builtin.shell: |
             ../github-latest-release-installer.sh -t kdheepak taskwarrior-tui taskwarrior-tui-x86_64-unknown-linux-gnu.tar.gz /usr/local/bin
 
-- name: tasknote
+- name: Install and setup tasknote
   hosts: localhost
   tags: tasknote
   tasks:
@@ -109,7 +108,7 @@
         dest: ~/.local/share/taskopen/notes
         state: link
 
-# - name: taskopen
+# - name: Install and setup taskopen
 #   hosts: localhost
 #   tags: taskopen
 #   tasks:
@@ -127,7 +126,7 @@
 #           sort -V |
 #           sed 's/_$//' |
 #           tail --lines 1
-#       include_role:
+#       ansible.builtin.include_role:
 #         name: binary
 #         tasks_from: latest_is_installed
 

@@ -1,5 +1,4 @@
----
-- name: install apt packages
+- name: Install apt packages
   hosts: localhost
   vars:
     apt_packages:

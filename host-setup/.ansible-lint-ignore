@@ -1,0 +1,2 @@
+playbooks/roles/binary/tasks/latest_is_installed.yml name[template]
+playbooks/roles/apt/tasks/main.yml package-latest
