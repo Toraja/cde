@@ -54,16 +54,7 @@ repositories:
 	mkdir --parents ~/.config/gh
 
 fish:
-	sudo --preserve-env apt-get update
-	sudo --preserve-env apt-get install --no-install-recommends --yes software-properties-common
-	sudo --preserve-env apt-add-repository --yes ppa:fish-shell/release-3
-	sudo --preserve-env apt-get update
-	sudo --preserve-env apt-get install --no-install-recommends --yes fish
-	sudo usermod --shell $(which fish) $(whoami) || just echored "Failed to change user's shell to fish. It might not be possible in this environment."
-	@# fish -i -c 'exit' <- trying to let fish to setup fish fixtures (e.g. ~/.config/fish) but this does not work
-	grep --quiet '# Added by host setup' ~/.config/fish/config.fish &> /dev/null || mkdir --parents ~/.config/fish/ && cat ./config.fish >> ~/.config/fish/config.fish
-	mkdir --parents ~/.config/fish/conf.d/ && ln --symbolic ~/toybox/fish/conf.d/* ~/.config/fish/conf.d/
-	ln --symbolic ~/toybox/fish/functions ~/.config/fish/myfuncs
+	ansible-playbook playbooks/fish.yml
 
 vim:
 	ansible-playbook playbooks/vim.yml

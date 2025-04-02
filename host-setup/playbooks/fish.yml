@@ -1,0 +1,96 @@
+- name: Install and setup fish
+  hosts: localhost
+  tags:
+    - fish
+  vars:
+    fish_config_dir: "{{ lookup('ansible.builtin.env', 'HOME') }}/.config/fish"
+    fish_confd_dir: "{{ fish_config_dir }}/conf.d"
+    toybox_fish_dir: "{{ lookup('ansible.builtin.env', 'HOME') }}/toybox/fish"
+  tasks:
+    - name: Install prerequisite packages
+      ansible.builtin.include_role:
+        name: apt
+      vars:
+        apt_packages:
+          - software-properties-common
+          - dirmngr
+          - gpg-agent
+
+    - name: Add fish apt repository
+      become: true
+      ansible.builtin.apt_repository:
+        repo: ppa:fish-shell/release-4
+        state: present
+
+    - name: Install fish package
+      ansible.builtin.include_role:
+        name: apt
+      vars:
+        apt_packages:
+          - fish
+
+    # This does not create config.fish and other directories
+    # - name: Initialise fish
+    #   ansible.builtin.command:
+    #     cmd: fish --interactive --command exit
+    #     creates: "{{ fish_config_dir }}/config.fish"
+    #   register: register_fish_path
+
+    - name: Register fish path
+      ansible.builtin.command:
+        cmd: which fish
+      changed_when: false
+      register: register_fish_path
+
+    - name: Set default shell to fish
+      become: true
+      ansible.builtin.user:
+        name: "{{ lookup('ansible.builtin.env', 'USER', default=Undefined) }}"
+        shell: "{{ register_fish_path.stdout }}"
+
+    - name: Create fish conf.d directory
+      ansible.builtin.file:
+        path: "{{ fish_confd_dir }}"
+        state: directory
+        mode: "0755"
+
+    - name: Setup fish config
+      ansible.builtin.blockinfile:
+        path: "{{ fish_config_dir }}/config.fish"
+        block: "{{ lookup('file', 'config.fish') }}"
+        create: true
+        mode: "0644"
+
+    - name: Find symlink sources in conf.d
+      ansible.builtin.find:
+        paths: "{{ toybox_fish_dir }}/conf.d"
+      register: register_confd_fish_files
+
+    - name: Create symlinks to files in conf.d
+      ansible.builtin.file:
+        src: "{{ item.path }}"
+        dest: "{{ fish_confd_dir }}/{{ item.path | basename }}"
+        state: link
+      loop: "{{ register_confd_fish_files.files }}"
+
+    - name: Create symlinks to fish function directory
+      ansible.builtin.file:
+        src: "{{ toybox_fish_dir }}/functions"
+        dest: "{{ fish_config_dir }}/myfuncs"
+        state: link
+
+- name: Fish_test
+  hosts: localhost
+  tags:
+    - fish_test
+  vars:
+    toybox_fish_dir: "{{ lookup('ansible.builtin.env', 'HOME') }}/toybox/fish"
+  tasks:
+    - name: Find symlink source for conf.d
+      ansible.builtin.find:
+        paths: "{{ toybox_fish_dir }}/conf.d"
+      register: register_confd_fish_files
+    - name: Debug
+      ansible.builtin.debug:
+        msg: "{{ item.path }}"
+      loop: "{{ register_confd_fish_files.files }}"
