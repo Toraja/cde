@@ -11,7 +11,7 @@ RUN curl --proto '=https' --tlsv1.2 --fail --silent --show-error https://just.sy
 ARG UID
 ARG USER
 RUN : ${UID:?not defined} && \
-    useradd --create-home --uid "${UID}" --shell /usr/bin/fish "${USER}" && \
+    useradd --create-home --uid "${UID}" "${USER}" && \
     echo "%"${USER}" ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/${USER}
 
 ENV PATH="${PATH}:/home/${USER}/.local/bin"
