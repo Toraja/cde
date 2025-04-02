@@ -1,9 +1,9 @@
 ---
-- name: install packages
+- name: install or upgrade packages
   become: true
   apt:
     name: "{{ apt_packages }}"
-    state: present
+    state: latest
     install_recommends: false
     update_cache: true
     cache_valid_time: 3600
