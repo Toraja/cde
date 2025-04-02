@@ -1,6 +1,6 @@
 set shell := ['/usr/bin/bash', '-c']
 
-export PATH :=  env_var('HOME') / '.local/bin:' +  env_var('PATH')
+export PATH := env_var('HOME') / '.local/bin:' + env_var('PATH')
 export ANSIBLE_BECOME_PASSWORD_FILE := '.ansible_become_password'
 
 default:
