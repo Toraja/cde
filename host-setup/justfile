@@ -28,7 +28,7 @@ cde_repo_url := 'git@' + github_host_user / 'cde.git'
 # Clone necessary repositories, setup gitconfig and create symlinks to the repositories
 repositories:
 	#!/usr/bin/env bash
-	if ! ghq --version; then
+	if ! which ghq > /dev/null; then
 		./github-latest-release-installer.sh x-motemen ghq ghq_linux_amd64.zip /tmp/ghq_linux_amd64.zip && \
 			unzip /tmp/ghq_linux_amd64.zip -d /tmp/ && \
 			mkdir --parents ~/.local/bin/ && \
@@ -42,7 +42,7 @@ repositories:
 		cat ./gitconfig > ~/.gitconfig
 	fi
 	ghq_root=$(~/.local/bin/ghq root)
-	if [[ -d ~/toybox && ! -L ~/toybox ]]
+	if [[ -d ~/toybox && ! -L ~/toybox ]]; then
 		mkdir --parents ${ghq_root}/{{github_repo_subpath}} && \
 			mv ~/toybox ${ghq_root}/{{github_repo_subpath}} && \
 			ln --symbolic ${ghq_root}/{{github_repo_subpath}}/toybox ~/toybox
