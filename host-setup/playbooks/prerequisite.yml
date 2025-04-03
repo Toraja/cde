@@ -15,7 +15,7 @@
   tasks:
     - name: Check if latest just is installed
       vars:
-        binary_name: just-x
+        binary_name: just
         installed_version_cmd: just --version | awk '{ print $2 }'
         latest_version_cmd: curl -s https://api.github.com/repos/casey/just/releases/latest | jq -r .tag_name
       ansible.builtin.include_role:
