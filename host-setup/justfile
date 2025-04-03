@@ -3,12 +3,22 @@ set shell := ['/usr/bin/bash', '-c']
 export PATH := env_var('HOME') / '.local/bin:' + env_var('PATH')
 export ANSIBLE_BECOME_PASSWORD_FILE := '.ansible_become_password'
 
+playbook_check_flags := '--check --diff'
+
 default:
 	@just --list --unsorted
 
 [private]
 @echored args:
 	echo -e "\e[0;31m{{args}}\e[0;0m"
+
+[private]
+playbook playbook *flags:
+	ansible-playbook {{flags}} playbooks/{{playbook}}.yml
+
+[private]
+playbook-check playbook:
+	just playbook {{playbook}} {{playbook_check_flags}}
 
 # Things that required to perform other targets
 prerequisite:
@@ -54,7 +64,10 @@ repositories:
 	mkdir --parents ~/.config/gh
 
 fish:
-	ansible-playbook playbooks/fish.yml
+	just playbook fish
+
+fish-check:
+	just playbook-check fish
 
 vim:
 	ansible-playbook playbooks/vim.yml
