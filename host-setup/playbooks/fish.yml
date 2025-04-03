@@ -47,6 +47,8 @@
       ansible.builtin.user:
         name: "{{ lookup('ansible.builtin.env', 'USER', default=Undefined) }}"
         shell: "{{ register_fish_path.stdout }}"
+      # This fails in some environment, where the user is not in passwd for example
+      ignore_errors: true
 
     - name: Create fish conf.d directory
       ansible.builtin.file:
