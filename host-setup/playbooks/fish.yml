@@ -78,19 +78,3 @@
         src: "{{ toybox_fish_dir }}/functions"
         dest: "{{ fish_config_dir }}/myfuncs"
         state: link
-
-- name: Fish_test
-  hosts: localhost
-  tags:
-    - fish_test
-  vars:
-    toybox_fish_dir: "{{ lookup('ansible.builtin.env', 'HOME') }}/toybox/fish"
-  tasks:
-    - name: Find symlink source for conf.d
-      ansible.builtin.find:
-        paths: "{{ toybox_fish_dir }}/conf.d"
-      register: register_confd_fish_files
-    - name: Debug
-      ansible.builtin.debug:
-        msg: "{{ item.path }}"
-      loop: "{{ register_confd_fish_files.files }}"
