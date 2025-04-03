@@ -5,8 +5,8 @@
     - name: Check if latest taskwarrior is installed
       vars:
         binary_name: task
-        installed_version_cmd: task --version
-        latest_version_cmd: curl -s https://api.github.com/repos/GothenburgBitFactory/taskwarrior/releases/latest | jq -r .tag_name | cut -c 2-
+        binary_installed_version_cmd: task --version
+        binary_latest_version_cmd: curl -s https://api.github.com/repos/GothenburgBitFactory/taskwarrior/releases/latest | jq -r .tag_name | cut -c 2-
       ansible.builtin.include_role:
         name: binary
         tasks_from: latest_is_installed
@@ -36,16 +36,18 @@
             version: stable
 
         - name: Build taskwarrior
-          ansible.builtin.shell: |
-            cmake -DCMAKE_BUILD_TYPE=release -DENABLE_SYNC=OFF .
-            make
+          ansible.builtin.command:
+            cmd: "{{ item }}"
           args:
             chdir: "{{ checkout_path }}"
+          loop:
+            - cmake -DCMAKE_BUILD_TYPE=release -DENABLE_SYNC=OFF .
+            - make
 
         - name: Install taskwarrior
           become: true
-          ansible.builtin.shell: |
-            make install
+          ansible.builtin.command:
+            cmd: make install
           args:
             chdir: "{{ checkout_path }}"
 
@@ -57,11 +59,12 @@
     - name: Setup taskrc
       vars:
         taskrc_path: "{{ lookup('ansible.builtin.env', 'HOME') }}/.config/taskwarrior/taskrc"
-      ansible.builtin.shell:
-        cmd: |
-          mkdir -p $(dirname {{ taskrc_path }})
-          cp ../taskrc {{ taskrc_path }}
+      ansible.builtin.command:
+        cmd: "{{ item }}"
         creates: "{{ taskrc_path }}"
+      loop:
+        - mkdir -p $(dirname {{ taskrc_path }})
+        - cp ../taskrc {{ taskrc_path }}
 
     - name: Create symlink to task database
       when: inside_container is defined and inside_container | bool
@@ -77,8 +80,8 @@
     - name: Check if latest taskwarrior is installed
       vars:
         binary_name: taskwarrior-tui
-        installed_version_cmd: taskwarrior-tui --version | awk '{print $2}'
-        latest_version_cmd: curl -s https://api.github.com/repos/kdheepak/taskwarrior-tui/releases/latest | jq -r .tag_name | cut -c 2-
+        binary_installed_version_cmd: taskwarrior-tui --version | awk '{print $2}'
+        binary_latest_version_cmd: curl -s https://api.github.com/repos/kdheepak/taskwarrior-tui/releases/latest | jq -r .tag_name | cut -c 2-
       ansible.builtin.include_role:
         name: binary
         tasks_from: latest_is_installed
@@ -88,8 +91,8 @@
       become: true
       block:
         - name: Install taskwarrior-tui
-          ansible.builtin.shell: |
-            ../github-latest-release-installer.sh -t kdheepak taskwarrior-tui taskwarrior-tui-x86_64-unknown-linux-gnu.tar.gz /usr/local/bin
+          ansible.builtin.command:
+            cmd: ../github-latest-release-installer.sh -t kdheepak taskwarrior-tui taskwarrior-tui-x86_64-unknown-linux-gnu.tar.gz /usr/local/bin
 
 - name: Install and setup tasknote
   hosts: localhost
@@ -115,8 +118,8 @@
 #     - name: Check if latest taskopen is installed
 #       vars:
 #         binary_name: taskopen
-#         installed_version_cmd: taskopen version | cut -c 2-
-#         latest_version_cmd: |
+#         binary_installed_version_cmd: taskopen version | cut -c 2-
+#         binary_latest_version_cmd: |
 #           git ls-remote --tags --refs https://github.com/jschlatow/taskopen.git |
 #           awk '{ print $2 }' |
 #           grep '^refs/tags/.*' |

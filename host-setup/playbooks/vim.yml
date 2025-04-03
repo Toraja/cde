@@ -7,8 +7,8 @@
     - name: Check if latest neovim is installed
       vars:
         binary_name: nvim
-        installed_version_cmd: nvim --version | head -1 | cut -d ' ' -f 2
-        latest_version_cmd: curl -s https://api.github.com/repos/neovim/neovim/releases | jq --raw-output .[].tag_name | sort -V | tail -1
+        binary_installed_version_cmd: nvim --version | head -1 | cut -d ' ' -f 2
+        binary_latest_version_cmd: curl -s https://api.github.com/repos/neovim/neovim/releases | jq --raw-output .[].tag_name | sort -V | tail -1
       ansible.builtin.include_role:
         name: binary
         tasks_from: latest_is_installed
@@ -17,10 +17,12 @@
       when: not latest_binary_is_installed
       vars:
         workdir: /tmp/xxx
-      ansible.builtin.shell: |
-        ../github-latest-release-installer.sh -t neovim neovim nvim-linux64.tar.gz {{ workdir }}
-        cp -r {{ workdir }}/nvim-linux64/* ~/.local/
-        rm -rdf {{ workdir }}
+      ansible.builtin.command:
+        cmd: "{{ item }}"
+      loop:
+        - ../github-latest-release-installer.sh -t neovim neovim nvim-linux64.tar.gz {{ workdir }}
+        - cp -r {{ workdir }}/nvim-linux64/* ~/.local/
+        - rm -rdf {{ workdir }}
 
     - name: Setup neovim
       block:
@@ -28,7 +30,7 @@
           ansible.builtin.file:
             path: "{{ nvim_conf_path }}"
             state: directory
-            mode: "0644"
+            mode: "0755"
 
         - name: Setup init.vim
           ansible.builtin.blockinfile:
@@ -55,22 +57,22 @@
         - name: Check if latest fzf is installed
           vars:
             binary_name: fzf
-            installed_version_cmd: fzf --version | cut -d ' ' -f 1
-            latest_version_cmd: curl -s https://api.github.com/repos/junegunn/fzf/releases/latest | jq --raw-output .tag_name
+            binary_installed_version_cmd: fzf --version | cut -d ' ' -f 1
+            binary_latest_version_cmd: curl -s https://api.github.com/repos/junegunn/fzf/releases/latest | jq --raw-output .tag_name
           ansible.builtin.include_role:
             name: binary
             tasks_from: latest_is_installed
 
         - name: Install fzf
           when: not latest_binary_is_installed
-          ansible.builtin.shell: |
-            ../github-latest-release-installer.sh -t junegunn fzf 'fzf-{{ latest_binary_version }}-linux_amd64.tar.gz' ~/.local/bin/
+          ansible.builtin.command:
+            cmd: ../github-latest-release-installer.sh -t junegunn fzf 'fzf-{{ latest_binary_version }}-linux_amd64.tar.gz' ~/.local/bin/
 
         - name: Check if latest fd is installed
           vars:
             binary_name: fd
-            installed_version_cmd: fd --version | cut -d ' ' -f 2
-            latest_version_cmd: curl -s https://api.github.com/repos/sharkdp/fd/releases/latest | jq --raw-output .tag_name | cut -c 2-
+            binary_installed_version_cmd: fd --version | cut -d ' ' -f 2
+            binary_latest_version_cmd: curl -s https://api.github.com/repos/sharkdp/fd/releases/latest | jq --raw-output .tag_name | cut -c 2-
           ansible.builtin.include_role:
             name: binary
             tasks_from: latest_is_installed
@@ -80,7 +82,9 @@
           vars:
             workdir: /tmp/xxx
           become: true
-          ansible.builtin.shell: |
-            ../github-latest-release-installer.sh sharkdp fd fd-musl_{{ latest_binary_version }}_amd64.deb {{ workdir }}/fd-musl_amd64.deb
-            dpkg --install {{ workdir }}/fd-musl_amd64.deb
-            rm -rdf {{ workdir }}
+          ansible.builtin.command:
+            cmd: "{{ item }}"
+          loop:
+            - ../github-latest-release-installer.sh sharkdp fd fd-musl_{{ latest_binary_version }}_amd64.deb {{ workdir }}/fd-musl_amd64.deb
+            - dpkg --install {{ workdir }}/fd-musl_amd64.deb
+            - rm -rdf {{ workdir }}

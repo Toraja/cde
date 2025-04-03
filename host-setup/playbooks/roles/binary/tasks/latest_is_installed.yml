@@ -1,12 +1,13 @@
 - name: Check if {{ binary_name }} is installed
-  ansible.builtin.shell: |
-    which {{ binary_name }}
+  ansible.builtin.command:
+    cmd: which {{ binary_name }}
   changed_when: false
   failed_when: false
   register: binary_installed
 
 - name: Get latest {{ binary_name }} version
-  ansible.builtin.shell: "{{ latest_version_cmd }}"
+  ansible.builtin.shell:
+    cmd: "{{ binary_latest_version_cmd }}"
   changed_when: false
   register: latest_version
 
@@ -14,13 +15,14 @@
   when: binary_installed.rc == 0
   block:
     - name: Get installed {{ binary_name }} version
-      ansible.builtin.shell: "{{ installed_version_cmd }}"
+      ansible.builtin.command:
+        cmd: "{{ binary_installed_version_cmd }}"
       changed_when: false
       register: installed_version
 
     - name: Check if latest {{ binary_name }} is installed
-      ansible.builtin.shell: |
-        test "{{ installed_version.stdout }}" = "{{ latest_version.stdout }}"
+      ansible.builtin.command:
+        cmd: test "{{ installed_version.stdout }}" = "{{ latest_version.stdout }}"
       changed_when: false
       failed_when: false
       register: latest_installed

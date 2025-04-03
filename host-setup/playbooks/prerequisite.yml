@@ -16,8 +16,8 @@
     - name: Check if latest just is installed
       vars:
         binary_name: just
-        installed_version_cmd: just --version | awk '{ print $2 }'
-        latest_version_cmd: curl -s https://api.github.com/repos/casey/just/releases/latest | jq -r .tag_name
+        binary_installed_version_cmd: just --version | awk '{ print $2 }'
+        binary_latest_version_cmd: curl -s https://api.github.com/repos/casey/just/releases/latest | jq -r .tag_name
       ansible.builtin.include_role:
         name: binary
         tasks_from: latest_is_installed
@@ -37,19 +37,25 @@
             stdin: "{{ fetch_just_installer.content }}"
           register: run_just_installer
 
+    # TODO: use ansible.builtin.file to create directories
     - name: Setup just completion
       block:
         - name: Add just bash completion
           vars:
-            just_bash_completion_path: /etc/bash_completion.d/just
+            just_bash_completion_path: "{{ lookup('ansible.builtin.env', 'HOME') }}/.local/share/bash-completion/completions/"
           when: just_bash_completion_path is not exists or run_just_installer is not skipped
-          ansible.builtin.command: |
-            just --completions bash | sudo tee {{ just_bash_completion_path }} > /dev/null
+          ansible.builtin.command:
+            cmd: "{{ item }}"
+          loop:
+            - mkdir --parents {{ just_bash_completion_path | dirname }}
+            - just --completions bash > {{ just_bash_completion_path }}
 
         - name: Add just fish completion
           vars:
             just_fish_completion_path: "{{ lookup('ansible.builtin.env', 'HOME') }}/.config/fish/completions/just.fish"
           when: just_fish_completion_path is not exists or run_just_installer is not skipped
-          ansible.builtin.shell: |
-            mkdir --parents ~/.config/fish/completions/
-            just --completions fish > {{ just_fish_completion_path }}
+          ansible.builtin.command:
+            cmd: "{{ item }}"
+          loop:
+            - mkdir --parents {{ just_fish_completion_path | dirname }}
+            - just --completions fish > {{ just_fish_completion_path }}
