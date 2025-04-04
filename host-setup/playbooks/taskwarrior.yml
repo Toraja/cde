@@ -59,12 +59,18 @@
     - name: Setup taskrc
       vars:
         taskrc_path: "{{ lookup('ansible.builtin.env', 'HOME') }}/.config/taskwarrior/taskrc"
-      ansible.builtin.command:
-        cmd: "{{ item }}"
-        creates: "{{ taskrc_path }}"
-      loop:
-        - mkdir -p $(dirname {{ taskrc_path }})
-        - cp ../taskrc {{ taskrc_path }}
+      block:
+        - name: Create taskwarrior config directory
+          ansible.builtin.file:
+            path: "{{ taskrc_path | dirname }}"
+            state: directory
+            mode: "0755"
+
+        - name: Copy taskrc
+          ansible.builtin.copy:
+            src: taskrc
+            dest: "{{ taskrc_path }}"
+            mode: '0644'
 
     - name: Create symlink to task database
       when: inside_container is defined and inside_container | bool

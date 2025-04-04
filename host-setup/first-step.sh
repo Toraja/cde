@@ -25,4 +25,4 @@ mise activate fish > ~/.config/fish/conf.d/mise.fish
 mise install
 
 # Setup bashrc
-grep --quiet '# Added by host setup' ~/.bashrc || cat ./bashrc >> ~/.bashrc
+grep --quiet '# Added by host setup' ~/.bashrc || cat $fixture_dir/bashrc >> ~/.bashrc

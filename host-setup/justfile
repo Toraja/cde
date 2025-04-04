@@ -31,8 +31,8 @@ repositories:
 	if [[ ! -d ~/toybox ]]; then
 		git clone {{toybox_repo_url}} ~/toybox
 	fi
-	if ! diff --brief ./gitconfig ~/.gitconfig; then
-		cat ./gitconfig > ~/.gitconfig
+	if ! diff --brief ./fixtures/gitconfig ~/.gitconfig; then
+		cat ./fixtures/gitconfig > ~/.gitconfig
 	fi
 	ghq_root=$(ghq root)
 	if [[ -d ~/toybox && ! -L ~/toybox ]]; then
