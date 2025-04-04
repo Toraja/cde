@@ -20,16 +20,6 @@ playbook playbook *flags:
 playbook-check playbook:
 	just playbook {{playbook}} {{playbook_check_flags}}
 
-# Things that required to perform other targets
-prerequisite:
-	sudo --preserve-env apt-get update
-	sudo --preserve-env apt-get install --no-install-recommends --yes python3-pip
-	pip install ansible
-	ansible-playbook playbooks/prerequisite.yml
-
-bashrc:
-	grep --quiet '# Added by host setup' ~/.bashrc || cat ./bashrc >> ~/.bashrc
-
 github_repo_subpath := 'personal.github.com/Toraja'
 github_host_user := 'personal.github.com:Toraja'
 toybox_repo_url := 'git@' + github_host_user / 'toybox.git'
@@ -38,20 +28,13 @@ cde_repo_url := 'git@' + github_host_user / 'cde.git'
 # Clone necessary repositories, setup gitconfig and create symlinks to the repositories
 repositories:
 	#!/usr/bin/env bash
-	if ! which ghq > /dev/null; then
-		./github-latest-release-installer.sh x-motemen ghq ghq_linux_amd64.zip /tmp/ghq_linux_amd64.zip && \
-			unzip /tmp/ghq_linux_amd64.zip -d /tmp/ && \
-			mkdir --parents ~/.local/bin/ && \
-			mv /tmp/ghq_linux_amd64/ghq ~/.local/bin/ && \
-			rm --recursive --dir --force /tmp/ghq_linux_amd64*
-	fi
 	if [[ ! -d ~/toybox ]]; then
 		git clone {{toybox_repo_url}} ~/toybox
 	fi
 	if ! diff --brief ./gitconfig ~/.gitconfig; then
 		cat ./gitconfig > ~/.gitconfig
 	fi
-	ghq_root=$(~/.local/bin/ghq root)
+	ghq_root=$(ghq root)
 	if [[ -d ~/toybox && ! -L ~/toybox ]]; then
 		mkdir --parents ${ghq_root}/{{github_repo_subpath}} && \
 			mv ~/toybox ${ghq_root}/{{github_repo_subpath}} && \
@@ -61,7 +44,6 @@ repositories:
 		mv ~/cde ${ghq_root}/{{github_repo_subpath}} && \
 			ln --symbolic ${ghq_root}/{{github_repo_subpath}}/cde ~/cde
 	fi
-	mkdir --parents ~/.config/gh
 
 fish:
 	just playbook fish

@@ -1,90 +1,39 @@
-- name: Install and setup neovim
+- name: Setup neovim
   hosts: localhost
   tags: neovim
   vars:
     nvim_conf_path: "{{ lookup('ansible.builtin.env', 'HOME') }}/.config/nvim"
   tasks:
-    - name: Check if latest neovim is installed
+    - name: Install packages required by plugins
       vars:
-        binary_name: nvim
-        binary_installed_version_cmd: nvim --version | head -1 | cut -d ' ' -f 2
-        binary_latest_version_cmd: curl -s https://api.github.com/repos/neovim/neovim/releases | jq --raw-output .[].tag_name | sort -V | tail -1
+        apt_packages:
+          - make
+          - build-essential
       ansible.builtin.include_role:
-        name: binary
-        tasks_from: latest_is_installed
+        name: apt
 
-    - name: Install neovim
-      when: not latest_binary_is_installed
-      vars:
-        workdir: /tmp/xxx
-      ansible.builtin.command:
-        cmd: "{{ item }}"
-      loop:
-        - ../github-latest-release-installer.sh -t neovim neovim nvim-linux64.tar.gz {{ workdir }}
-        - cp -r {{ workdir }}/nvim-linux64/* ~/.local/
-        - rm -rdf {{ workdir }}
+    - name: Create nvim directory
+      ansible.builtin.file:
+        path: "{{ nvim_conf_path }}"
+        state: directory
+        mode: "0755"
 
-    - name: Setup neovim
-      block:
-        - name: Create nvim directory
-          ansible.builtin.file:
-            path: "{{ nvim_conf_path }}"
-            state: directory
-            mode: "0755"
+    - name: Setup init.vim
+      ansible.builtin.blockinfile:
+        path: "{{ nvim_conf_path }}/init.vim"
+        marker: '" {mark} ANSIBLE MANAGED BLOCK'
+        block: |
+          source ~/toybox/nvim/init.lua
+          " --- add machine dependent settings below ---
+        create: true
+        mode: "0644"
 
-        - name: Setup init.vim
-          ansible.builtin.blockinfile:
-            path: "{{ nvim_conf_path }}/init.vim"
-            marker: '" {mark} ANSIBLE MANAGED BLOCK'
-            block: |
-              source ~/toybox/nvim/init.lua
-              " --- add machine dependent settings below ---
-            create: true
-            mode: "0644"
-
-        - name: Setup ginit.vim
-          ansible.builtin.blockinfile:
-            path: "{{ nvim_conf_path }}/ginit.vim"
-            marker: '" {mark} ANSIBLE MANAGED BLOCK'
-            block: |
-              source ~/toybox/nvim/ginit.vim
-              " --- add machine dependent settings below ---
-            create: true
-            mode: "0644"
-
-    - name: Tools required by plugins
-      block:
-        - name: Check if latest fzf is installed
-          vars:
-            binary_name: fzf
-            binary_installed_version_cmd: fzf --version | cut -d ' ' -f 1
-            binary_latest_version_cmd: curl -s https://api.github.com/repos/junegunn/fzf/releases/latest | jq --raw-output .tag_name
-          ansible.builtin.include_role:
-            name: binary
-            tasks_from: latest_is_installed
-
-        - name: Install fzf
-          when: not latest_binary_is_installed
-          ansible.builtin.command:
-            cmd: ../github-latest-release-installer.sh -t junegunn fzf 'fzf-{{ latest_binary_version }}-linux_amd64.tar.gz' ~/.local/bin/
-
-        - name: Check if latest fd is installed
-          vars:
-            binary_name: fd
-            binary_installed_version_cmd: fd --version | cut -d ' ' -f 2
-            binary_latest_version_cmd: curl -s https://api.github.com/repos/sharkdp/fd/releases/latest | jq --raw-output .tag_name | cut -c 2-
-          ansible.builtin.include_role:
-            name: binary
-            tasks_from: latest_is_installed
-
-        - name: Install fd
-          when: not latest_binary_is_installed
-          vars:
-            workdir: /tmp/xxx
-          become: true
-          ansible.builtin.command:
-            cmd: "{{ item }}"
-          loop:
-            - ../github-latest-release-installer.sh sharkdp fd fd-musl_{{ latest_binary_version }}_amd64.deb {{ workdir }}/fd-musl_amd64.deb
-            - dpkg --install {{ workdir }}/fd-musl_amd64.deb
-            - rm -rdf {{ workdir }}
+    - name: Setup ginit.vim
+      ansible.builtin.blockinfile:
+        path: "{{ nvim_conf_path }}/ginit.vim"
+        marker: '" {mark} ANSIBLE MANAGED BLOCK'
+        block: |
+          source ~/toybox/nvim/ginit.vim
+          " --- add machine dependent settings below ---
+        create: true
+        mode: "0644"

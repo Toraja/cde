@@ -1,0 +1,18 @@
+[tools]
+fd = { version = 'latest' }
+fzf = { version = 'latest', postinstall = 'mise exec fzf -- fzf --fish > ~/.config/fish/conf.d/fzf.fish' }
+ghq = { version = 'latest' }
+# github-cli = { version = 'latest', postinstall = 'mkdir --parents ~/.config/gh' }
+github-cli = { version = 'latest' }
+jq = { version = 'latest' }
+neovim = { version = 'latest' }
+ripgrep = { version = 'latest' }
+usage = { version = 'latest' }
+
+[tools.just]
+version = 'latest'
+postinstall = """\
+mise exec just --command "\
+just --completions bash > ~/.local/share/bash-completion/completions/just.bash && \
+just --completions fish > ~/.config/fish/completions/just.fish" \
+"""
