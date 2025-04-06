@@ -1,0 +1,41 @@
+- name: Install and setup docker
+  hosts: localhost
+  tags:
+    - docker
+  vars:
+    docker_config_dir: "{{ lookup('ansible.builtin.env', 'HOME') }}/.docker"
+  roles:
+    - role: geerlingguy.docker
+      become: true
+      vars:
+        docker_users:
+          - "{{ lookup('ansible.builtin.env', 'USER') }}"
+      # The role fails if docker apt repo has not been added as it cannot find docker packages
+      when: not ansible_check_mode
+
+  tasks:
+    - name: Create docker config directory
+      ansible.builtin.file:
+        path: "{{ docker_config_dir }}"
+        state: directory
+        mode: "0755"
+
+    - name: Setup docker config
+      ansible.builtin.copy:
+        src: "{{ lookup('ansible.builtin.env', 'HOME') }}/toybox/docker/config.json"
+        dest: "{{ docker_config_dir }}/config.json"
+        force: false
+
+    # source: https://dev.to/felipecrs/simply-run-docker-on-wsl2-3o8
+    - name: Enable systemd in WSL
+      become: true
+      tags:
+        - wsl
+      ansible.builtin.blockinfile:
+        path: "/etc/wsl.conf"
+        block: |
+          [boot]
+          systemd=true
+        create: true
+        mode: "0644"
+      when: "'wsl' in ansible_run_tags"

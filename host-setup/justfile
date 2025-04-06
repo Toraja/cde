@@ -9,8 +9,12 @@ default:
 	@just --list --unsorted
 
 [private]
-@echored args:
+@echored +args:
 	echo -e "\e[0;31m{{args}}\e[0;0m"
+
+[private]
+@echocyan +args:
+	echo -e "\e[0;36m{{args}}\e[0;0m"
 
 [private]
 playbook playbook *flags:
@@ -45,6 +49,9 @@ repositories:
 			ln --symbolic ${ghq_root}/{{github_repo_subpath}}/cde ~/cde
 	fi
 
+galaxy-install:
+	ansible-galaxy role install --role-file requirements.yml --roles-path playbooks/roles/
+
 fish:
 	just playbook fish
 
@@ -60,39 +67,18 @@ tmux:
 tmux-check:
 	just playbook-check tmux
 
-docker: docker-clean docker-add-repository docker-install-engine docker-setup
+docker:
+	just playbook docker
 
-docker-clean:
-	sudo --preserve-env apt-get remove docker docker.io containerd runc
-	@# docker-engine might not exist as package
-	-sudo --preserve-env apt-get remove docker-engine
+docker-check:
+	just playbook-check docker
 
-docker-add-repository:
-	sudo --preserve-env apt-get update
-	sudo --preserve-env apt-get install --no-install-recommends --yes apt-transport-https ca-certificates curl gnupg lsb-release
-	curl --fail --silent --show-error --location https://download.docker.com/linux/ubuntu/gpg | sudo --preserve-env gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
-	@# check CPU architecure and exit if it does not match
-	@if [ $(uname --machine) != 'x86_64' ]; then just echored the CPU architecure is not supported; exit 1; fi
-	echo "deb [arch=amd64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu \
-		$(lsb_release -cs) stable" | sudo --preserve-env tee /etc/apt/sources.list.d/docker.list > /dev/null
-
-docker-install-engine: # prerequisites commented out for reusability -- docker-clean docker-add-repository
-	sudo --preserve-env apt-get update
-	sudo --preserve-env apt-get install --no-install-recommends --yes docker-ce docker-ce-cli containerd.io docker-compose-plugin
-	./github-latest-release-installer.sh -x docker buildx 'buildx-v.*.linux-amd64'  ~/.docker/cli-plugins/docker-buildx
-
-docker-setup:
-	sudo --preserve-env usermod -aG docker $(whoami)
-	mkdir --parents ~/.docker && cat ~/toybox/docker/config.json > ~/.docker/config.json
-
-# Run this recipe to setup on WSL
 docker-wsl:
-	@# This is needed for Ubuntu 22.04
-	@# Source:
-	@# - https://dev.to/felipecrs/simply-run-docker-on-wsl2-3o8
-	@# - https://medium.com/twodigits/install-docker-on-wsl-2-with-vpn-support-to-replace-docker-for-windows-45b8e200e171
-	sudo update-alternatives --set iptables /usr/sbin/iptables-legacy
-	sudo update-alternatives --set ip6tables /usr/sbin/ip6tables-legacy
+	ansible-playbook --tags wsl playbooks/docker.yml
+	echocyan Setting to enable systemd might be added to /etc/wsl.conf. In that case, you need to restart WSL.
+
+docker-wsl-check:
+	ansible-playbook --tags wsl --check --diff playbooks/docker.yml
 
 taskwarrior:
 	ansible-playbook playbooks/taskwarrior.yml
