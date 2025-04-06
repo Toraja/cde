@@ -1,9 +1,14 @@
-- name: Install apt packages
+- name: Install and setup misc stuff
   hosts: localhost
-  vars:
-    apt_packages:
-      - xclip
-      - keychain
-  roles:
-    - role: apt
+  tags:
+    - misc
+  tasks:
+    - name: Install apt packages
       tags: ["apt"]
+      ansible.builtin.include_role:
+        name: apt
+        tasks_from: latest
+      vars:
+        apt_packages:
+          - xclip
+          - keychain

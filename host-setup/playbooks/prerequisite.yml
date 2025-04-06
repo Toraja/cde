@@ -1,12 +1,17 @@
 - name: Install apt packages
   hosts: localhost
-  vars:
-    apt_packages:
-      - jq
-      - unzip
-  roles:
-    - role: apt
+  tags:
+    - prerequisite
+  tasks:
+    - name: Install apt packages
       tags: ["apt"]
+      ansible.builtin.include_role:
+        name: apt
+        tasks_from: latest
+      vars:
+        apt_packages:
+          - jq
+          - unzip
 
 - name: Install just
   hosts: localhost

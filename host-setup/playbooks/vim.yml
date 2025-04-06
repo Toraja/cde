@@ -11,6 +11,7 @@
           - build-essential
       ansible.builtin.include_role:
         name: apt
+        tasks_from: latest
 
     - name: Create nvim directory
       ansible.builtin.file:

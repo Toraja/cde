@@ -26,6 +26,7 @@
               - uuid-dev
           ansible.builtin.include_role:
             name: apt
+            tasks_from: latest
 
         - name: Git checkout
           ansible.builtin.git:
