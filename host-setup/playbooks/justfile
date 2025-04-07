@@ -12,7 +12,7 @@ playbook_check_flags := '--check --diff'
 
 [private]
 playbook tags *flags:
-	ansible-playbook --tags={{tags}} {{flags}} main.yml
+	ANSIBLE_ROLES_PATH={{source_directory()}}/.ansible/roles/ ansible-playbook --tags={{tags}} {{flags}} main.yml
 
 [private]
 playbook-check tags:
@@ -22,7 +22,7 @@ lint:
 	ansible-lint
 
 galaxy-install:
-	ansible-galaxy role install --role-file requirements.yml --roles-path roles/
+	ansible-galaxy role install --role-file requirements.yml --roles-path .ansible/roles/
 
 docker:
 	just playbook docker
