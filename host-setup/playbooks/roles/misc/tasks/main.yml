@@ -1,0 +1,8 @@
+- name: Install apt packages
+  ansible.builtin.include_role:
+    name: apt
+    tasks_from: latest
+  vars:
+    apt_packages:
+      - xsel
+      - keychain

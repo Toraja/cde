@@ -1,0 +1,2 @@
+docker_config_dir: "{{ home_dir }}/.docker"
+toybox_docker_dir: "{{ toybox_dir }}/docker"

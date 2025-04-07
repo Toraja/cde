@@ -1,0 +1,34 @@
+- name: Install packages required by plugins
+  vars:
+    apt_packages:
+      - make
+      - build-essential
+  ansible.builtin.include_role:
+    name: apt
+    tasks_from: latest
+
+- name: Create nvim directory
+  ansible.builtin.file:
+    path: "{{ neovim_conf_path }}"
+    state: directory
+    mode: "0755"
+
+- name: Setup init.vim
+  ansible.builtin.blockinfile:
+    path: "{{ neovim_conf_path }}/init.vim"
+    marker: '" {mark} ANSIBLE MANAGED BLOCK'
+    block: |
+      source ~/toybox/nvim/init.lua
+      " --- add machine dependent settings below ---
+    create: true
+    mode: "0644"
+
+- name: Setup ginit.vim
+  ansible.builtin.blockinfile:
+    path: "{{ neovim_conf_path }}/ginit.vim"
+    marker: '" {mark} ANSIBLE MANAGED BLOCK'
+    block: |
+      source ~/toybox/nvim/ginit.vim
+      " --- add machine dependent settings below ---
+    create: true
+    mode: "0644"

@@ -1,0 +1,1 @@
+neovim_conf_path: "{{ home_dir }}/.config/nvim"

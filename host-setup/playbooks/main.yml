@@ -1,0 +1,22 @@
+- name: Setup host
+
+  hosts: localhost
+  become: true
+  roles:
+    - role: docker
+      tags: ["docker"]
+
+    - role: fish
+      tags: ["fish"]
+
+    - role: neovim
+      tags: ["neovim"]
+
+    - role: taskwarrior
+      tags: ["taskwarrior"]
+
+    - role: tmux
+      tags: ["tmux"]
+
+    - role: misc
+      tags: ["misc"]

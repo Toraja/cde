@@ -17,12 +17,12 @@ default:
 	echo -e "\e[0;36m{{args}}\e[0;0m"
 
 [private]
-playbook playbook *flags:
-	ansible-playbook {{flags}} playbooks/{{playbook}}.yml
+playbook tags *flags:
+	ansible-playbook --tags={{tags}} {{flags}} playbooks/main.yml
 
 [private]
-playbook-check playbook:
-	just playbook {{playbook}} {{playbook_check_flags}}
+playbook-check tags:
+	just playbook {{tags}} {{playbook_check_flags}}
 
 github_repo_subpath := 'personal.github.com/Toraja'
 github_host_user := 'personal.github.com:Toraja'
@@ -52,21 +52,6 @@ repositories:
 galaxy-install:
 	ansible-galaxy role install --role-file requirements.yml --roles-path playbooks/roles/
 
-fish:
-	just playbook fish
-
-fish-check:
-	just playbook-check fish
-
-vim:
-	ansible-playbook playbooks/vim.yml
-
-tmux:
-	just playbook tmux
-
-tmux-check:
-	just playbook-check tmux
-
 docker:
 	just playbook docker
 
@@ -74,17 +59,41 @@ docker-check:
 	just playbook-check docker
 
 docker-wsl:
-	ansible-playbook --tags wsl playbooks/docker.yml
+	just playbook docker,wsl
 	echocyan Setting to enable systemd might be added to /etc/wsl.conf. In that case, you need to restart WSL.
 
 docker-wsl-check:
-	ansible-playbook --tags wsl --check --diff playbooks/docker.yml
+	just playbook-check docker,wsl
+
+fish:
+	just playbook fish
+
+fish-check:
+	just playbook-check fish
+
+neovim:
+	just playbook neovim
+
+neovim-check:
+	just playbook-check neovim
 
 taskwarrior:
-	ansible-playbook playbooks/taskwarrior.yml
+	just playbook taskwarrior
+
+taskwarrior-check:
+	just playbook-check taskwarrior
+
+tmux:
+	just playbook tmux
+
+tmux-check:
+	just playbook-check tmux
 
 misc:
-	ansible-playbook playbooks/misc.yml
+	just playbook misc
+
+misc-check:
+	just playbook-check misc
 
 [group('Test')]
 test:

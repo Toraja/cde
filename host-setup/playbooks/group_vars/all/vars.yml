@@ -1,0 +1,3 @@
+user: "{{ lookup('ansible.builtin.env', 'USER', default=Undefined) }}"
+home_dir: "{{ lookup('ansible.builtin.env', 'HOME', default=Undefined) }}"
+toybox_dir: "{{ home_dir }}/toybox"

@@ -1,0 +1,49 @@
+- name: Create symlink to tasknote shell
+  ansible.builtin.file:
+    src: "{{ toybox_taskwarrior_dir }}/tasknote"
+    dest: "{{ home_dir }}/.local/bin/tasknote"
+    state: link
+
+# - name: Install and setup taskopen
+#   hosts: localhost
+#   tags: taskopen
+#   tasks:
+#     - name: Check if latest taskopen is installed
+#       vars:
+#         binary_name: taskopen
+#         binary_installed_version_cmd: taskopen version | cut -c 2-
+#         binary_latest_version_cmd: |
+#           git ls-remote --tags --refs https://github.com/jschlatow/taskopen.git |
+#           awk '{ print $2 }' |
+#           grep '^refs/tags/.*' |
+#           sed 's/^refs\/tags\///' |
+#           sed 's/^v//' |
+#           awk '{ if ($1 ~ /-/) print; else print $0"_" ; }' |
+#           sort -V |
+#           sed 's/_$//' |
+#           tail --lines 1
+#       ansible.builtin.include_role:
+#         name: binary
+#         tasks_from: latest_is_installed
+
+#     - name: Install taskopen
+#       when: not latest_binary_is_installed
+#       vars:
+#         install_prefix: /usr/local
+#       ansible.builtin.shell: |
+#         docker run --rm -v {{ install_prefix }}/bin:/dst nimlang/nim \
+#           bash -c 'apt-get update &&
+#             apt-get install --yes make &&
+#             git clone --depth 1 --branch v{{ latest_version.stdout }} https://github.com/jschlatow/taskopen.git &&
+#             cd taskopen &&
+#             make PREFIX={{ install_prefix }} &&
+#             mv taskopen /dst'
+
+#     - name: Setup taskopenrc
+#       vars:
+#         taskopenrc_path: "{{ lookup('ansible.builtin.env', 'HOME') }}/.config/taskopen/taskopenrc"
+#       ansible.builtin.shell:
+#         cmd: |
+#           mkdir -p $(dirname {{ taskopenrc_path }})
+#           ln -s $HOME/toybox/taskwarrior/taskopenrc {{ taskopenrc_path }}
+#         creates: "{{ taskopenrc_path }}"

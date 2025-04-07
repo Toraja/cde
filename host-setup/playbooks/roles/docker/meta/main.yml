@@ -1,0 +1,7 @@
+dependencies:
+  - role: geerlingguy.docker
+    become: true
+    vars:
+      docker_users:
+        - "{{ user }}"
+    ignore_errors: "{{ ansible_check_mode }}"

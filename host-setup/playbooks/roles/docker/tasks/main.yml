@@ -1,0 +1,25 @@
+- name: Create docker config directory
+  ansible.builtin.file:
+    path: "{{ docker_config_dir }}"
+    state: directory
+    mode: "0755"
+
+- name: Setup docker config
+  ansible.builtin.copy:
+    src: "{{ toybox_docker_dir }}/config.json"
+    dest: "{{ docker_config_dir }}/config.json"
+    force: false
+
+# source: https://dev.to/felipecrs/simply-run-docker-on-wsl2-3o8
+- name: Enable systemd in WSL
+  become: true
+  tags:
+    - wsl
+  ansible.builtin.blockinfile:
+    path: "/etc/wsl.conf"
+    block: |
+      [boot]
+      systemd=true
+    create: true
+    mode: "0644"
+  when: "'wsl' in ansible_run_tags"

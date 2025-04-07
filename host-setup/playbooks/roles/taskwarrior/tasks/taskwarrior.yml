@@ -1,0 +1,68 @@
+- name: Check if latest taskwarrior is installed
+  vars:
+    binary_name: task
+    binary_installed_version_cmd: task --version
+    binary_latest_version_cmd: curl -s https://api.github.com/repos/GothenburgBitFactory/taskwarrior/releases/latest | jq -r .tag_name | cut -c 2-
+  ansible.builtin.include_role:
+    name: binary
+    tasks_from: latest_is_installed
+
+- name: Install taskwarrior
+  when: not latest_binary_is_installed
+  vars:
+    checkout_path: /tmp/taskwarrior
+  block:
+    - name: Install required packages
+      vars:
+        apt_packages:
+          - make
+          - cmake
+          - gcc
+          - g++
+          - uuid-dev
+      ansible.builtin.include_role:
+        name: apt
+        tasks_from: latest
+
+    - name: Git checkout
+      ansible.builtin.git:
+        repo: https://github.com/GothenburgBitFactory/taskwarrior.git
+        dest: "{{ checkout_path }}"
+        depth: 1
+        single_branch: true
+        version: stable
+
+    - name: Build taskwarrior
+      ansible.builtin.command:
+        cmd: "{{ item }}"
+      args:
+        chdir: "{{ checkout_path }}"
+      loop:
+        - cmake -DCMAKE_BUILD_TYPE=release -DENABLE_SYNC=OFF .
+        - make
+
+    - name: Install taskwarrior
+      become: true
+      ansible.builtin.command:
+        cmd: make install
+      args:
+        chdir: "{{ checkout_path }}"
+
+    - name: Remove git repository
+      ansible.builtin.file:
+        state: absent
+        path: "{{ checkout_path }}"
+
+- name: Setup taskrc
+  block:
+    - name: Create taskwarrior config directory
+      ansible.builtin.file:
+        path: "{{ taskrc_path | dirname }}"
+        state: directory
+        mode: "0755"
+
+    - name: Copy taskrc
+      ansible.builtin.copy:
+        src: taskrc
+        dest: "{{ taskrc_path }}"
+        mode: '0644'
