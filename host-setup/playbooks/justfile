@@ -1,0 +1,68 @@
+export ANSIBLE_BECOME_PASSWORD_FILE := '.ansible_become_password'
+
+playbook_check_flags := '--check --diff'
+
+[private]
+@echored +args:
+	echo -e "\e[0;31m{{args}}\e[0;0m"
+
+[private]
+@echocyan +args:
+	echo -e "\e[0;36m{{args}}\e[0;0m"
+
+[private]
+playbook tags *flags:
+	ansible-playbook --tags={{tags}} {{flags}} main.yml
+
+[private]
+playbook-check tags:
+	just playbook {{tags}} {{playbook_check_flags}}
+
+lint:
+	ansible-lint
+
+galaxy-install:
+	ansible-galaxy role install --role-file requirements.yml --roles-path roles/
+
+docker:
+	just playbook docker
+
+docker-check:
+	just playbook-check docker
+
+docker-wsl:
+	just playbook docker,wsl
+	echocyan Setting to enable systemd might be added to /etc/wsl.conf. In that case, you need to restart WSL.
+
+docker-wsl-check:
+	just playbook-check docker,wsl
+
+fish:
+	just playbook fish
+
+fish-check:
+	just playbook-check fish
+
+neovim:
+	just playbook neovim
+
+neovim-check:
+	just playbook-check neovim
+
+taskwarrior:
+	just playbook taskwarrior
+
+taskwarrior-check:
+	just playbook-check taskwarrior
+
+tmux:
+	just playbook tmux
+
+tmux-check:
+	just playbook-check tmux
+
+misc:
+	just playbook misc
+
+misc-check:
+	just playbook-check misc
