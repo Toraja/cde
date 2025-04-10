@@ -10,12 +10,12 @@ github-cli = { version = 'latest', postinstall = 'ln --symbolic --force ~/hostho
 glow = { version = 'latest' }
 grpcurl = { version = 'latest' }
 jq = { version = 'latest' }
-just = { version = 'latest', postinstall = 'mise exec just -- just --completions fish > ~/.config/fish/completions/just.fish' }
+just = { version = 'latest', postinstall = 'mise exec just --command "just --completions fish > ~/.config/fish/completions/just.fish && just --man > ~/.local/share/man/man1/just.1"' }
 lazydocker = { version = 'latest' }
 lazygit = { version = 'latest', postinstall = 'mkdir --parents ~/.config/lazygit/ && ln --symbolic --force ~/toybox/lazygit/config.yml ~/.config/lazygit/' }
 neovim = { version = 'latest', postinstall = 'mise run postinstall:neovim' }
 nodejs = { version = 'latest', postinstall = 'npm install --global vscode-langservers-extracted yaml-language-server json5' }
-ripgrep = { version = 'latest' }
+ripgrep = { version = 'latest', postinstall = 'mise exec rg --command "rg --generate complete-fish > ~/.config/fish/completions/rg.fish && rg --generate man > ~/.local/share/man/man1/rg.1' }
 taplo = { version = 'latest' }
 usage = { version = 'latest' }
 yamlfmt = { version = 'latest', postinstall = 'ln --symbolic --force ~/toybox/yamlfmt ~/.config/' }
