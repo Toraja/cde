@@ -7,7 +7,7 @@ fx = { version = 'latest' }
 fzf = { version = 'latest', postinstall = 'mise exec fzf -- fzf --fish > ~/.config/fish/conf.d/fzf.fish' }
 ghq = { version = 'latest' }
 github-cli = { version = 'latest', postinstall = 'ln --symbolic --force ~/hosthome/.config/gh ~/.config/gh' }
-glow = { version = 'latest' }
+glow = { version = 'latest', postinstall = 'mise exec glow -- glow completion fish > ~/.config/fish/completions/glow.fish' }
 grpcurl = { version = 'latest' }
 jq = { version = 'latest' }
 just = { version = 'latest', postinstall = 'mise exec just --command "just --completions fish > ~/.config/fish/completions/just.fish && just --man > ~/.local/share/man/man1/just.1"' }
