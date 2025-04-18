@@ -39,3 +39,5 @@ git clone --depth 1 https://github.com/cheat/cheatsheets.git ~/.config/cheat/che
 ln -s ~/toybox/cheat/conf.yml ~/.config/cheat/conf.yml
 ln -s ~/toybox/cheat/cheatsheets ~/.config/cheat/cheatsheets/personal
 curl -fsSL -o ~/.config/fish/completions/cheat.fish https://raw.githubusercontent.com/cheat/cheat/master/scripts/cheat.fish
+# NOTE: glow prepends spaces and it breaks the cheat shell completion as `cut` is used instead of `awk`
+echo 'complete -c cheat -f -a "(cheat -l | tail -n +2 | awk \'{print \$1}\')"' >> ~/.config/fish/completions/cheat.fish
