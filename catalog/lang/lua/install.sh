@@ -2,7 +2,7 @@
 set -eo pipefail
 
 sudo apt-get update
-# unsip is required by mise install lua
+# unzip is required by mise install lua
 sudo apt-get install --no-install-recommends --yes \
     build-essential libreadline-dev unzip
 
