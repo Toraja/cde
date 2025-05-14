@@ -7,3 +7,8 @@ git clone --depth 1 https://github.com/cheat/cheatsheets.git ~/.config/cheat/che
 ln --symbolic --force ~/toybox/cheat/conf.yml ~/.config/cheat/conf.yml
 ln --symbolic --force ~/toybox/cheat/cheatsheets ~/.config/cheat/cheatsheets/personal
 curl --fail --silent --show-error --location --clobber --output ~/.config/fish/completions/cheat.fish https://raw.githubusercontent.com/cheat/cheat/master/scripts/cheat.fish
+# `cheat` uses pager for non-cheatsheet outputs as well and since `glow` prepends some whitespaces to every line,
+# `cut` malfunctions and completions will not be displayed.
+# The below commands fixes this.
+sed --in-place "s/cut -d ' ' -f 1/awk '{print \\\\\$1}'/" ~/.config/fish/completions/cheat.fish
+sed --in-place "s/cut -d ':' -f 1/awk '{print \\\\\$1}' | sed 's\/.\\\\\$\/\/'/" ~/.config/fish/completions/cheat.fish
