@@ -4,10 +4,10 @@ cheat = { version = 'latest', postinstall = 'mise run postinstall:cheat' }
 direnv = { version = 'latest', postinstall = 'mise run postinstall:direnv' }
 fd = { version = 'latest' }
 fx = { version = 'latest' }
-fzf = { version = 'latest', postinstall = 'mise exec fzf -- fzf --fish > ~/.config/fish/conf.d/fzf.fish' }
+fzf = { version = 'latest', postinstall = 'mise exec fzf --command "fzf --fish > ~/.config/fish/conf.d/fzf.fish"' }
 ghq = { version = 'latest' }
 github-cli = { version = 'latest', postinstall = 'ln --symbolic --force ~/hosthome/.config/gh ~/.config/gh' }
-glow = { version = 'latest', postinstall = 'mise exec glow -- glow completion fish > ~/.config/fish/completions/glow.fish' }
+glow = { version = 'latest', postinstall = 'mise exec glow --command "glow completion fish > ~/.config/fish/completions/glow.fish"' }
 grpcurl = { version = 'latest' }
 hurl = { version = 'latest' }
 jq = { version = 'latest' }
