@@ -12,13 +12,7 @@ if [[ -r $script_dir/go-extra ]]; then
   source ${script_dir}/go-extra
 fi
 
-# Installing golangci-lint via `go install` is not recommended
-# ref: https://golangci-lint.run/welcome/install/#binaries
-# The sample code installs golangci-lint to $(go env GOPATH)/bin but I changed to another location,
-# because other tools installed via `go install` are placed under mise directory
-# and $(go env GOPATH) is not in the PATH (just dont wanna be bothered).
 mise exec go --command '\
-  curl --location --silent --show-error --fail https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b ~/.local/bin ${GOLANGCI_LINT_VERSION} && \
   go install -v golang.org/x/tools/cmd/goimports@latest && \
   go install -v golang.org/x/tools/cmd/gorename@latest && \
   go install -v golang.org/x/tools/gopls@latest && \

@@ -1,2 +1,3 @@
 [tools]
 go = { version = 'latest', postinstall = 'mise run postinstall:go' }
+golangci-lint = { version = 'latest' }
