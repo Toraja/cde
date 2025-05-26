@@ -12,18 +12,22 @@ if [[ -r $script_dir/go-extra ]]; then
   source ${script_dir}/go-extra
 fi
 
+# go tools that go.nvim depends on but not installed here are below
+# https://github.com/ray-x/go.nvim?tab=readme-ov-file#go-binaries-install-and-update
+# - gorename: gorename is deprecated and gopls can rename
+# - fillswitch: does not work
+# - iferr: not needed
+# - gofumpt, golines, gotestsum: installed with mise
 mise exec go --command '\
   go install -v golang.org/x/tools/cmd/goimports@latest && \
   go install -v golang.org/x/tools/gopls@latest && \
   go install -v golang.org/x/tools/cmd/callgraph@latest && \
-  go install -v github.com/segmentio/golines@latest && \
+  go install -v golang.org/x/vuln/cmd/govulncheck@latest && \
   go install -v github.com/fatih/gomodifytags@latest && \
   go install -v github.com/cweill/gotests/...@latest && \
-  go install -v github.com/koron/iferr@latest && \
   go install -v github.com/josharian/impl@latest && \
   go install -v github.com/go-delve/delve/cmd/dlv@latest && \
   go install -v github.com/onsi/ginkgo/v2/ginkgo@latest && \
   go install -v github.com/tmc/json-to-struct@latest && \
-  go install -v gotest.tools/gotestsum@latest && \
   go install -v go.uber.org/mock/mockgen@${MOCKGEN_VERSION:-latest} && \
-  go install -v mvdan.cc/gofumpt@latest'
+  curl --location --silent --show-error --fail --output ~/.local/bin/go-enum "https://github.com/abice/go-enum/releases/latest/download/go-enum_$(uname -s)_$(uname -m)" && chmod 755 ~/.local/bin/go-enum'

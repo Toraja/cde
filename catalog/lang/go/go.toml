@@ -1,3 +1,6 @@
 [tools]
 go = { version = 'latest', postinstall = 'mise run postinstall:go' }
+gofumpt = { version = 'latest' }
 golangci-lint = { version = 'latest' }
+golines = { version = 'latest' }
+gotestsum = { version = 'latest' }
