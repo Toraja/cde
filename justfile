@@ -39,7 +39,7 @@ default:
 # Build specified targets.
 build target *bakeflag: docker_service
 	#!/usr/bin/env fish
-	set -x BUILDX_BAKE_ENTITLEMENTS_FS 0
+	set --export BUILDX_BAKE_ENTITLEMENTS_FS 0
 	docker pull ubuntu:$BASE_IMAGE_TAG
 	docker pull rust:latest
 	set target (string replace '/' '_' {{trim_start_match(trim_end_match(target, '/'), 'env/')}})
