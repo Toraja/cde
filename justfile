@@ -51,6 +51,17 @@ build target *bakeflag: docker_service
 # Parse and print bake file
 build-print target: (build target '--print')
 
+root-test-build *bakeflag:
+	export BUILDX_BAKE_ENTITLEMENTS_FS=0
+	docker buildx bake --file docker-bake.hcl {{bakeflag}} root_test
+
+root-test-enter:
+	docker run --interactive --tty --rm --detach --name root_test cde/root-test:latest
+	docker exec --interactive --tty root_test bash
+
+root-test-stop:
+	docker stop root_test
+
 config:
 	{{compose_cmd}} config --no-interpolate
 
