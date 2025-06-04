@@ -1,5 +1,6 @@
 [tools]
 bat = { version = 'latest' }
+bottom = { version = 'latest' }
 cheat = { version = 'latest', postinstall = 'mise run postinstall:cheat' }
 direnv = { version = 'latest', postinstall = 'mise run postinstall:direnv' }
 fd = { version = 'latest' }
@@ -19,6 +20,7 @@ nodejs = { version = 'latest', postinstall = 'mise exec nodejs -- npm install --
 ripgrep = { version = 'latest', postinstall = 'mise exec ripgrep --command "rg --generate complete-fish > ~/.config/fish/completions/rg.fish && rg --generate man > ~/.local/share/man/man1/rg.1"' }
 taplo = { version = 'latest' }
 usage = { version = 'latest' }
+xh = { version = 'latest', postinstall = 'mise exec xh --command "xh --generate complete-fish > ~/.config/fish/completions/xh.fish && xh --generate man > ~/.local/share/man/man1/xh.1"' }
 yamlfmt = { version = 'latest', postinstall = 'ln --symbolic --force ~/toybox/yamlfmt ~/.config/' }
 yamllint = { version = 'latest', postinstall = 'ln --symbolic --force ~/toybox/yamllint ~/.config/' }
 yazi = { version = 'latest', postinstall = 'mise run postinstall:yazi' }

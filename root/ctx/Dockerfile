@@ -98,8 +98,6 @@ RUN mkdir --parents ~/tmp && \
     mkdir --parents ~/.cde/mnt/single/.local/share/tmux/resurrect/ ~/.local/share/tmux/ && \
     ln --symbolic --force ~/.cde/mnt/single/.local/share/tmux/resurrect ~/.local/share/tmux/
 
-RUN for p in httpie glances; do pipx install $p; done
-
 RUN curl https://mise.run | sh && \
     mise completion fish > ~/.config/fish/completions/mise.fish && \
     mise activate fish > ~/.config/fish/conf.d/mise.fish
