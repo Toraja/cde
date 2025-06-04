@@ -1,0 +1,5 @@
+#!/bin/bash
+
+set -e
+
+ln --symbolic --force ~/hosthome/.config/gh ~/.config/gh

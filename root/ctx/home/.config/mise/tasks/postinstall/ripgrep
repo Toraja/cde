@@ -1,0 +1,5 @@
+#!/bin/bash
+
+set -e
+
+mise exec ripgrep --command "rg --generate complete-fish > ~/.config/fish/completions/rg.fish && rg --generate man > ~/.local/share/man/man1/rg.1"
