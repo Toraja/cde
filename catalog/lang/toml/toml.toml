@@ -1,0 +1,2 @@
+[tools]
+taplo = { version = 'latest' }

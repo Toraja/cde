@@ -102,13 +102,16 @@ RUN curl https://mise.run | sh && \
     mise completion fish > ~/.config/fish/completions/mise.fish && \
     mise activate fish > ~/.config/fish/conf.d/mise.fish
 
-COPY --from=catalog lang/lua /tmp/catalog/lua
-COPY --from=catalog ansible /tmp/catalog/ansible
-# Separate installation of ansible and lua as installing luajit takes long time
-RUN for installer in /tmp/catalog/*/install.sh; do $installer; done && \
-    sudo rm --recursive --force /tmp/catalog
+# Separate installation of base mise tools and catalogs as installing luajit takes long time
 RUN --mount=type=secret,id=GITHUB_TOKEN,env=GITHUB_TOKEN \
     mise install
+COPY --from=catalog lang/lua /tmp/catalog/lua
+COPY --from=catalog lang/toml /tmp/catalog/toml
+COPY --from=catalog lang/yaml /tmp/catalog/yaml
+COPY --from=catalog ansible /tmp/catalog/ansible
+RUN --mount=type=secret,id=GITHUB_TOKEN,env=GITHUB_TOKEN \
+    for installer in /tmp/catalog/*/install.sh; do $installer; done && \
+    sudo rm --recursive --force /tmp/catalog
 
 # taskwarrior
 COPY --from=taskwarrior --chown=${USER_NAME}:${USER_NAME} /usr/local/bin/task /home/${USER_NAME}/.local/bin/task
