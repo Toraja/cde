@@ -4,8 +4,8 @@ set -e
 
 mkdir --parents ~/.config/yazi/plugins
 ln --symbolic --force ~/toybox/yazi/*.{lua,toml} ~/.config/yazi/
-mise exec yazi --command 'ya pack -a yazi-rs/plugins:smart-enter && \
-  ya pack -a yazi-rs/plugins:full-border && \
-  ya pack -a yazi-rs/plugins:smart-filter && \
-  ya pack -a yazi-rs/plugins:chmod && \
-  ya pack -a yazi-rs/plugins:git'
+mise exec yazi --command 'ya pkg add yazi-rs/plugins:smart-enter && \
+  ya pkg add yazi-rs/plugins:full-border && \
+  ya pkg add yazi-rs/plugins:smart-filter && \
+  ya pkg add yazi-rs/plugins:chmod && \
+  ya pkg add yazi-rs/plugins:git'
