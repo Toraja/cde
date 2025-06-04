@@ -80,6 +80,8 @@ ENV PATH="/home/${USER_NAME}/.local/bin:${PATH}"
 # toybox is cloned here as some of them requires it for setup
 RUN mkdir --parents ~/tmp && \
     git clone --depth 1 https://github.com/Toraja/toybox.git && \
+    # man \
+    mkdir --parents ~/.local/share/man/man1/ && \
     # fish \
     mkdir --parents ~/.config/fish/completions/ ~/.config/fish/conf.d && \
     ln --symbolic ~/toybox/fish/functions ~/.config/fish/myfuncs && \
