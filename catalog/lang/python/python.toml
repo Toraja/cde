@@ -1,0 +1,5 @@
+[tools]
+python = { version = 'latest' }
+pipenv = { version = 'latest' }
+poetry = { version = 'latest', postinstall = 'mise exec poetry --command "poetry completions fish > ~/.config/fish/completions/poetry.fish"' }
+ruff = { version = 'latest' }
