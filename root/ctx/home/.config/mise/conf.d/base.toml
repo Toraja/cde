@@ -9,7 +9,6 @@ fzf = { version = 'latest', postinstall = 'mise run postinstall:fzf' }
 ghq = { version = 'latest' }
 github-cli = { version = 'latest', postinstall = 'mise run postinstall:github-cli' }
 glow = { version = 'latest', postinstall = 'mise run postinstall:glow' }
-grpcurl = { version = 'latest' }
 hurl = { version = 'latest' }
 jq = { version = 'latest' }
 just = { version = 'latest', postinstall = 'mise run postinstall:just' }
