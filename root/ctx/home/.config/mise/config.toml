@@ -1,0 +1,5 @@
+[settings]
+fetch_remote_versions_timeout = "15s"
+http_timeout = "120s"
+# Concurrent download triggers unofficial(?) rate limit and downloads time out
+jobs = 1
