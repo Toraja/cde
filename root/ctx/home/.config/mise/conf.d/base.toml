@@ -17,6 +17,7 @@ lazygit = { version = 'latest', postinstall = 'mise run postinstall:lazygit' }
 neovim = { version = 'latest', postinstall = 'mise run postinstall:neovim' }
 nodejs = { version = 'latest', postinstall = 'mise run postinstall:nodejs' }
 ripgrep = { version = 'latest', postinstall = 'mise run postinstall:ripgrep' }
+shfmt = { version = 'latest' }
 usage = { version = 'latest' }
 xh = { version = 'latest', postinstall = 'mise run postinstall:xh' }
 yazi = { version = 'latest', postinstall = 'mise run postinstall:yazi' }
