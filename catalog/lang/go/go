@@ -19,15 +19,15 @@ fi
 # - iferr: not needed
 # - gofumpt, golines, gotestsum: installed with mise
 mise exec go --command '\
-  echo "=== installing goimports ===" && go install -v golang.org/x/tools/cmd/goimports@latest && \
-  echo "=== installing gopls ===" && go install -v golang.org/x/tools/gopls@latest && \
-  echo "=== installing callgraph ===" && go install -v golang.org/x/tools/cmd/callgraph@latest && \
-  echo "=== installing govulncheck ===" && go install -v golang.org/x/vuln/cmd/govulncheck@latest && \
-  echo "=== installing gomodifytags ===" && go install -v github.com/fatih/gomodifytags@latest && \
-  echo "=== installing gotests ===" && go install -v github.com/cweill/gotests/...@latest && \
-  echo "=== installing impl ===" && go install -v github.com/josharian/impl@latest && \
-  echo "=== installing delve ===" && go install -v github.com/go-delve/delve/cmd/dlv@latest && \
-  echo "=== installing ginkgo-v2 ===" && go install -v github.com/onsi/ginkgo/v2/ginkgo@latest && \
-  echo "=== installing json-to-struct ===" && go install -v github.com/tmc/json-to-struct@latest && \
-  echo "=== installing mockgen ===" && go install -v go.uber.org/mock/mockgen@latest && \
+  echo "=== installing goimports ===" && go install golang.org/x/tools/cmd/goimports@latest && \
+  echo "=== installing gopls ===" && go install golang.org/x/tools/gopls@latest && \
+  echo "=== installing callgraph ===" && go install golang.org/x/tools/cmd/callgraph@latest && \
+  echo "=== installing govulncheck ===" && go install golang.org/x/vuln/cmd/govulncheck@latest && \
+  echo "=== installing gomodifytags ===" && go install github.com/fatih/gomodifytags@latest && \
+  echo "=== installing gotests ===" && go install github.com/cweill/gotests/...@latest && \
+  echo "=== installing impl ===" && go install github.com/josharian/impl@latest && \
+  echo "=== installing delve ===" && go install github.com/go-delve/delve/cmd/dlv@latest && \
+  echo "=== installing ginkgo-v2 ===" && go install github.com/onsi/ginkgo/v2/ginkgo@latest && \
+  echo "=== installing json-to-struct ===" && go install github.com/tmc/json-to-struct@latest && \
+  echo "=== installing mockgen ===" && go install go.uber.org/mock/mockgen@latest && \
   echo "=== installing go-enum ===" && curl --location --silent --show-error --fail --output ~/.local/bin/go-enum "https://github.com/abice/go-enum/releases/latest/download/go-enum_$(uname -s)_$(uname -m)" && chmod 755 ~/.local/bin/go-enum'
