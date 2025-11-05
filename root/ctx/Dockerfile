@@ -117,7 +117,9 @@ RUN --mount=type=secret,id=GITHUB_TOKEN,env=GITHUB_TOKEN \
 
 # taskwarrior
 COPY --from=taskwarrior --chown=${USER_NAME}:${USER_NAME} /usr/local/bin/task /home/${USER_NAME}/.local/bin/task
-RUN github-latest-release-installer.sh -t kdheepak taskwarrior-tui taskwarrior-tui-x86_64-unknown-linux-gnu.tar.gz ~/.local/bin && \
+RUN github-latest-release-installer.sh kdheepak taskwarrior-tui taskwarrior-tui.deb /tmp/taskwarrior-tui.deb && \
+	sudo dpkg --install /tmp/taskwarrior-tui.deb && \
+	rm /tmp/taskwarrior-tui.deb && \
     # taskwarrior \
     mkdir --parents ~/.local/share/taskwarrior/ && \
     ln --symbolic ~/hosthome/.local/share/taskwarrior/task ~/.local/share/taskwarrior/task && \
