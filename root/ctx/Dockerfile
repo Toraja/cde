@@ -17,7 +17,7 @@ RUN version=$(curl --silent https://api.github.com/repos/GothenburgBitFactory/ta
     make install && \
     rm --recursive --force /taskwarrior
 
-FROM ubuntu:${BASE_IMAGE_TAG}
+FROM ubuntu:${BASE_IMAGE_TAG:-rolling}
 
 # `unminimize` is required to use `man`
 RUN apt-get update && apt-get upgrade --no-install-recommends --yes && apt-get install --no-install-recommends --yes \
