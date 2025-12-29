@@ -3,7 +3,7 @@ set -eo pipefail
 
 dest=/tmp/codelldb
 mkdir --parents $dest
-github-latest-release-installer.sh vadimcn codelldb 'codelldb-x86_64-linux.vsix' $dest/codelldb.vsix
+github-latest-release-installer.sh vadimcn codelldb 'codelldb-linux-x64.vsix' $dest/codelldb.vsix
 unzip -o $dest/codelldb.vsix -d $dest
 mv $dest/extension.vsixmanifest $dest/extension/.vsixmanifest
 mkdir --parents ~/.local/share/code-server/extensions/
