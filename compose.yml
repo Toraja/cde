@@ -2,7 +2,7 @@ services:
   cde:
     image: cde/${PRIMARY_CDE:?}
     environment:
-      - GIT_HUB_SSH_KEY
+      - GITHUB_SSH_KEY
       - TZ
     hostname: ${CDE_HOSTNAME:?}
     extra_hosts:

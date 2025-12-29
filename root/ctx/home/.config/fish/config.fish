@@ -4,9 +4,9 @@ end
 
 source ~/toybox/fish/config.fish
 
-# GIT_HUB_SSH_KEY is set in .env
-if test -f ~/.ssh/$GIT_HUB_SSH_KEY
-    keychain --quiet --noask --agents ssh ~/.ssh/$GIT_HUB_SSH_KEY
+# GITHUB_SSH_KEY is set in .env
+if test -f ~/.ssh/$GITHUB_SSH_KEY
+    keychain --quiet --noask --agents ssh ~/.ssh/$GITHUB_SSH_KEY
 end
 
 begin
