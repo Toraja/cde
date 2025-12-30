@@ -1,4 +1,4 @@
 [tools]
-lua = { version = '5.1.5', postinstall = 'mise run postinstall:lua' }
+lua = { version = 'latest', postinstall = 'mise run postinstall:lua' }
 stylua = { version = 'latest' }
 lua-language-server = { version = 'latest' }
