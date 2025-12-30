@@ -1,0 +1,6 @@
+[tools]
+rust = { version = 'latest', postinstall = 'mise run postinstall:rust' }
+protoc = { version = 'latest' } # protoc is required by rust-analyzer
+sccache= { version = 'latest' }
+# rust-analyzer = { version = 'latest' }
+cargo-binstall = { version = 'latest' }
