@@ -6,7 +6,7 @@ Refer to [Host setup README](./host-setup/README.md)
 
 #### WSL
 - Do the setup and configuration illustrated in
-  [here](https://github.com/Toraja/toybox/blob/master/windows/wsl/wsl.md)
+  [here](https://github.com/Toraja/candyjar/blob/master/windows/wsl/wsl.adoc)
 
 ### Add environments
 Refer to [Skeleton README](./skeleton/README.adoc)
