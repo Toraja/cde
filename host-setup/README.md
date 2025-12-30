@@ -9,7 +9,7 @@
   ```sh
   git clone git@personal.github.com:Toraja/cde.git ~/cde
   ```
-- Add your sudo password to `.ansible_become_password` file.
 - Make sure `curl` is installed.
 - Run `first-step.sh` to setup prerequisite stuff.
 - Run recipes in `justfile`.
+    - To run recipes in playbooks modules, add your sudo password to `<project_root>/host-setup/playbooks/.ansible_become_password` file.

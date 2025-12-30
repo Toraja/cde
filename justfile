@@ -102,5 +102,5 @@ new-env bundle project:
 	just echocyan "Setup is almost done!"
 	just echocyan "Modify 'env/{{bundle}}/{{project}}/ctx/Dockerfile' as you like"
 	if $new_bundle; then \
-		just echocyan "And if you don't need common setup for your projects, remove 'base' section and change default image of 'PROJECT_BASE_IMAGE' in 'docker-bake.hcl'"; \
+		just echocyan "And if you don't need common setup for your projects, remove 'base' section and change default image of 'PROJECT_BASE_IMAGE' in 'docker-bake.hcl' to 'target:root'"; \
 	fi
