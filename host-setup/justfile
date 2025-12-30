@@ -32,6 +32,10 @@ repositories:
 			ln --symbolic ${ghq_root}/{{github_repo_subpath}}/cde ~/cde
 	fi
 
+# Fails to start taskwarrior/tasknote inside containers without these directories which are pointed by symlinks in containers.
+taskwarrior-dirs:
+	mkdir --parents ~/hosthome/.local/share/taskwarrior/task ~/hosthome/.local/share/taskopen/notes
+
 [group('Test')]
 test:
 	@# UID is a readonly variable, so it cannot be reassigned as in UID=${UID}
