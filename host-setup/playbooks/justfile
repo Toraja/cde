@@ -24,10 +24,10 @@ lint:
 galaxy-install:
 	ansible-galaxy role install --role-file requirements.yml --roles-path .ansible/roles/
 
-docker:
+docker: galaxy-install
 	just playbook docker
 
-docker-check:
+docker-check: galaxy-install
 	just playbook-check docker
 
 docker-wsl:
