@@ -32,7 +32,7 @@ docker-check:
 
 docker-wsl:
 	just playbook docker,wsl
-	echocyan Setting to enable systemd might be added to /etc/wsl.conf. In that case, you need to restart WSL.
+	just echocyan Setting to enable systemd might be added to /etc/wsl.conf. In that case, you need to restart WSL.
 
 docker-wsl-check:
 	just playbook-check docker,wsl
