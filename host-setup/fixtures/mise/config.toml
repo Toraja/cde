@@ -6,6 +6,7 @@ jq = { version = 'latest' }
 just = { version = 'latest', postinstall = 'mise run postinstall:just' }
 neovim = { version = 'latest' }
 ripgrep = { version = 'latest' }
+tree-sitter = { version = 'latest' }
 usage = { version = 'latest' }
 
 [tasks."postinstall:fzf"]
