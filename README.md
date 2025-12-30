@@ -11,6 +11,12 @@ Refer to [Host setup README](./host-setup/README.md)
 ### Add environments
 Refer to [Skeleton README](./skeleton/README.adoc)
 
+### Prepare .env
+Run the below command and and modify `.env`.
+```sh
+cp .env.example .env
+```
+
 ## Usage
 To build image or start container, run the command below.
 ```
