@@ -32,6 +32,10 @@ repositories:
 			ln --symbolic ${ghq_root}/{{github_repo_subpath}}/cde ~/cde
 	fi
 
+# Fails to authenticate GitHub CLI without these directories which are pointed by symlinks in containers.
+gh-dirs:
+	mkdir --parents ~/.config/gh
+
 # Fails to start taskwarrior/tasknote inside containers without these directories which are pointed by symlinks in containers.
 taskwarrior-dirs:
 	mkdir --parents ~/hosthome/.local/share/taskwarrior/task ~/hosthome/.local/share/taskopen/notes
