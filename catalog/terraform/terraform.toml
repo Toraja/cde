@@ -1,3 +1,4 @@
 [tools]
+opentofu = { version = 'latest' }
 terraform = { version = 'latest' }
 terraform-ls = { version = 'latest' }
