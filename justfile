@@ -8,7 +8,7 @@ export USER_NAME := `whoami`
 export GROUP_ID := `id -g`
 export GROUP_NAME := `groups | cut -d ' ' -f1`
 export DOCKER_GROUP_ID := `getent group docker | cut -d: -f3`
-export BASE_IMAGE_TAG := `echo ${BASE_IMAGE_TAG:-rolling}`
+export BASE_IMAGE_TAG := env("BASE_IMAGE_TAG", "rolling")
 
 default:
 	@just --list --unsorted
