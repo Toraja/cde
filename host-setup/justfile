@@ -36,6 +36,10 @@ repositories:
 gh-dirs:
 	mkdir --parents ~/.config/gh
 
+# Fails to authenticate GitHub Copilot without these directories which are pointed by symlinks in containers.
+copilot-dirs:
+    mkdir --parents ~/.config/github-copilot/
+
 # Fails to start taskwarrior/tasknote inside containers without these directories which are pointed by symlinks in containers.
 taskwarrior-dirs:
 	mkdir --parents ~/hosthome/.local/share/taskwarrior/task ~/hosthome/.local/share/taskopen/notes
