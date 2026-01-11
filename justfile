@@ -36,12 +36,18 @@ default:
 		exit 1; \
 	fi
 
-# Build specified targets.
-build target *bakeflag: docker_service
-	#!/usr/bin/env fish
-	set --export BUILDX_BAKE_ENTITLEMENTS_FS 0
+[private]
+pull_base_images: docker_service
 	docker pull ubuntu:$BASE_IMAGE_TAG
 	docker pull rust:latest
+
+# Build specified targets
+build target *bakeflag: docker_service pull_base_images (build-no-pull-base target bakeflag)
+
+# Build specified targets without pulling base images
+build-no-pull-base target *bakeflag: docker_service
+	#!/usr/bin/env fish
+	set --export BUILDX_BAKE_ENTITLEMENTS_FS 0
 	set target (string replace '/' '_' {{trim_start_match(trim_end_match(target, '/'), 'env/')}})
 	set flag --file docker-bake.hcl
 	set env_root (string replace --regex '([^/]+/[^/]+/).*' '$1' {{target}})
@@ -49,7 +55,7 @@ build target *bakeflag: docker_service
 	docker buildx bake $flag {{bakeflag}} $target
 
 # Parse and print bake file
-build-print target: (build target '--print')
+build-print target: (build-no-pull-base target '--print')
 
 root-test-build *bakeflag:
 	export BUILDX_BAKE_ENTITLEMENTS_FS=0
