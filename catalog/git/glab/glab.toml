@@ -1,3 +1,2 @@
 [tools]
-# ubi, which is the default backend, fails to install as it looks in github where glab does not exist.
-"asdf:glab" = { version = 'latest', postinstall = 'mise run postinstall:glab' }
+glab = { version = 'latest', postinstall = 'mise run postinstall:glab' }
