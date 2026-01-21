@@ -1,13 +1,6 @@
 services:
   test:
-    build:
-      context: .
-      args:
-        # UID should not be mandatory as it is not env var by default and docker compose will fail
-        - UID
-        - USER=${USER:?}
-        - GROUP_NAME=${GROUP_NAME:?}
-        - IMAGE_TAG
+    image: cde/host-setup-test
     volumes:
       - type: bind
         source: ./
