@@ -59,7 +59,7 @@ build-print target: (build-no-pull-base target '--print')
 
 root-test-build *bakeflag:
 	export BUILDX_BAKE_ENTITLEMENTS_FS=0
-	docker buildx bake --file docker-bake.hcl {{bakeflag}} root_test
+	docker buildx bake --file docker-bake.hcl --file root/docker-bake.hcl {{bakeflag}} root_test
 
 root-test-enter:
 	docker run --interactive --tty --rm --detach --name root_test cde/root-test:latest
