@@ -3,7 +3,6 @@ variable "BASE_IMAGE" {
   default = "target:root"
 }
 variable "BASE_IMAGE_TAG" {}
-variable "HOME" {}
 variable "USER_ID" {}
 variable "USER_NAME" {}
 variable "GROUP_ID" {}
