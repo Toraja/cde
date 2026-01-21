@@ -95,14 +95,26 @@ destroy cde: (compose cde 'down -v')
 
 new-env bundle project:
 	#!/usr/bin/env bash
-	new_bundle=false
-	test -d env/{{bundle}} || new_bundle=true
 	set -euo pipefail
-	if $new_bundle; then
-		cp --recursive skeleton/bundle/ env/{{bundle}}
-		mv env/{{bundle}}/project env/{{bundle}}/{{project}}
-	else
-		cp --recursive skeleton/bundle/project env/{{bundle}}/{{project}}
+	if [ ! -e env/{{bundle}} ]; then
+		just new-bundle {{bundle}}
 	fi
-	sed --in-place --expression 's/xxx-bundle/{{bundle}}/g' --expression 's/yyy-project/{{project}}/g' env/{{bundle}}/docker-bake.hcl
+	if [ -e env/{{bundle}}/{{project}} ]; then
+		just echored "env/{{bundle}}/{{project}} already exists"
+		exit 1
+	fi
+	just new-project {{bundle}} {{project}}
 	just echocyan "New env has been initialised in env/{{bundle}}/{{project}}/"
+
+[private]
+new-bundle bundle:
+	mkdir --parents env/{{bundle}}
+	find skeleton/bundle -maxdepth 1 -type f -exec cp {} env/{{bundle}}/ \;
+	sed --in-place --expression 's/xxx-bundle/{{bundle}}/g' env/{{bundle}}/docker-bake.hcl
+	cp --recursive skeleton/bundle/project env/{{bundle}}/base
+	just echocyan "Base env has been initialised in env/{{bundle}}/base/"
+
+[private]
+new-project bundle project:
+	cp --recursive skeleton/bundle/project env/{{bundle}}/{{project}}
+	cat skeleton/fixtures/docker-bake-project.hcl | sed --expression 's/xxx-bundle/{{bundle}}/g' --expression 's/yyy-project/{{project}}/g' >> env/{{bundle}}/docker-bake.hcl
