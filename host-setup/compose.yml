@@ -6,6 +6,7 @@ services:
         # UID should not be mandatory as it is not env var by default and docker compose will fail
         - UID
         - USER=${USER:?}
+        - GROUP_NAME=${GROUP_NAME:?}
         - IMAGE_TAG
     volumes:
       - type: bind

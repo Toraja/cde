@@ -9,13 +9,14 @@ RUN apt-get update && apt-get upgrade --no-install-recommends --yes && apt-get i
 
 ARG UID
 ARG USER
+ARG GROUP_NAME
 RUN : ${UID:?not defined} && \
     useradd --create-home --uid "${UID}" "${USER}" && \
     echo "%"${USER}" ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/${USER}
 
 ENV USER="${USER}"
 USER ${USER}
-COPY --chown=${USER}:${USER} ./ /home/${USER}/wd/
+COPY --chown=${USER}:${GROUP_NAME} ./ /home/${USER}/wd/
 WORKDIR /home/${USER}/wd/
 
 RUN ./first-step.sh

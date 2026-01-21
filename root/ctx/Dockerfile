@@ -73,7 +73,7 @@ RUN apt-get update && apt-add-repository -y ppa:lepapareil/hurl && apt-get insta
 USER ${USER_NAME}
 WORKDIR /home/${USER_NAME}
 
-COPY --chown=${USER_NAME}:${USER_NAME} ./home ./
+COPY --chown=${USER_NAME}:${GROUP_NAME} ./home ./
 ENV PATH="/home/${USER_NAME}/.local/bin:${PATH}"
 
 # Setup tools installed by apt
@@ -123,7 +123,7 @@ RUN --mount=type=secret,id=GITHUB_TOKEN,env=GITHUB_TOKEN \
 RUN sudo rm --recursive --force /tmp/catalog
 
 # taskwarrior
-COPY --from=taskwarrior --chown=${USER_NAME}:${USER_NAME} /usr/local/bin/task /home/${USER_NAME}/.local/bin/task
+COPY --from=taskwarrior --chown=${USER_NAME}:${GROUP_NAME} /usr/local/bin/task /home/${USER_NAME}/.local/bin/task
 RUN github-latest-release-installer.sh kdheepak taskwarrior-tui taskwarrior-tui.deb /tmp/taskwarrior-tui.deb && \
 	sudo dpkg --install /tmp/taskwarrior-tui.deb && \
 	rm /tmp/taskwarrior-tui.deb && \
