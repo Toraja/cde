@@ -3,6 +3,9 @@
 set -e
 
 mise exec glab --command "glab completion --shell fish > ~/.config/fish/completions/glab.fish"
+# XXX: The below should be done in `install.sh` but cannot due to the reason described in #58.
+# To do so requires volume mount instead of bind mount.
+# ---
 # Delete config dir auto-created by glab command, as `ln` creates symlink inside the directory
 # when link path exists and a directory.
 rm --recursive --force ~/.config/glab-cli
