@@ -2,11 +2,7 @@
 variable "BASE_IMAGE" {
   default = "target:root"
 }
-variable "BASE_IMAGE_TAG" {
-  # Default value must be set here.
-  # If unset, BASE_IMAGE_TAG will be empty even if the default value of ARG is specified in Dockerfile.
-  default = "rolling"
-}
+variable "BASE_IMAGE_TAG" {}
 variable "HOME" {}
 variable "USER_ID" {}
 variable "USER_NAME" {}
