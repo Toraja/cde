@@ -2,17 +2,52 @@
 variable "BASE_IMAGE" {
   default = "target:root"
 }
-variable "BASE_IMAGE_TAG" {}
-variable "USER_ID" {}
-variable "USER_NAME" {}
-variable "GROUP_ID" {}
-variable "GROUP_NAME" {}
-variable "DOCKER_GROUP_ID" {}
+variable "BASE_IMAGE_TAG" {
+  validation {
+    condition = BASE_IMAGE_TAG != ""
+    error_message = "BASE_IMAGE_TAG is required"
+  }
+}
+variable "USER_ID" {
+  validation {
+    condition = USER_ID != ""
+    error_message = "USER_ID is required"
+  }
+}
+variable "USER_NAME" {
+  validation {
+    condition = USER_NAME != ""
+    error_message = "USER_NAME is required"
+  }
+}
+variable "GROUP_ID" {
+  validation {
+    condition = GROUP_ID != ""
+    error_message = "GROUP_ID is required"
+  }
+}
+variable "GROUP_NAME" {
+  validation {
+    condition = GROUP_NAME != ""
+    error_message = "GROUP_NAME is required"
+  }
+}
+variable "DOCKER_GROUP_ID" {
+  validation {
+    condition = DOCKER_GROUP_ID != ""
+    error_message = "DOCKER_GROUP_ID is required"
+  }
+}
 
 variable "ENV_PREFIX" {
   default = "env"
 }
-variable "ENV_BUNDLE" {} # must be overwritten in docker-bake.hcl of each env
+variable "ENV_BUNDLE" {
+  validation {
+    condition = ENV_BUNDLE != ""
+    error_message = "ENV_BUNDLE must be overwritten in docker-bake.hcl of each env"
+  }
+}
 
 function "tagname" {
   params = []

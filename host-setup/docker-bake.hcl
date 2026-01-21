@@ -1,8 +1,33 @@
-variable "IMAGE_TAG" {}
-variable "USER_ID" {}
-variable "USER_NAME" {}
-variable "GROUP_ID" {}
-variable "GROUP_NAME" {}
+variable "IMAGE_TAG" {
+  validation {
+    condition = IMAGE_TAG != ""
+    error_message = "IMAGE_TAG is required"
+  }
+}
+variable "USER_ID" {
+  validation {
+    condition = USER_ID != ""
+    error_message = "USER_ID is required"
+  }
+}
+variable "USER_NAME" {
+  validation {
+    condition = USER_NAME != ""
+    error_message = "USER_NAME is required"
+  }
+}
+variable "GROUP_ID" {
+  validation {
+    condition = GROUP_ID != ""
+    error_message = "GROUP_ID is required"
+  }
+}
+variable "GROUP_NAME" {
+  validation {
+    condition = GROUP_NAME != ""
+    error_message = "GROUP_NAME is required"
+  }
+}
 
 target "test" {
   args = {
