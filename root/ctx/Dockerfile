@@ -65,9 +65,9 @@ RUN userdel --remove ubuntu && \
     echo ${USER_NAME}" ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/${USER_NAME}
 
 # Other nice-to-have tools
-RUN apt-get update && apt-get install --no-install-recommends --yes \
+RUN apt-get update && apt-add-repository -y ppa:lepapareil/hurl && apt-get install --no-install-recommends --yes \
         # file required by yazi, jq required by github-latest-release-installer \
-        keychain file skopeo jq pwgen \
+        keychain file skopeo jq pwgen hurl \
     && rm --recursive --force /var/lib/apt/lists/*
 
 USER ${USER_NAME}
