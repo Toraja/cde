@@ -7,22 +7,18 @@ variable "PROJECT_BASE_IMAGE" {
 }
 
 # --- base ---
-# Use this if you need common setup for all the project
-
-variable "BASE_BASE_IMAGE" {
-  default = "target:root"
-}
+# Remove this if you do not need common setup for all the projects
 
 target "xxx-bundle_base" {
   inherits = ["common"]
   context = "${envbundleprefix()}/base/ctx"
   contexts = {
-    baseimage = "${BASE_BASE_IMAGE}"
+    baseimage = "target:root"
   }
   tags = [tagname("base")]
 }
 
-# --- project ---
+# --- projects ---
 
 target "xxx-bundle_yyy-project" {
   inherits = ["common"]
