@@ -1,0 +1,3 @@
+[tools]
+ollama = { version = "latest" }
+opencode = { version = "latest" }
