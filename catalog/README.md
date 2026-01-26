@@ -5,7 +5,7 @@
 To add a catalog, create a directory and create below files in the directory.
 - install.sh
 - mise config (optional)
-- postinstall script (optional)
+- postinstall scripts (under postinstall directory, optional)
 
 ### install.sh
 
@@ -20,12 +20,15 @@ set -eo pipefail
 
 script_dir=$(dirname "$0")
 
-cp -- $script_dir/<catalog>.toml ~/.config/mise/conf.d/
-cp -- $script_dir/<catalog> ~/.config/mise/tasks/postinstall/
+if [ -f "$script_dir/<catalog>.toml" ]; then
+  cp -- "$script_dir/<catalog>.toml" ~/.config/mise/conf.d/
+fi
+if ls "$script_dir/<catalog>/postinstall/"* > /dev/null 2>&1; then
+  cp -- "$script_dir/<catalog>/postinstall/"* ~/.config/mise/tasks/postinstall/
+fi
 mise install
 ```
 Code to setup tools installed with mise can also go here, if that is not what should go to postinstall script (see below).
-
 
 ### mise config & postinstall script
 

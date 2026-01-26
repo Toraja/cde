@@ -10,7 +10,12 @@ sudo apt-get install --no-install-recommends --yes \
   build-essential libreadline-dev
 
 script_dir=$(dirname "$0")
-cp -- $script_dir/lua.toml ~/.config/mise/conf.d/
-cp -- $script_dir/lua ~/.config/mise/tasks/postinstall/
+
+if [ -f "$script_dir/<catalog>.toml" ]; then
+  cp -- "$script_dir/<catalog>.toml" ~/.config/mise/conf.d/
+fi
+if ls "$script_dir/<catalog>/postinstall/"* > /dev/null 2>&1; then
+  cp -- "$script_dir/<catalog>/postinstall/"* ~/.config/mise/tasks/postinstall/
+fi
 # Specify luarock version as 3.13.0 is broken: https://github.com/luarocks/luarocks/issues/1851
 ASDF_LUA_LINUX_READLINE=1 ASDF_LUA_LUAROCKS_VERSION=3.12.2 mise install

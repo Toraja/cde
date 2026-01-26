@@ -13,8 +13,13 @@ sudo apt-get install --no-install-recommends --yes \
   liblzma-dev
 
 script_dir=$(dirname "$0")
-cp -- $script_dir/python.toml ~/.config/mise/conf.d/
-# cp -- $script_dir/python ~/.config/mise/tasks/postinstall/
+
+if [ -f "$script_dir/<catalog>.toml" ]; then
+  cp -- "$script_dir/<catalog>.toml" ~/.config/mise/conf.d/
+fi
+if ls "$script_dir/<catalog>/postinstall/"* > /dev/null 2>&1; then
+  cp -- "$script_dir/<catalog>/postinstall/"* ~/.config/mise/tasks/postinstall/
+fi
 mise install
 
 packages=(

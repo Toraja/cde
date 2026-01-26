@@ -11,6 +11,7 @@ sudo apt-get install --no-install-recommends --yes \
     libxml2-dev \
     libsqlite3-dev
 
+# TODO: Must be updated to use mise
 export PATH="$HOME/.asdf/shims:$PATH"
 # XXX Installation fails with error: No package 'openssl' found
 # Installing 'openssl' with apt-get does not solve it.
