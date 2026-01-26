@@ -11,4 +11,4 @@ if ls "$script_dir/<catalog>/postinstall/"* > /dev/null 2>&1; then
 fi
 mise install
 
-mise exec fzf --command "npm install --global vscode-langservers-extracted yaml-language-server"
+mise exec npm --command "npm install --global vscode-langservers-extracted yaml-language-server"
