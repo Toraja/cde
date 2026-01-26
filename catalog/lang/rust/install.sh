@@ -7,13 +7,17 @@ set -eo pipefail
 sudo apt-get update
 # pkg-config: required by rust-openssl crate which reqwest crate depends on
 sudo apt-get install --no-install-recommends --yes \
-    build-essential \
-    pkg-config
+  build-essential \
+  pkg-config
 
 script_dir=$(dirname "$0")
 
-cp -- $script_dir/rust.toml ~/.config/mise/conf.d/
-cp -- $script_dir/rust ~/.config/mise/tasks/postinstall/
+if [ -f "$script_dir/<catalog>.toml" ]; then
+  cp -- "$script_dir/<catalog>.toml" ~/.config/mise/conf.d/
+fi
+if ls "$script_dir/<catalog>/postinstall/"* > /dev/null 2>&1; then
+  cp -- "$script_dir/<catalog>/postinstall/"* ~/.config/mise/tasks/postinstall/
+fi
 mise install
 
 # required by nvim-neotest

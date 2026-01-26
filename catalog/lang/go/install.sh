@@ -6,6 +6,10 @@ script_dir=$(dirname "$0")
 # go_version=${1:-latest}
 
 mkdir --parents ${HOME}/go
-cp -- $script_dir/go.toml ~/.config/mise/conf.d/
-cp -- $script_dir/go ~/.config/mise/tasks/postinstall/
+if [ -f "$script_dir/<catalog>.toml" ]; then
+  cp -- "$script_dir/<catalog>.toml" ~/.config/mise/conf.d/
+fi
+if ls "$script_dir/<catalog>/postinstall/"* > /dev/null 2>&1; then
+  cp -- "$script_dir/<catalog>/postinstall/"* ~/.config/mise/tasks/postinstall/
+fi
 mise install

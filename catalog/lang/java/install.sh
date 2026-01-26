@@ -1,6 +1,7 @@
 #!/bin/bash
 set -eo pipefail
 
+# TODO: must be updated to use mise
 # XXX not tested
 export PATH="$HOME/.asdf/shims:$PATH"
 asdf-global-installer.sh java
