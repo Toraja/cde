@@ -120,7 +120,7 @@ RUN --mount=type=secret,id=GITHUB_TOKEN,env=GITHUB_TOKEN \
 COPY --from=catalog ansible /tmp/catalog/ansible
 RUN --mount=type=secret,id=GITHUB_TOKEN,env=GITHUB_TOKEN \
 	/tmp/catalog/ansible/install.sh
-COPY --from=catalog ansible /tmp/catalog/llm
+COPY --from=catalog llm /tmp/catalog/llm
 RUN --mount=type=secret,id=GITHUB_TOKEN,env=GITHUB_TOKEN \
 	/tmp/catalog/llm/install.sh
 RUN sudo rm --recursive --force /tmp/catalog
