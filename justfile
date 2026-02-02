@@ -49,7 +49,7 @@ build-no-pull-base target *bakeflag: docker_service
 	#!/usr/bin/env fish
 	set --export BUILDX_BAKE_ENTITLEMENTS_FS 0
 	set target (string replace '/' '_' {{trim_start_match(trim_end_match(target, '/'), 'env/')}})
-	set flag --file docker-bake.hcl
+	set flag --file docker-bake.hcl --file root/docker-bake.hcl
 	set env_root (string replace --regex '([^/]+/[^/]+/).*' '$1' {{target}})
 	test -f $env_root/docker-bake.hcl && set flag $flag --file $env_root/docker-bake.hcl
 	docker buildx bake $flag {{bakeflag}} $target
