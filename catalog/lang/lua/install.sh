@@ -15,8 +15,9 @@ catalog_name=$(basename "$script_dir")
 if [ -f "$script_dir/${catalog_name}.toml" ]; then
   cp -- "$script_dir/${catalog_name}.toml" ~/.config/mise/conf.d/
 fi
-if ls "$script_dir/${catalog_name}/postinstall/"* > /dev/null 2>&1; then
-  cp -- "$script_dir/${catalog_name}/postinstall/"* ~/.config/mise/tasks/postinstall/
+if ls "$script_dir/postinstall/"* > /dev/null 2>&1; then
+  cp -- "$script_dir/postinstall/"* ~/.config/mise/tasks/postinstall/
 fi
+
 # Specify luarock version as 3.13.0 is broken: https://github.com/luarocks/luarocks/issues/1851
 ASDF_LUA_LINUX_READLINE=1 ASDF_LUA_LUAROCKS_VERSION=3.12.2 mise install
