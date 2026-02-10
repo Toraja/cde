@@ -4,9 +4,10 @@ FROM rust:latest AS taskwarrior
 
 SHELL ["/bin/bash", "-eo", "pipefail", "-c"]
 
-RUN apt-get update && apt-get upgrade --no-install-recommends --yes && apt-get install --no-install-recommends --yes \
-    make cmake gcc g++ uuid-dev jq && \
-    rm --recursive --force /var/lib/apt/lists/*
+RUN rm --force /etc/apt/apt.conf.d/docker-clean; echo 'Binary::apt::APT::Keep-Downloaded-Packages "true";' > /etc/apt/apt.conf.d/keep-cache
+RUN --mount=type=cache,id=apt-cache,target=/var/cache/apt,sharing=locked --mount=type=cache,id=apt-cache,target=/var/lib/apt,sharing=locked \
+    apt-get update && apt-get upgrade --no-install-recommends --yes && apt-get install --no-install-recommends --yes \
+    make cmake gcc g++ uuid-dev jq
 
 # taskwarrior is installed at /usr/local/bin/task
 RUN version=$(curl --silent https://api.github.com/repos/GothenburgBitFactory/taskwarrior/releases/latest | jq --raw-output '.tag_name') && \
@@ -20,7 +21,9 @@ RUN version=$(curl --silent https://api.github.com/repos/GothenburgBitFactory/ta
 FROM ubuntu:${BASE_IMAGE_TAG:-rolling}
 
 # `unminimize` is required to use `man`
-RUN apt-get update && apt-get upgrade --no-install-recommends --yes && apt-get install --no-install-recommends --yes \
+RUN rm --force /etc/apt/apt.conf.d/docker-clean; echo 'Binary::apt::APT::Keep-Downloaded-Packages "true";' > /etc/apt/apt.conf.d/keep-cache
+RUN --mount=type=cache,id=apt-cache,target=/var/cache/apt,sharing=locked --mount=type=cache,id=apt-cache,target=/var/lib/apt,sharing=locked \
+    apt-get update && apt-get upgrade --no-install-recommends --yes && apt-get install --no-install-recommends --yes \
     unminimize \
     && yes | unminimize
 
@@ -29,7 +32,8 @@ SHELL ["/bin/bash", "-eo", "pipefail", "-c"]
 # Official Debian and Ubuntu images automatically run apt-get clean, so explicit invocation is not required.
 # Set up to install docker
 ARG DOCKER_GROUP_ID
-RUN apt-get update && apt-get install --no-install-recommends --yes \
+RUN --mount=type=cache,id=apt-cache,target=/var/cache/apt,sharing=locked --mount=type=cache,id=apt-cache,target=/var/lib/apt,sharing=locked \
+    apt-get update && apt-get install --no-install-recommends --yes \
     apt-transport-https ca-certificates curl gnupg lsb-release \
     && install --mode 0755 --directory /etc/apt/keyrings \
     && curl --fail --silent --show-error --location https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor --output /etc/apt/keyrings/docker.gpg \
@@ -38,20 +42,19 @@ RUN apt-get update && apt-get install --no-install-recommends --yes \
         tee /etc/apt/sources.list.d/docker.list > /dev/null \
     && apt-get update && apt-get install --no-install-recommends --yes \
         docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin \
-    && rm --recursive --force /var/lib/apt/lists/* \
     # Specify GROUP_ID for docker as it differs depending on the environment (Docker Desktop etc.) \
     && groupmod --gid ${DOCKER_GROUP_ID} docker
 
 # Must-have basic packages
 ## gettext-base installs envsubst
-RUN apt-get update && apt-get install --no-install-recommends --yes \
+RUN --mount=type=cache,id=apt-cache,target=/var/cache/apt,sharing=locked --mount=type=cache,id=apt-cache,target=/var/lib/apt,sharing=locked \
+    apt-get update && apt-get install --no-install-recommends --yes \
         software-properties-common \
     && apt-add-repository ppa:fish-shell/release-4 \
     && apt-add-repository ppa:git-core/ppa \
     && apt-get update && apt-get install --no-install-recommends --yes \
         sudo less man-db locales tree openssh-client unzip wget gettext-base pipx \
         git git-lfs make xclip net-tools netcat-openbsd dnsutils fish vim tmux \
-    && rm --recursive --force /var/lib/apt/lists/* \
     # Without this, `man` complains that $LC_* is not set \
     && locale-gen en_US.UTF-8
 
@@ -65,10 +68,10 @@ RUN userdel --remove ubuntu && \
     echo ${USER_NAME}" ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/${USER_NAME}
 
 # Other nice-to-have tools
-RUN apt-get update && apt-add-repository -y ppa:lepapareil/hurl && apt-get install --no-install-recommends --yes \
+RUN --mount=type=cache,target=/var/cache/apt,sharing=locked --mount=type=cache,id=apt-cache,target=/var/lib/apt,sharing=locked \
+    apt-get update && apt-add-repository -y ppa:lepapareil/hurl && apt-get install --no-install-recommends --yes \
         # file required by yazi, jq required by github-latest-release-installer \
-        keychain file skopeo jq pwgen hurl \
-    && rm --recursive --force /var/lib/apt/lists/*
+        keychain file skopeo jq pwgen hurl
 
 USER ${USER_NAME}
 WORKDIR /home/${USER_NAME}
@@ -108,15 +111,30 @@ RUN curl https://mise.run | sh && \
 # as some might fail sometimes and it takes time to retry all.
 RUN --mount=type=secret,id=GITHUB_TOKEN,env=GITHUB_TOKEN \
     mise install
-RUN --mount=type=secret,id=GITHUB_TOKEN,env=GITHUB_TOKEN --mount=type=bind,from=catalog,source=lang/lua,target=/tmp/catalog/lua \
+RUN --mount=type=secret,id=GITHUB_TOKEN,env=GITHUB_TOKEN \
+    --mount=type=cache,id=apt-cache,target=/var/cache/apt,sharing=locked \
+    --mount=type=cache,id=apt-cache,target=/var/lib/apt,sharing=locked \
+    --mount=type=bind,from=catalog,source=lang/lua,target=/tmp/catalog/lua \
 	/tmp/catalog/lua/install.sh
-RUN --mount=type=secret,id=GITHUB_TOKEN,env=GITHUB_TOKEN --mount=type=bind,from=catalog,source=lang/toml,target=/tmp/catalog/toml \
+RUN --mount=type=secret,id=GITHUB_TOKEN,env=GITHUB_TOKEN \
+    --mount=type=cache,id=apt-cache,target=/var/cache/apt,sharing=locked \
+    --mount=type=cache,id=apt-cache,target=/var/lib/apt,sharing=locked \
+    --mount=type=bind,from=catalog,source=lang/toml,target=/tmp/catalog/toml \
 	/tmp/catalog/toml/install.sh
-RUN --mount=type=secret,id=GITHUB_TOKEN,env=GITHUB_TOKEN --mount=type=bind,from=catalog,source=lang/yaml,target=/tmp/catalog/yaml \
+RUN --mount=type=secret,id=GITHUB_TOKEN,env=GITHUB_TOKEN \
+    --mount=type=cache,id=apt-cache,target=/var/cache/apt,sharing=locked \
+    --mount=type=cache,id=apt-cache,target=/var/lib/apt,sharing=locked \
+    --mount=type=bind,from=catalog,source=lang/yaml,target=/tmp/catalog/yaml \
 	/tmp/catalog/yaml/install.sh
-RUN --mount=type=secret,id=GITHUB_TOKEN,env=GITHUB_TOKEN --mount=type=bind,from=catalog,source=ansible,target=/tmp/catalog/ansible \
+RUN --mount=type=secret,id=GITHUB_TOKEN,env=GITHUB_TOKEN \
+    --mount=type=cache,id=apt-cache,target=/var/cache/apt,sharing=locked \
+    --mount=type=cache,id=apt-cache,target=/var/lib/apt,sharing=locked \
+    --mount=type=bind,from=catalog,source=ansible,target=/tmp/catalog/ansible \
 	/tmp/catalog/ansible/install.sh
-RUN --mount=type=secret,id=GITHUB_TOKEN,env=GITHUB_TOKEN --mount=type=bind,from=catalog,source=llm,target=/tmp/catalog/llm \
+RUN --mount=type=secret,id=GITHUB_TOKEN,env=GITHUB_TOKEN \
+    --mount=type=cache,id=apt-cache,target=/var/cache/apt,sharing=locked \
+    --mount=type=cache,id=apt-cache,target=/var/lib/apt,sharing=locked \
+    --mount=type=bind,from=catalog,source=llm,target=/tmp/catalog/llm \
 	/tmp/catalog/llm/install.sh
 
 # taskwarrior
