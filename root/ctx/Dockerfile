@@ -108,22 +108,16 @@ RUN curl https://mise.run | sh && \
 # as some might fail sometimes and it takes time to retry all.
 RUN --mount=type=secret,id=GITHUB_TOKEN,env=GITHUB_TOKEN \
     mise install
-COPY --from=catalog lang/lua /tmp/catalog/lua
-RUN --mount=type=secret,id=GITHUB_TOKEN,env=GITHUB_TOKEN \
+RUN --mount=type=secret,id=GITHUB_TOKEN,env=GITHUB_TOKEN --mount=type=bind,from=catalog,source=lang/lua,target=/tmp/catalog/lua \
 	/tmp/catalog/lua/install.sh
-COPY --from=catalog lang/toml /tmp/catalog/toml
-RUN --mount=type=secret,id=GITHUB_TOKEN,env=GITHUB_TOKEN \
+RUN --mount=type=secret,id=GITHUB_TOKEN,env=GITHUB_TOKEN --mount=type=bind,from=catalog,source=lang/toml,target=/tmp/catalog/toml \
 	/tmp/catalog/toml/install.sh
-COPY --from=catalog lang/yaml /tmp/catalog/yaml
-RUN --mount=type=secret,id=GITHUB_TOKEN,env=GITHUB_TOKEN \
+RUN --mount=type=secret,id=GITHUB_TOKEN,env=GITHUB_TOKEN --mount=type=bind,from=catalog,source=lang/yaml,target=/tmp/catalog/yaml \
 	/tmp/catalog/yaml/install.sh
-COPY --from=catalog ansible /tmp/catalog/ansible
-RUN --mount=type=secret,id=GITHUB_TOKEN,env=GITHUB_TOKEN \
+RUN --mount=type=secret,id=GITHUB_TOKEN,env=GITHUB_TOKEN --mount=type=bind,from=catalog,source=ansible,target=/tmp/catalog/ansible \
 	/tmp/catalog/ansible/install.sh
-COPY --from=catalog llm /tmp/catalog/llm
-RUN --mount=type=secret,id=GITHUB_TOKEN,env=GITHUB_TOKEN \
+RUN --mount=type=secret,id=GITHUB_TOKEN,env=GITHUB_TOKEN --mount=type=bind,from=catalog,source=llm,target=/tmp/catalog/llm \
 	/tmp/catalog/llm/install.sh
-RUN sudo rm --recursive --force /tmp/catalog
 
 # taskwarrior
 COPY --from=taskwarrior --chown=${USER_NAME}:${GROUP_NAME} /usr/local/bin/task /home/${USER_NAME}/.local/bin/task
