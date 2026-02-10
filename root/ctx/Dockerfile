@@ -45,16 +45,18 @@ RUN --mount=type=cache,id=apt-cache,target=/var/cache/apt,sharing=locked --mount
     # Specify GROUP_ID for docker as it differs depending on the environment (Docker Desktop etc.) \
     && groupmod --gid ${DOCKER_GROUP_ID} docker
 
-# Must-have basic packages
 ## gettext-base installs envsubst
+# file required by yazi, jq required by github-latest-release-installer
 RUN --mount=type=cache,id=apt-cache,target=/var/cache/apt,sharing=locked --mount=type=cache,id=apt-cache,target=/var/lib/apt,sharing=locked \
     apt-get update && apt-get install --no-install-recommends --yes \
         software-properties-common \
-    && apt-add-repository ppa:fish-shell/release-4 \
-    && apt-add-repository ppa:git-core/ppa \
+    && apt-add-repository --yes ppa:fish-shell/release-4 \
+    && apt-add-repository --yes ppa:git-core/ppa \
+    && apt-add-repository --yes ppa:lepapareil/hurl \
     && apt-get update && apt-get install --no-install-recommends --yes \
         sudo less man-db locales tree openssh-client unzip wget gettext-base pipx \
         git git-lfs make xclip net-tools netcat-openbsd dnsutils fish vim tmux \
+        keychain file skopeo jq pwgen hurl \
     # Without this, `man` complains that $LC_* is not set \
     && locale-gen en_US.UTF-8
 
@@ -66,12 +68,6 @@ RUN userdel --remove ubuntu && \
     groupadd --gid ${GROUP_ID} ${GROUP_NAME} && \
     useradd --create-home --uid ${USER_ID} --gid ${GROUP_ID} --groups ${DOCKER_GROUP_ID} --shell /usr/bin/fish ${USER_NAME} && \
     echo ${USER_NAME}" ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/${USER_NAME}
-
-# Other nice-to-have tools
-RUN --mount=type=cache,target=/var/cache/apt,sharing=locked --mount=type=cache,id=apt-cache,target=/var/lib/apt,sharing=locked \
-    apt-get update && apt-add-repository -y ppa:lepapareil/hurl && apt-get install --no-install-recommends --yes \
-        # file required by yazi, jq required by github-latest-release-installer \
-        keychain file skopeo jq pwgen hurl
 
 USER ${USER_NAME}
 WORKDIR /home/${USER_NAME}
