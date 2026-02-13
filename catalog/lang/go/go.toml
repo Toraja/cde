@@ -1,6 +1,6 @@
 [tools]
 go = { version = 'latest', postinstall = 'mise run postinstall:go' }
 gofumpt = { version = 'latest' }
-golangci-lint = { version = 'latest' }
+golangci-lint = { version = 'latest', postinstall = 'mise exec golangci-lint --command "golangci-lint completion fish > ~/.config/fish/completions/golangci-lint.fish"' }
 golines = { version = 'latest' }
 gotestsum = { version = 'latest' }
