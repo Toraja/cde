@@ -125,7 +125,7 @@ RUN --mount=type=secret,id=GITHUB_TOKEN,env=GITHUB_TOKEN \
 RUN --mount=type=secret,id=GITHUB_TOKEN,env=GITHUB_TOKEN \
     --mount=type=cache,id=apt-cache,target=/var/cache/apt,sharing=locked \
     --mount=type=cache,id=apt-cache,target=/var/lib/apt,sharing=locked \
-    --mount=type=bind,from=catalog,source=ansible,target=/tmp/catalog/ansible \
+    --mount=type=bind,from=catalog,source=iac/ansible,target=/tmp/catalog/ansible \
 	/tmp/catalog/ansible/install.sh
 RUN --mount=type=secret,id=GITHUB_TOKEN,env=GITHUB_TOKEN \
     --mount=type=cache,id=apt-cache,target=/var/cache/apt,sharing=locked \
