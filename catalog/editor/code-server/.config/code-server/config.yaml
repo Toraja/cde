@@ -1,0 +1,7 @@
+bind-addr: 127.0.0.1:8080
+auth: password
+cert: false
+# Separate directory for installing extensions so that volume mounting ~/.local/share/code-server
+# does not result in old extensions overwriting newer ones installed during build.
+extensions-dir: ~/.local/share/code-server-extensions
+disable-workspace-trust: true
