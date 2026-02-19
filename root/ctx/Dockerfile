@@ -143,9 +143,7 @@ RUN github-latest-release-installer.sh kdheepak taskwarrior-tui taskwarrior-tui.
     ln --symbolic ~/hosthome/.local/share/taskopen/notes ~/.local/share/taskopen/
 
 # misc setup
-RUN \
-    # Remove toybox here as some of the tools installed by mise expect toybox to setup \
-    rm --recursive --force ~/toybox && \
+RUN rm --recursive --force ~/toybox && \
     # Setup symlink to host home directory to reduce bind mount \
     # This also enables replacing those links with actual files when symlink is inappriate \
     ln --symbolic ~/hosthome/.ssh ~/.ssh && \
