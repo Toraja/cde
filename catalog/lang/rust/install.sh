@@ -24,3 +24,12 @@ mise install
 # required by nvim-neotest
 # curl --location --silent --show-error --fail https://get.nexte.st/latest/linux | tar -zxf - --directory $(dirname $(asdf which cargo))
 mise exec rust cargo-binstall --command 'cargo binstall cargo-nextest --secure'
+
+workdir=/tmp/codelldb
+mkdir --parents $workdir
+github-latest-release-installer.sh vadimcn codelldb 'codelldb-linux-x64.vsix' $workdir/codelldb.vsix
+unzip -o $workdir/codelldb.vsix -d $workdir
+mv $workdir/extension.vsixmanifest $workdir/extension/.vsixmanifest
+mkdir --parents ~/.local/share/code-server/extensions/
+mv $workdir/extension ~/.local/share/code-server/extensions/vadimcn.vscode-lldb
+rm --recursive --dir --force $workdir
