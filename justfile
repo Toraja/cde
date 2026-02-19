@@ -68,18 +68,27 @@ root-test-enter:
 root-test-stop:
 	docker stop root_test
 
-config:
-	{{compose_cmd}} config --no-interpolate
+config cde="": (validate_cde cde)
+	#!/usr/bin/env fish
+	if test -n "{{cde}}"
+		set env_root (string replace --regex '([^/]+/[^/]+/).*' '$1' {{cde}})
+		test -f $env_root/compose.yml && set flag --file $env_root/compose.yml
+	end
+	{{compose_cmd}} $flag config --no-interpolate
 
 compose cde +args: (validate_cde cde)
 	#!/usr/bin/env fish
 	# Specify COMPOSE_PROJECT_NAME (which is the service name by default) to avoid the collision of container name and volume name between CDEs
 	set cde {{trim_start_match(trim_end_match(cde, '/'), 'env/')}}
 	set --query COMPOSE_PROJECT_NAME || set --export COMPOSE_PROJECT_NAME (string replace '/' '_' "$cde")
+	if test -n "{{cde}}"
+		set env_root (string replace --regex '([^/]+/[^/]+/).*' '$1' {{cde}})
+		test -f $env_root/compose.yml && set flag --file $env_root/compose.yml
+	end
 	PRIMARY_CDE=$cde \
 	CDE_HOSTNAME=(string replace '/' '.' "$cde") \
 	TZ=(cat /etc/timezone) \
-	{{compose_cmd}} {{args}}
+	{{compose_cmd}} $flag {{args}}
 
 up cde: (compose cde 'up --no-recreate --no-build --pull never')
 
