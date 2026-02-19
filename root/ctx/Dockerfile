@@ -116,12 +116,8 @@ RUN --mount=type=secret,id=GITHUB_TOKEN,env=GITHUB_TOKEN \
     --mount=type=cache,id=apt-cache,target=/var/cache/apt,sharing=locked \
     --mount=type=cache,id=apt-cache,target=/var/lib/apt,sharing=locked \
     --mount=type=bind,from=catalog,source=lang/toml,target=/tmp/catalog/toml \
-	/tmp/catalog/toml/install.sh
-RUN --mount=type=secret,id=GITHUB_TOKEN,env=GITHUB_TOKEN \
-    --mount=type=cache,id=apt-cache,target=/var/cache/apt,sharing=locked \
-    --mount=type=cache,id=apt-cache,target=/var/lib/apt,sharing=locked \
     --mount=type=bind,from=catalog,source=lang/yaml,target=/tmp/catalog/yaml \
-	/tmp/catalog/yaml/install.sh
+    for installer in /tmp/catalog/*/install.sh; do $installer; done
 RUN --mount=type=secret,id=GITHUB_TOKEN,env=GITHUB_TOKEN \
     --mount=type=cache,id=apt-cache,target=/var/cache/apt,sharing=locked \
     --mount=type=cache,id=apt-cache,target=/var/lib/apt,sharing=locked \
