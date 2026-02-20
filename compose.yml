@@ -1,6 +1,7 @@
 services:
   cde:
     image: cde/${PRIMARY_CDE:?}
+    init: true
     environment:
       - GITHUB_SSH_KEY
       - TZ
