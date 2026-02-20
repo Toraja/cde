@@ -47,7 +47,7 @@ copilot-dirs:
 
 # Fails to start taskwarrior/tasknote inside containers without these directories which are pointed by symlinks in containers.
 taskwarrior-dirs:
-	mkdir --parents ~/hosthome/.local/share/taskwarrior/task ~/hosthome/.local/share/taskopen/notes
+	mkdir --parents ~/.local/share/taskwarrior/task ~/.local/share/taskopen/notes
 
 [group('Test')]
 test:
