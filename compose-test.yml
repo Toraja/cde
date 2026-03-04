@@ -1,0 +1,17 @@
+services:
+  mise:
+    image: jdxcode/mise:latest
+    init: true
+    environment:
+      - TZ
+      - GITHUB_TOKEN
+    entrypoint: bash
+    volumes:
+      # Configs must be mounted separately
+      # If the entire directory is mounted, the host machine is messed up with the files installed by mise
+      - type: bind
+        source: ${PWD:?}/root/ctx/home/.config/mise/conf.d/base.toml
+        target: /mise/config.toml
+      - type: bind
+        source: ${PWD:?}/root/ctx/home/.config/mise/tasks
+        target: /mise/tasks
