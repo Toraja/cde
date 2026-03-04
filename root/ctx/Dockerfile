@@ -10,7 +10,8 @@ RUN --mount=type=cache,id=apt-cache,target=/var/cache/apt,sharing=locked --mount
     make cmake gcc g++ uuid-dev jq
 
 # taskwarrior is installed at /usr/local/bin/task
-RUN version=$(curl --silent https://api.github.com/repos/GothenburgBitFactory/taskwarrior/releases/latest | jq --raw-output '.tag_name') && \
+RUN --mount=type=secret,id=GITHUB_TOKEN,env=GITHUB_TOKEN \
+    version=$(curl --silent --header "Authorization: token $GITHUB_TOKEN" https://api.github.com/repos/GothenburgBitFactory/taskwarrior/releases/latest | jq --raw-output '.tag_name') && \
     git clone --depth 1 --branch $version https://github.com/GothenburgBitFactory/taskwarrior.git /taskwarrior && \
     cd /taskwarrior && \
     cmake -DCMAKE_BUILD_TYPE=release -DENABLE_SYNC=OFF . && \
