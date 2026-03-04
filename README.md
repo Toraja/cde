@@ -49,6 +49,12 @@ just <recipe> env/<path to project>
 ```
 To view the available recipes, simply run `just`.
 
+### WSL
+Use justfile for WSL.
+```sh
+just --justfile wsl.just <recipe>
+```
+
 ## Development notes
 
 ### Symlink

@@ -1,5 +1,6 @@
 set shell := ['/usr/bin/bash', '-c']
 set dotenv-load
+set allow-duplicate-variables
 
 compose_cmd := 'docker compose --file compose.yml'
 
