@@ -4,5 +4,5 @@ kubectl = { version = 'latest', postinstall = 'mise exec kubectl --command "kube
 # krew = { version = 'latest', postinstall = 'mise exec kubectl krew -- kubectl krew install tree tail ns && echo "fish_add_path ~/.krew/bin" >> ~/.config/fish/conf.d/krew.fish' }
 kind = { version = 'latest', postinstall = 'mise exec kind --command "kind completion fish > ~/.config/fish/completions/kind.fish"' }
 k9s = { version = 'latest', postinstall = 'mise exec k9s --command "k9s completion fish > ~/.config/fish/completions/k9s.fish"' }
-helm = { version = 'latest', postinstall = 'mise exec helm --command "helm completion fish > ~/.config/fish/completions/helm.fish && helm plugin install https://github.com/databus23/helm-diff"' }
+helm = { version = 'latest', postinstall = 'mise exec helm --command "helm completion fish > ~/.config/fish/completions/helm.fish && helm plugin install https://github.com/databus23/helm-diff --verify=false"' }
 helmfile = { version = 'latest', postinstall = 'mise exec helmfile --command "helmfile completion fish > ~/.config/fish/completions/helmfile.fish"' }
