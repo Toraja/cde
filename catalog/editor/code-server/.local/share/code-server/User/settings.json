@@ -1,4 +1,4 @@
 {
   "workbench.colorTheme": "Default Dark+",
-  "chat.agent.maxRequests": 100
+  "chat.agent.maxRequests": 10000
 }
