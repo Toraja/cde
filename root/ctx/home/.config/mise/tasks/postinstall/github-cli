@@ -3,3 +3,4 @@
 set -e
 
 ln --symbolic --force ~/hosthome/.config/gh ~/.config/gh
+mise exec github-cli --command "gh extension install dlvhdr/gh-dash"
