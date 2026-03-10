@@ -9,9 +9,3 @@ target "root" {
   }
   tags = ["cde/root"]
 }
-
-target "root_test" {
-  inherits = ["root"]
-  tags = ["cde/root-test"]
-  dockerfile = "test.Dockerfile"
-}

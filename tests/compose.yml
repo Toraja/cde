@@ -1,5 +1,10 @@
 services:
-  mise-test:
+  root:
+    image: cde-test/root:latest
+    init: true
+    entrypoint: bash
+
+  mise:
     image: jdxcode/mise:latest
     init: true
     depends_on:
@@ -10,17 +15,19 @@ services:
     entrypoint: bash
     volumes:
       - type: volume
-        source: mise-test
+        source: mise
         target: /mise
+
   mise-file-copy:
     image: alpine:latest
     volumes:
       - type: volume
-        source: mise-test
+        source: mise
         target: /mise/volume
       - type: bind
         source: ${PWD:?}/root/ctx/home/.config/mise
         target: /mise/bind
     entrypoint: sh -c "rm -rf /mise/volume/* && cp -rf /mise/bind/* /mise/volume/"
+
 volumes:
-  mise-test:
+  mise:
