@@ -1,17 +1,26 @@
 services:
-  mise:
+  mise-test:
     image: jdxcode/mise:latest
     init: true
+    depends_on:
+      - mise-file-copy
     environment:
       - TZ
       - GITHUB_TOKEN
     entrypoint: bash
     volumes:
-      # Configs must be mounted separately
-      # If the entire directory is mounted, the host machine is messed up with the files installed by mise
+      - type: volume
+        source: mise-test
+        target: /mise
+  mise-file-copy:
+    image: alpine:latest
+    volumes:
+      - type: volume
+        source: mise-test
+        target: /mise/volume
       - type: bind
-        source: ${PWD:?}/root/ctx/home/.config/mise/conf.d/base.toml
-        target: /mise/config.toml
-      - type: bind
-        source: ${PWD:?}/root/ctx/home/.config/mise/tasks
-        target: /mise/tasks
+        source: ${PWD:?}/root/ctx/home/.config/mise
+        target: /mise/bind
+    entrypoint: sh -c "rm -rf /mise/volume/* && cp -rf /mise/bind/* /mise/volume/"
+volumes:
+  mise-test:

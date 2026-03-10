@@ -58,16 +58,27 @@ build-no-pull-base target *bakeflag: docker_service
 # Parse and print bake file
 build-print target: (build-no-pull-base target '--print')
 
+[group('Test')]
 root-test-build *bakeflag:
 	export BUILDX_BAKE_ENTITLEMENTS_FS=0
 	docker buildx bake --file docker-bake.hcl --file root/docker-bake.hcl {{bakeflag}} root_test
 
+[group('Test')]
 root-test-enter:
 	docker run --interactive --tty --rm --detach --name root_test cde/root-test:latest
 	docker exec --interactive --tty root_test bash
 
+[group('Test')]
 root-test-stop:
 	docker stop root_test
+
+[group('Test')]
+mise-test:
+	docker compose --file compose-test.yml run --rm mise-test
+
+[group('Test')]
+mise-test-clean:
+	docker compose --file compose-test.yml down --volumes
 
 config cde="": (validate_cde cde)
 	#!/usr/bin/env fish
