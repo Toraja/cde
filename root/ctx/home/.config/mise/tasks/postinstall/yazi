@@ -2,7 +2,7 @@
 
 set -e
 
-mkdir --parents ~/.config/yazi/plugins
+mkdir --parents ~/.config/yazi/plugins ~/.config/yazi/
 ln --symbolic --force ~/toybox/yazi/*.{lua,toml} ~/.config/yazi/
 mise exec yazi --command 'ya pkg add yazi-rs/plugins:smart-enter && \
   ya pkg add yazi-rs/plugins:full-border && \
