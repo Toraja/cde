@@ -1,13 +1,16 @@
 export COMPOSE_PROJECT_NAME := 'cde-test'
 export BUILDX_BAKE_ENTITLEMENTS_FS := '0'
 
+compose-config:
+	docker compose config
+
 root-build *bakeflag:
 	docker buildx bake --file ../docker-bake.hcl --file ../root/docker-bake.hcl --file docker-bake.hcl {{bakeflag}} root_test
 
 root-run:
 	docker compose run --rm root
 
-mise-run:
+mise-run: mise-clean
 	docker compose run --rm mise
 
 mise-clean:
