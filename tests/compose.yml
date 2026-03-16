@@ -25,7 +25,7 @@ services:
         source: mise
         target: /mise/volume
       - type: bind
-        source: ${PWD:?}/root/ctx/home/.config/mise
+        source: ${PWD:?}/../root/ctx/home/.config/mise
         target: /mise/bind
     entrypoint: sh -c "rm -rf /mise/volume/* && cp -rf /mise/bind/* /mise/volume/"
 
