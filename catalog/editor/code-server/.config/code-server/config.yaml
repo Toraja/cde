@@ -3,5 +3,7 @@ auth: password
 cert: false
 # Separate directory for installing extensions so that volume mounting ~/.local/share/code-server
 # does not result in old extensions overwriting newer ones installed during build.
-extensions-dir: ~/.local/share/code-server-extensions
+# `~` will not be expanded to home directory, and since the home directory (user name) is variable,
+# use /home/coder instead as it is a symlink to the user's actual home directory.
+extensions-dir: /home/coder/.local/share/code-server-extensions
 disable-workspace-trust: true
