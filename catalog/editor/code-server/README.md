@@ -40,3 +40,20 @@ Password must be passed via flag or manually added to config file.
 ```sh
 code-server --password PASSWORD
 ```
+
+Or, add below recipes to your global justfile to automatically generate password if it is not present in the config file.
+
+```just
+code_server_port := env("CODE_SERVER_PORT", "443")
+
+code-server: code-server-pass
+	code-server --bind-addr 0.0.0.0:{{code_server_port}} --disable-workspace-trust
+
+code-server-pass:
+	#!/bin/bash
+	if [ "$(yq '.password' ~/.config/code-server/config.yaml)" = "null" ]; then
+		yq -i '.password = "'"$(openssl rand -base64 32 | tr -d '/+=' | head -c 32)"'"' ~/.config/code-server/config.yaml
+		echo "Password added to ~/.config/code-server/config.yaml"
+	fi
+	echo Password: $(yq '.password' ~/.config/code-server/config.yaml)
+```
