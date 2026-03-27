@@ -20,7 +20,7 @@ services:
         target: /var/run/docker.sock
       - type: bind
         source: "~"
-        target: /home/${USER:?}/hosthome
+        target: /home/${USER:?}/.cde/mnt/hosthome
       # Bind volume `workspace` direcory instead of symlinking so that relative
       # path of bind volume inside CDE container does not result in error
       - type: bind

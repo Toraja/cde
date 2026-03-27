@@ -137,20 +137,20 @@ RUN github-latest-release-installer.sh kdheepak taskwarrior-tui taskwarrior-tui.
 	rm /tmp/taskwarrior-tui.deb && \
     # taskwarrior \
     mkdir --parents ~/.local/share/taskwarrior/ && \
-    ln --symbolic ~/hosthome/.local/share/taskwarrior/task ~/.local/share/taskwarrior/ && \
+    ln --symbolic ~/.cde/mnt/hosthome/.local/share/taskwarrior/task ~/.local/share/taskwarrior/ && \
     # tasktnote \
     mkdir --parents ~/.local/share/taskopen/ && \
     ln --symbolic ~/toybox/taskwarrior/tasknote ~/.local/bin/tasknote && \
-    ln --symbolic ~/hosthome/.local/share/taskopen/notes ~/.local/share/taskopen/
+    ln --symbolic ~/.cde/mnt/hosthome/.local/share/taskopen/notes ~/.local/share/taskopen/
 
 # misc setup
 RUN rm --recursive --force ~/toybox && \
     # Setup symlink to host home directory to reduce bind mount \
     # This also enables replacing those links with actual files when symlink is inappriate \
-    ln --symbolic ~/hosthome/.ssh ~/.ssh && \
-    mkdir --parents ~/.docker && ln --symbolic ~/hosthome/.docker/config.json ~/.docker/config.json && \
+    ln --symbolic ~/.cde/mnt/hosthome/.ssh ~/.ssh && \
+    mkdir --parents ~/.docker && ln --symbolic ~/.cde/mnt/hosthome/.docker/config.json ~/.docker/config.json && \
     ln --symbolic ~/workspace/personal.github.com/Toraja/toybox ~/toybox && \
-    mkdir --parents ~/.config/github-copilot/ && ln --symbolic ~/hosthome/.config/github-copilot/apps.json ~/.config/github-copilot/ && \
+    mkdir --parents ~/.config/github-copilot/ && ln --symbolic ~/.cde/mnt/hosthome/.config/github-copilot/apps.json ~/.config/github-copilot/ && \
     # Create directories for volume mount destination so that owner:group of those directories are not root \
     mkdir --parents ~/.cde/mnt/single ~/.local/share/fish
 

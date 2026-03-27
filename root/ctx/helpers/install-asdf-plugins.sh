@@ -24,10 +24,10 @@ asdf-global-installer.sh \
 
 export PATH="$HOME/.asdf/shims:$PATH"
 
-mkdir --parents  ~/.local/{share,state}/nvim/ ~/.cde/mnt/single/.local/state/nvim/ ~/hosthome/.local/{share,state}/nvim/lazy/
+mkdir --parents  ~/.local/{share,state}/nvim/ ~/.cde/mnt/single/.local/state/nvim/ ~/.cde/mnt/hosthome/.local/{share,state}/nvim/lazy/
 ln -sf ~/.cde/mnt/single/.local/state/nvim/{shada,trust} ~/.local/state/nvim/
-ln -s ~/hosthome/.local/share/nvim/lazy ~/.local/share/nvim/
-ln -s ~/hosthome/.local/state/nvim/lazy ~/.local/state/nvim/
+ln -s ~/.cde/mnt/hosthome/.local/share/nvim/lazy ~/.local/share/nvim/
+ln -s ~/.cde/mnt/hosthome/.local/state/nvim/lazy ~/.local/state/nvim/
 
 just --completions fish > ~/.config/fish/completions/just.fish
 
