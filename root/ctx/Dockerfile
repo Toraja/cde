@@ -102,8 +102,7 @@ RUN mkdir --parents ~/tmp ~/.cde/mnt/single ~/.cde/mnt/shared ~/.local/share/fis
     ln --symbolic --force ~/.cde/mnt/single/.local/share/tmux/resurrect ~/.local/share/tmux/
 
 RUN curl https://mise.run | sh && \
-    mise completion fish > ~/.config/fish/completions/mise.fish && \
-    mise activate fish > ~/.config/fish/conf.d/mise.fish
+    mise completion fish > ~/.config/fish/completions/mise.fish
 
 # Separate installation of base mise tools and each catalog
 # as some might fail sometimes and it takes time to retry all.

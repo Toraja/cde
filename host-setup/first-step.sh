@@ -21,7 +21,6 @@ cp --recursive $fixture_dir/mise ~/.config/
 mise completion bash > ~/.local/share/bash-completion/completions/mise.bash
 mise activate bash > ~/.bashrc.d/mise.bash
 mise completion fish > ~/.config/fish/completions/mise.fish
-mise activate fish > ~/.config/fish/conf.d/mise.fish
 mise install
 
 # Setup bashrc
