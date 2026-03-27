@@ -10,6 +10,13 @@
     dest: "{{ docker_config_dir }}/config.json"
     force: false
 
+- name: Create named volume "cde_shared"
+  community.docker.docker_volume:
+    name: cde_shared
+    state: present
+    labels:
+      prune: false
+
 # source: https://dev.to/felipecrs/simply-run-docker-on-wsl2-3o8
 - name: Enable systemd in WSL
   become: true

@@ -36,7 +36,6 @@ volumes:
       prune: false
   cde_shared:
     labels:
-      prune: false
       external: true
   local_share_fish:
     labels:

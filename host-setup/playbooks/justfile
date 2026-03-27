@@ -23,6 +23,7 @@ lint:
 
 galaxy-install:
 	ansible-galaxy role install --role-file requirements.yml --roles-path .ansible/roles/
+	ansible-galaxy collection install --requirements-file requirements.yml --collections-path .ansible/collections
 
 docker: galaxy-install
 	just playbook docker
