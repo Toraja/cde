@@ -37,18 +37,6 @@ repositories:
 			ln --symbolic ${ghq_root}/{{github_repo_subpath}}/cde ~/cde
 	fi
 
-# Fails to authenticate GitHub CLI without these directories which are pointed by symlinks in containers.
-gh-dirs:
-	mkdir --parents ~/.config/gh
-
-# Fails to authenticate GitHub Copilot without these directories which are pointed by symlinks in containers.
-copilot-dirs:
-    mkdir --parents ~/.config/github-copilot/
-
-# Fails to start taskwarrior/tasknote inside containers without these directories which are pointed by symlinks in containers.
-taskwarrior-dirs:
-	mkdir --parents ~/.local/share/taskwarrior/task ~/.local/share/taskopen/notes
-
 [group('Test')]
 test:
 	docker compose run --rm test

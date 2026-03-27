@@ -13,6 +13,9 @@ services:
         source: cde_single
         target: /home/${USER:?}/.cde/mnt/single
       - type: volume
+        source: cde_shared
+        target: /home/${USER:?}/.cde/mnt/shared
+      - type: volume
         source: local_share_fish
         target: /home/${USER:?}/.local/share/fish
       - type: bind
@@ -31,6 +34,9 @@ volumes:
   cde_single:
     labels:
       prune: false
+  cde_shared:
+    labels:
+      external: true
   local_share_fish:
     labels:
       prune: false

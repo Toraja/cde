@@ -78,7 +78,8 @@ ENV PATH="/home/${USER_NAME}/.local/bin:${PATH}"
 
 # Setup tools installed by apt
 # toybox is cloned here as some of them requires it for setup
-RUN mkdir --parents ~/tmp && \
+# Create directories for volume mount destination so that owner:group of those directories are not root
+RUN mkdir --parents ~/tmp ~/.cde/mnt/single ~/.cde/mnt/shared ~/.local/share/fish && \
     git clone --depth 1 https://github.com/Toraja/toybox.git && \
     # man \
     mkdir --parents ~/.local/share/man/man1/ && \
@@ -136,12 +137,12 @@ RUN github-latest-release-installer.sh kdheepak taskwarrior-tui taskwarrior-tui.
 	sudo dpkg --install /tmp/taskwarrior-tui.deb && \
 	rm /tmp/taskwarrior-tui.deb && \
     # taskwarrior \
-    mkdir --parents ~/.local/share/taskwarrior/ && \
-    ln --symbolic ~/.cde/mnt/hosthome/.local/share/taskwarrior/task ~/.local/share/taskwarrior/ && \
+    mkdir --parents ~/.local/share/taskwarrior/ ~/.cde/mnt/shared/.local/share/taskwarrior/task/ && \
+    ln --symbolic ~/.cde/mnt/shared/.local/share/taskwarrior/task ~/.local/share/taskwarrior/ && \
     # tasktnote \
-    mkdir --parents ~/.local/share/taskopen/ && \
+    mkdir --parents ~/.local/share/taskopen/ ~/.cde/mnt/shared/.local/share/taskopen/notes/ && \
     ln --symbolic ~/toybox/taskwarrior/tasknote ~/.local/bin/tasknote && \
-    ln --symbolic ~/.cde/mnt/hosthome/.local/share/taskopen/notes ~/.local/share/taskopen/
+    ln --symbolic ~/.cde/mnt/shared/.local/share/taskopen/notes ~/.local/share/taskopen/
 
 # misc setup
 RUN rm --recursive --force ~/toybox && \
@@ -150,8 +151,6 @@ RUN rm --recursive --force ~/toybox && \
     ln --symbolic ~/.cde/mnt/hosthome/.ssh ~/.ssh && \
     mkdir --parents ~/.docker && ln --symbolic ~/.cde/mnt/hosthome/.docker/config.json ~/.docker/config.json && \
     ln --symbolic ~/workspace/personal.github.com/Toraja/toybox ~/toybox && \
-    mkdir --parents ~/.config/github-copilot/ && ln --symbolic ~/.cde/mnt/hosthome/.config/github-copilot/apps.json ~/.config/github-copilot/ && \
-    # Create directories for volume mount destination so that owner:group of those directories are not root \
-    mkdir --parents ~/.cde/mnt/single ~/.local/share/fish
+    mkdir --parents ~/.config/github-copilot/ ~/.cde/mnt/shared/.config/github-copilot/ && ln --symbolic ~/.cde/mnt/shared/.config/github-copilot/apps.json ~/.config/github-copilot/
 
 CMD ["tail", "-f", "/dev/null"]
