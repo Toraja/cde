@@ -23,8 +23,10 @@ repositories:
 	if [[ ! -d ~/toybox ]]; then
 		git clone {{toybox_repo_url}} ~/toybox
 	fi
-	if ! diff --brief ./fixtures/gitconfig ~/.gitconfig; then
+	if [[ ! -e ~/.gitconfig ]]; then
 		cat ./fixtures/gitconfig > ~/.gitconfig
+	elif ! diff --brief ./fixtures/gitconfig ~/.gitconfig; then
+		echo "gitconfig is in an unexpected state. You might wanna check that the change is valid."
 	fi
 	ghq_root=$(ghq root)
 	if [[ -d ~/toybox && ! -L ~/toybox ]]; then
