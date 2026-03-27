@@ -1,18 +1,19 @@
 # CDE - Containerised Develop Environment
 
 ## Setup
-### Things to do on Host machine
-Refer to [Host setup README](./host-setup/README.md)
-
-#### WSL
-- Do the setup and configuration illustrated in
-  [here](https://github.com/Toraja/candyjar/blob/master/windows/wsl/wsl.adoc)
 
 ### Prepare .env
 Run the below command and and modify `.env`.
 ```sh
 cp .env.example .env
 ```
+
+### Things to do on Host machine
+Refer to [Host setup README](./host-setup/README.md)
+
+#### WSL
+- Do the setup and configuration illustrated in
+  [here](https://github.com/Toraja/candyjar/blob/master/windows/wsl/wsl.adoc)
 
 ### Adding environments
 1. `just new-env <bundle> <project>`
