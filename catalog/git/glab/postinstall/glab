@@ -9,4 +9,4 @@ mise exec glab --command "glab completion --shell fish > ~/.config/fish/completi
 # Delete config dir auto-created by glab command, as `ln` creates symlink inside the directory
 # when link path exists and a directory.
 rm --recursive --force ~/.config/glab-cli
-ln --symbolic --force ~/hosthome/.config/glab-cli ~/.config/glab-cli
+ln --symbolic --force ~/.cde/mnt/hosthome/.config/glab-cli ~/.config/glab-cli
