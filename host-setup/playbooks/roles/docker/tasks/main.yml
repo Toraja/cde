@@ -10,6 +10,22 @@
     dest: "{{ docker_config_dir }}/config.json"
     force: false
 
+- name: Check if cde_shared docker volume exists
+  ansible.builtin.command:
+    cmd: docker volume inspect cde_shared
+  register: cde_shared_volume_info
+  failed_when: false
+  changed_when: false
+
+- name: Create cde_shared docker volume
+  become: true
+  ansible.builtin.command:
+    # White `docker volume create` itself is already idempotent (no error even if the volume exists),
+    # the existence of volume is checked in advance so that `changed_when` can be added.
+    cmd: docker volume create --label prune=false cde_shared
+  when: cde_shared_volume_info.rc != 0
+  changed_when: cde_shared_volume_info.rc != 0
+
 # source: https://dev.to/felipecrs/simply-run-docker-on-wsl2-3o8
 - name: Enable systemd in WSL
   become: true
