@@ -19,5 +19,6 @@ curl https://mise.run | sh
 cp --recursive $fixture_dir/mise ~/.config/
 mise completion --include-bash-completion-lib bash > ~/.local/share/bash-completion/completions/mise.bash
 mise activate bash > ~/.bashrc.d/mise.bash
+cp --recursive $fixture_dir/fish ~/.config/
 mise completion fish > ~/.config/fish/completions/mise.fish
 mise install
