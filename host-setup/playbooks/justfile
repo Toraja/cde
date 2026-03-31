@@ -2,6 +2,9 @@ export ANSIBLE_BECOME_PASSWORD_FILE := '.ansible_become_password'
 
 playbook_check_flags := '--check --diff'
 
+default:
+        @just --list --unsorted
+
 [private]
 @echored +args:
 	echo -e "\e[0;31m{{args}}\e[0;0m"
