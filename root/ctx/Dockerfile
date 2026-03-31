@@ -4,6 +4,8 @@ FROM rust:latest AS taskwarrior
 
 SHELL ["/bin/bash", "-eo", "pipefail", "-c"]
 
+RUN --mount=type=bind,source=helpers/proxy.sh,target=/tmp/proxy.sh /tmp/proxy.sh
+
 RUN rm --force /etc/apt/apt.conf.d/docker-clean; echo 'Binary::apt::APT::Keep-Downloaded-Packages "true";' > /etc/apt/apt.conf.d/keep-cache
 RUN --mount=type=cache,id=apt-cache,target=/var/cache/apt,sharing=locked --mount=type=cache,id=apt-cache,target=/var/lib/apt,sharing=locked \
     apt-get update && apt-get upgrade --no-install-recommends --yes && apt-get install --no-install-recommends --yes \
