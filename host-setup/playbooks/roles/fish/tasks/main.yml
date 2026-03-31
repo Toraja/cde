@@ -8,11 +8,17 @@
       - dirmngr
       - gpg-agent
 
-- name: Add fish apt repository
+# This fails behind a proxy as apt_repository module still uses apt-key, which is deprecated and apparently ignores proxy settings.
+# - name: Add fish apt repository
+#   become: true
+#   ansible.builtin.apt_repository:
+#     repo: ppa:fish-shell/release-4
+#     state: present
+
+- name: Register fish path
   become: true
-  ansible.builtin.apt_repository:
-    repo: ppa:fish-shell/release-4
-    state: present
+  ansible.builtin.command:
+    cmd: add-apt-repository --yes ppa:fish-shell/release-4
 
 - name: Install fish package
   ansible.builtin.include_role:
@@ -40,7 +46,7 @@
   ansible.builtin.user:
     name: "{{ lookup('ansible.builtin.env', 'USER', default=Undefined) }}"
     shell: "{{ register_fish_path.stdout }}"
-  # This fails in some environment, where the user is not in passwd for example
+  # This fails in some environment, where the user is not in passwd for example (e.g. users managed by LDAP)
   ignore_errors: true
 
 - name: Create fish conf.d directory
