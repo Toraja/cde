@@ -30,6 +30,13 @@ sudo ln --symbolic ~ /home/coder
 
 rsync --archive --backup "$script_dir/home/" ~
 echo 'mod code-server' >> ~/.config/just/justfile
+config_file="~/.config/code-server/config.yaml"
+if [ -n "$CODE_SERVER_BIND_ADDR" ]; then
+  sed --in-place "s/^bind-addr: .*/bind-addr: ${CODE_SERVER_BIND_ADDR}/" "$config_file"
+fi
+if [ -n "$CODE_SERVER_CERT" ]; then
+  sed --in-place "s/^cert: .*/cert: ${CODE_SERVER_CERT}/" "$config_file"
+fi
 
 curl --fail --silent --show-error --location \
   "https://marketplace.visualstudio.com/_apis/public/gallery/publishers/GitHub/vsextensions/copilot-chat/${CODE_SERVER_COPILOT_CHAT_VERSION:-latest}/vspackage" |
