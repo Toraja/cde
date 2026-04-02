@@ -1,5 +1,9 @@
 bind-addr: 127.0.0.1:8080
 auth: password
+# code-server sets up self-signed certificate for you.
+# See https://coder.com/docs/code-server/guide#using-a-self-signed-certificate
+# While `setcap` command is used in the instruction, it is entirely optional and only necessary
+# if you need the port to be 443 (or any number < 1024).
 cert: false
 # Separate directory for installing extensions so that volume mounting ~/.local/share/code-server
 # does not result in old extensions overwriting newer ones installed during build.
