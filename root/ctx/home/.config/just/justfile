@@ -1,0 +1,2 @@
+default:
+	@just --global-justfile --list --unsorted
