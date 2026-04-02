@@ -28,8 +28,7 @@ curl --fail --silent --show-error --location https://code-server.dev/install.sh 
 # There seems to be no option to change it, so as a workaround, create symbolic link to home directory.
 sudo ln --symbolic ~ /home/coder
 
-cp --recursive -- "$script_dir/.config" ~
-cp --recursive -- "$script_dir/.local" ~
+rsync --archive --backup "$script_dir/home/" ~
 
 curl --fail --silent --show-error --location \
   "https://marketplace.visualstudio.com/_apis/public/gallery/publishers/GitHub/vsextensions/copilot-chat/${COPILOT_CHAT_VERSION:-latest}/vspackage" |

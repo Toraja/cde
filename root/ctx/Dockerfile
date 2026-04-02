@@ -57,7 +57,7 @@ RUN --mount=type=cache,id=apt-cache,target=/var/cache/apt,sharing=locked --mount
     && apt-add-repository --yes ppa:git-core/ppa \
     && apt-add-repository --yes ppa:lepapareil/hurl \
     && apt-get update && apt-get install --no-install-recommends --yes \
-        sudo less man-db locales tree openssh-client unzip wget gettext-base pipx \
+        sudo less man-db locales tree openssh-client unzip rsync wget gettext-base pipx \
         git git-lfs make xclip net-tools netcat-openbsd dnsutils fish vim tmux \
         keychain file skopeo jq pwgen hurl \
     # Without this, `man` complains that $LC_* is not set \
