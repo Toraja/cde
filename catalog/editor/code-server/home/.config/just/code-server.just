@@ -10,7 +10,7 @@ run *flags: pass
 pass:
 	#!/bin/bash
 	if [ "$(yq '.password' {{config_path}})" = "null" ]; then
-		yq -i '.password = "'"$(openssl rand -base64 32 | tr -d '/+=' | head -c 32)"'"' {{config_path}}
+		yq --inplace '.password = "'"$(openssl rand -base64 32 | tr --delete '/+=' | head --bytes 32)"'"' {{config_path}}
 		echo "Password added to {{config_path}}"
 	fi
 	echo Password: $(yq '.password' {{config_path}})
