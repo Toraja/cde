@@ -1,6 +1,11 @@
 #!/bin/bash
 set -eo pipefail
 
+sudo apt-get update
+# lsof is required by opencode.nvim
+sudo apt-get install --no-install-recommends --yes \
+  lsof
+
 script_dir=$(dirname "$0")
 catalog_name=$(basename "$script_dir")
 mise_install=false
