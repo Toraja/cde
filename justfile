@@ -25,7 +25,7 @@ default:
 	echo -e "\e[0;36m{{args}}\e[0;0m"
 
 [private]
-@docker_service:
+@docker-service:
 	if test -f helpers/start-docker-service.sh; then \
 		helpers/start-docker-service.sh; \
 	else \
@@ -33,22 +33,22 @@ default:
 	fi
 
 [private]
-@validate_cde cde:
+@validate-cde cde:
 	if ! test -d {{cde}}; then \
 		just echored 'Invalid cde: {{cde}}'; \
 		exit 1; \
 	fi
 
 [private]
-pull_base_images: docker_service
+pull-base-images: docker-service
 	docker pull ubuntu:$BASE_IMAGE_TAG
 	docker pull rust:latest
 
 # Build specified targets
-build target *bakeflag: docker_service pull_base_images (build-no-pull-base target bakeflag)
+build target *bakeflag: docker-service pull-base-images (build-no-pull-base target bakeflag)
 
 # Build specified targets without pulling base images
-build-no-pull-base target *bakeflag: docker_service
+build-no-pull-base target *bakeflag: docker-service
 	#!/usr/bin/env fish
 	set --export BUILDX_BAKE_ENTITLEMENTS_FS 0
 	set target (string replace '/' '_' {{trim_start_match(trim_end_match(target, '/'), 'env/')}})
@@ -60,7 +60,7 @@ build-no-pull-base target *bakeflag: docker_service
 # Parse and print bake file
 build-print target: (build-no-pull-base target '--print')
 
-config cde="": (validate_cde cde)
+config cde="": (validate-cde cde)
 	#!/usr/bin/env fish
 	if test -n "{{cde}}"
 		set env_root (string replace --regex '([^/]+/[^/]+/).*' '$1' {{cde}})
@@ -68,7 +68,7 @@ config cde="": (validate_cde cde)
 	end
 	{{compose_cmd}} $flag config --no-interpolate
 
-compose cde +args: (validate_cde cde)
+compose cde +args: (validate-cde cde)
 	#!/usr/bin/env fish
 	# Specify COMPOSE_PROJECT_NAME (which is the service name by default) to avoid the collision of container name and volume name between CDEs
 	set cde {{trim_start_match(trim_end_match(cde, '/'), 'env/')}}
