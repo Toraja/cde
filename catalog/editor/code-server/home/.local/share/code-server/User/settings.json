@@ -1,4 +1,12 @@
 {
-  "workbench.colorTheme": "Default Dark+",
-  "chat.agent.maxRequests": 10000
+  "chat.agent.maxRequests": 10000,
+  "chat.editor.fontSize": 15,
+  "chat.fontSize": 14,
+  "chat.viewSessions.orientation": "stacked",
+  "git.confirmSync": false,
+  "git.enableSmartCommit": true,
+  "git.replaceTagsWhenPull": true,
+  "terminal.integrated.defaultProfile.linux": "bash",
+  "terminal.integrated.sendKeybindingsToShell": true,
+  "workbench.colorTheme": "Default Dark+"
 }
