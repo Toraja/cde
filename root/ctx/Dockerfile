@@ -140,6 +140,7 @@ RUN github-latest-release-installer.sh kdheepak taskwarrior-tui taskwarrior-tui.
     # taskwarrior \
     mkdir --parents ~/.local/share/taskwarrior/ ~/.cde/mnt/shared/.local/share/taskwarrior/task/ && \
     ln --symbolic ~/.cde/mnt/shared/.local/share/taskwarrior/task ~/.local/share/taskwarrior/ && \
+    ln --symbolic ~/toybox/taskwarrior/hooks ~/.local/share/taskwarrior/task/ && \
     # tasktnote \
     mkdir --parents ~/.local/share/taskopen/ ~/.cde/mnt/shared/.local/share/taskopen/notes/ && \
     ln --symbolic ~/toybox/taskwarrior/tasknote ~/.local/bin/tasknote && \
