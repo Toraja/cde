@@ -56,6 +56,32 @@ Use justfile for WSL.
 just --justfile wsl.just <recipe>
 ```
 
+### Tips
+
+#### Change the tag of built image
+By default, the image is tagged as `:latest`. Set `RESULT_IMAGE_TAG` environment variable to change the tag.
+```sh
+RESULT_IMAGE_TAG=<tag> just build env/<path to project>
+```
+
+#### Run a container of a non-default image
+Likewise, set `RESULT_IMAGE_TAG` environment variable to specify the tag.
+```sh
+RESULT_IMAGE_TAG=<tag> just <recipe> env/<path to project>
+```
+
+If a container of same env is already running, you need to set `COMPOSE_PROJECT_NAME` environment variable as well to run as another container.
+```sh
+COMPOSE_PROJECT_NAME=<project> RESULT_IMAGE_TAG=<tag> just <recipe> env/<path to project>
+```
+
+#### Run a container as a non-default name
+If you want to run the container with a different name, you can set `COMPOSE_PROJECT_NAME` environment variable.  
+This is useful when you have built a new image of the same env and want to run the container with the new image without stopping the old one.
+```sh
+COMPOSE_PROJECT_NAME=<project> just <recipe> env/<path to project>
+```
+
 ## Development notes
 
 ### Symlink
