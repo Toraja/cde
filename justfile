@@ -77,7 +77,11 @@ compose cde +args: (validate-cde cde)
 		set env_root (string replace --regex '([^/]+/[^/]+/).*' '$1' {{cde}})
 		test -f $env_root/compose.yml && set flag --file $env_root/compose.yml
 	end
-	PRIMARY_CDE=$cde \
+	set image_name $cde
+	if test -n "$RESULT_IMAGE_TAG"
+		set image_name "$image_name:$RESULT_IMAGE_TAG"
+	end
+	IMAGE_NAME=$image_name \
 	CDE_HOSTNAME=(string replace '/' '.' "$cde") \
 	TZ=(cat /etc/timezone) \
 	{{compose_cmd}} $flag {{args}}
