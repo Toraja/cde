@@ -30,7 +30,7 @@ sudo ln --symbolic ~ /home/coder
 
 rsync --archive --backup "$script_dir/home/" ~
 echo 'mod code-server' >> ~/.config/just/justfile
-config_file="~/.config/code-server/config.yaml"
+config_file="$HOME/.config/code-server/config.yaml"
 if [ -n "$CODE_SERVER_BIND_ADDR" ]; then
   sed --in-place "s/^bind-addr: .*/bind-addr: ${CODE_SERVER_BIND_ADDR}/" "$config_file"
 fi
