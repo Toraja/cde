@@ -48,10 +48,19 @@ variable "ENV_BUNDLE" {
   }
 }
 
-function "tagname" {
+variable "RESULT_IMAGE_TAG" {
+  default = ""
+}
+
+function "imagename" {
   params = []
   variadic_params = items
   result = join("/", ["cde", ENV_BUNDLE, join("/", items)])
+}
+function "tagname" {
+  params = []
+  variadic_params = items
+  result = notequal(RESULT_IMAGE_TAG, "") ? "${imagename(items...)}:${RESULT_IMAGE_TAG}" : imagename(items...)
 }
 function "envbundleprefix" {
   params = []
