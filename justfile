@@ -96,7 +96,14 @@ stop cde: (compose cde 'stop')
 
 down cde: (compose cde 'down')
 
-destroy cde: (compose cde 'down -v')
+destroy cde:
+	#!/usr/bin/env fish
+	read --prompt-str "This will remove all containers and volumes for {{cde}}. Are you sure? [y/N] " confirm
+	if test "$confirm" != "y"
+		echo "Aborting."
+		exit 0
+	end
+	just compose {{cde}} 'down --volumes'
 
 new-env bundle project:
 	#!/usr/bin/env bash
