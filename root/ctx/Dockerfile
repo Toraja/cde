@@ -23,6 +23,8 @@ RUN --mount=type=secret,id=GITHUB_TOKEN,env=GITHUB_TOKEN \
 
 FROM ubuntu:${BASE_IMAGE_TAG:-rolling}
 
+RUN --mount=type=bind,source=helpers/proxy.sh,target=/tmp/proxy.sh /tmp/proxy.sh
+
 # `unminimize` is required to use `man`
 RUN rm --force /etc/apt/apt.conf.d/docker-clean; echo 'Binary::apt::APT::Keep-Downloaded-Packages "true";' > /etc/apt/apt.conf.d/keep-cache
 RUN --mount=type=cache,id=apt-cache,target=/var/cache/apt,sharing=locked --mount=type=cache,id=apt-cache,target=/var/lib/apt,sharing=locked \
