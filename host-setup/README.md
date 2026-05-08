@@ -12,4 +12,14 @@
 - Make sure `curl` is installed.
 - Run `first-step.sh` to setup prerequisite stuff.
 - Run recipes in `justfile`.
-    - To run recipes in playbooks modules, add your sudo password to `<project_root>/host-setup/playbooks/.ansible_become_password` file.
+  - To run recipes in playbooks modules, add your sudo password to `<project_root>/host-setup/playbooks/.ansible_become_password` file.
+  - If proxy is required, add proxy info to `/etc/environment`.  
+    `/etc/environment` is commont setting for both root and non-root users. As some playbook tasks require root priviledge, make sure proxy setting is also effective to root user.
+    ```
+    HTTP_PROXY=<PROXY_HOST_PORT>
+    HTTPS_PROXY=<PROXY_HOST_PORT>
+    NO_PROXY=localhost,127.0.0.0/8
+    http_proxy=<PROXY_HOST_PORT>
+    https_proxy=<PROXY_HOST_PORT>
+    no_proxy=localhost,127.0.0.0/8
+    ```
