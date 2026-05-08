@@ -72,7 +72,12 @@ compose cde +args: (validate-cde cde)
 	#!/usr/bin/env fish
 	# Specify COMPOSE_PROJECT_NAME (which is the service name by default) to avoid the collision of container name and volume name between CDEs
 	set cde {{trim_start_match(trim_end_match(cde, '/'), 'env/')}}
-	set --query COMPOSE_PROJECT_NAME || set --export COMPOSE_PROJECT_NAME (string replace '/' '_' "$cde")
+	if set --query COMPOSE_PROJECT_NAME
+		set cde_hostname (string replace '/' '.' "$COMPOSE_PROJECT_NAME")
+	else
+		set --export COMPOSE_PROJECT_NAME (string replace '/' '_' "$cde")
+		set cde_hostname (string replace '/' '.' "$cde")
+	end
 	if test -n "{{cde}}"
 		set env_root (string replace --regex '([^/]+/[^/]+/).*' '$1' {{cde}})
 		test -f $env_root/compose.yml && set flag --file $env_root/compose.yml
@@ -82,7 +87,7 @@ compose cde +args: (validate-cde cde)
 		set image_name "$image_name:$RESULT_IMAGE_TAG"
 	end
 	IMAGE_NAME=$image_name \
-	CDE_HOSTNAME=(string replace '/' '.' "$cde") \
+	CDE_HOSTNAME=$cde_hostname \
 	TZ=(cat /etc/timezone) \
 	{{compose_cmd}} $flag {{args}}
 
