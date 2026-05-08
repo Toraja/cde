@@ -109,6 +109,16 @@ destroy cde:
 	end
 	just compose {{cde}} 'down --volumes'
 
+@resources cde:
+	echo [Containers]
+	just compose {{cde}} ps
+	echo
+	echo [Images]
+	just compose {{cde}} images
+	echo
+	echo [Volumes]
+	just compose {{cde}} volumes
+
 new-env bundle project:
 	#!/usr/bin/env bash
 	set -euo pipefail
