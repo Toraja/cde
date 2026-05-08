@@ -98,7 +98,11 @@ down cde: (compose cde 'down')
 
 destroy cde:
 	#!/usr/bin/env fish
-	read --prompt-str "This will remove all containers and volumes for {{cde}}. Are you sure? [y/N] " confirm
+	set cde {{cde}}
+	if test -n "$COMPOSE_PROJECT_NAME"
+		set cde "$cde ($COMPOSE_PROJECT_NAME)"
+	end
+	read --prompt-str "This will remove all containers and volumes for $cde. Are you sure? [y/N] " confirm
 	if test "$confirm" != "y"
 		echo "Aborting."
 		exit 0
