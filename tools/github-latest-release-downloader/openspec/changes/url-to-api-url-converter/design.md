@@ -21,9 +21,10 @@ This is a new Rust CLI tool (`github-latest-release-downloader`) with no existin
 - `clap` is the de facto standard for Rust CLI argument parsing; provides help text and error messages for free.
 - Alternative: `std::env::args()` directly - rejected as too manual for a CLI that will grow.
 
-**URL parsing: `url` crate or manual string parsing**
-- The GitHub repo URL has a predictable structure (`https://github.com/<owner>/<repo>`). Manual parsing with `split('/')` is sufficient and avoids an extra dependency for this iteration.
-- The `url` crate can be added later if URL handling grows more complex.
+**URL parsing: `url` crate**
+- The `url` crate is used to parse the input URL. By typing `Cli.url` as `url::Url`, `clap` validates the URL format automatically before any application logic runs, eliminating manual scheme-stripping and host extraction.
+- This simplifies `to_api_url` to work directly with the parsed `url::Url` struct (accessing `.host_str()` and `.path_segments()`) rather than splitting raw strings.
+- Alternative considered: manual parsing with `split('/')` — rejected because it requires reimplementing what the `url` crate already provides correctly (scheme handling, percent-encoding, etc.).
 
 **Output: stdout only**
 - The converted URL is printed to stdout, making the tool composable in shell pipelines.
