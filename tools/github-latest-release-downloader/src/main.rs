@@ -9,7 +9,7 @@ struct Cli {
     url: Url,
 }
 
-fn to_api_url(url: &Url) -> Result<String, String> {
+fn to_api_url(url: &Url) -> Result<Url, String> {
     if url.host_str() != Some("github.com") {
         return Err(format!(
             "Invalid URL: host must be github.com, got {}",
@@ -32,17 +32,18 @@ fn to_api_url(url: &Url) -> Result<String, String> {
     let owner = segments[0];
     let repo = segments[1];
 
-    Ok(format!(
+    Url::parse(&format!(
         "https://api.github.com/repos/{}/{}/releases/latest",
         owner, repo
     ))
+    .map_err(|e| e.to_string())
 }
 
 fn main() {
     let cli = Cli::parse();
 
     match to_api_url(&cli.url) {
-        Ok(api_url) => println!("{}", api_url),
+        Ok(api_url) => println!("{}", api_url.as_str()),
         Err(e) => {
             eprintln!("Error: {}", e);
             std::process::exit(1);
@@ -59,7 +60,7 @@ mod tests {
         let url = Url::parse("https://github.com/owner/repo").unwrap();
         assert_eq!(
             to_api_url(&url),
-            Ok("https://api.github.com/repos/owner/repo/releases/latest".to_string())
+            Ok(Url::parse("https://api.github.com/repos/owner/repo/releases/latest").unwrap())
         );
     }
 
@@ -68,7 +69,7 @@ mod tests {
         let url = Url::parse("https://github.com/owner/repo/").unwrap();
         assert_eq!(
             to_api_url(&url),
-            Ok("https://api.github.com/repos/owner/repo/releases/latest".to_string())
+            Ok(Url::parse("https://api.github.com/repos/owner/repo/releases/latest").unwrap())
         );
     }
 
