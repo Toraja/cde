@@ -22,3 +22,11 @@
 ## 5. Tests
 
 - [x] 5.1 Add unit tests for `to_api_url` covering: standard URL, trailing slash URL, non-GitHub domain, missing repo segment
+
+## 6. Refactor: Use `url::Url` for CLI argument
+
+- [ ] 6.1 Add `url` crate dependency to `Cargo.toml`
+- [ ] 6.2 Change `Cli.url` field type from `String` to `url::Url`
+- [ ] 6.3 Update `to_api_url` signature to accept `&url::Url` instead of `&str` and simplify validation logic to use parsed URL fields
+- [ ] 6.4 Update call site in `main` to pass `&cli.url` directly
+- [ ] 6.5 Update unit tests to construct `url::Url` values via `Url::parse` instead of raw strings
