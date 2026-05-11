@@ -12,15 +12,15 @@ The CLI SHALL accept a single GitHub repository URL as a positional argument.
 - **THEN** the CLI exits with a non-zero code and prints a usage/help message to stderr
 
 ### Requirement: Convert GitHub repo URL to API latest release URL
-The CLI SHALL convert a GitHub repo URL of the form `https://github.com/<owner>/<repo>` to `https://api.github.com/repos/<owner>/<repo>/releases/latest`.
+The CLI SHALL convert a GitHub repo URL of the form `https://github.com/<owner>/<repo>` to a `url::Url` representing `https://api.github.com/repos/<owner>/<repo>/releases/latest`.
 
 #### Scenario: Standard URL without trailing slash
 - **WHEN** the input is `https://github.com/owner/repo`
-- **THEN** the output is `https://api.github.com/repos/owner/repo/releases/latest`
+- **THEN** the output is a `url::Url` equal to `https://api.github.com/repos/owner/repo/releases/latest`
 
 #### Scenario: URL with trailing slash
 - **WHEN** the input is `https://github.com/owner/repo/`
-- **THEN** the output is `https://api.github.com/repos/owner/repo/releases/latest` (trailing slash ignored)
+- **THEN** the output is a `url::Url` equal to `https://api.github.com/repos/owner/repo/releases/latest` (trailing slash ignored)
 
 ### Requirement: Reject invalid or non-GitHub URLs
 The CLI SHALL exit with a non-zero code and print an error message to stderr when the input URL is not a valid GitHub repo URL.
