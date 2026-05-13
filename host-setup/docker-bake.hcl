@@ -1,8 +1,5 @@
 variable "IMAGE_TAG" {
-  validation {
-    condition = IMAGE_TAG != ""
-    error_message = "IMAGE_TAG is required"
-  }
+  default = "latest"
 }
 variable "USER_ID" {
   validation {
