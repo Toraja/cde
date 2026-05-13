@@ -2,7 +2,9 @@ ARG IMAGE_TAG
 # Use `latest` as the host is usually on LTS version
 FROM ubuntu:${IMAGE_TAG:-latest}
 
-RUN yes | unminimize
+RUN apt-get update && apt-get upgrade --no-install-recommends --yes && apt-get install --no-install-recommends --yes \
+    unminimize && \
+	yes | unminimize
 
 RUN apt-get update && apt-get upgrade --no-install-recommends --yes && apt-get install --no-install-recommends --yes \
     sudo less man-db locales curl ca-certificates lsb-release bash-completion git openssh-client  && \
