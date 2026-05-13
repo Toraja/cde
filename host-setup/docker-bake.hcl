@@ -38,4 +38,7 @@ target "test" {
     GROUP_NAME = GROUP_NAME
   }
   tags = ["cde/host-setup-test"]
+  secret = [
+    { type = "env", id = "GITHUB_TOKEN" },
+  ]
 }

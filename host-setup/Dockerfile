@@ -26,4 +26,5 @@ USER ${USER_NAME}
 COPY --chown=${USER_NAME}:${GROUP_NAME} ./ /home/${USER_NAME}/wd/
 WORKDIR /home/${USER_NAME}/wd/
 
-RUN ./first-step.sh
+RUN --mount=type=secret,id=GITHUB_TOKEN,env=GITHUB_TOKEN \
+	./first-step.sh

@@ -1,4 +1,5 @@
 set shell := ['/usr/bin/bash', '-c']
+set dotenv-path := "../.env"
 
 export USER_ID := `id -u`
 export USER_NAME := `whoami`
