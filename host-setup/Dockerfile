@@ -7,8 +7,10 @@ RUN apt-get update && apt-get upgrade --no-install-recommends --yes && apt-get i
 	yes | unminimize
 
 RUN apt-get update && apt-get upgrade --no-install-recommends --yes && apt-get install --no-install-recommends --yes \
-    sudo less man-db locales curl ca-certificates lsb-release bash-completion git openssh-client  && \
-    locale-gen en_US.UTF-8
+    sudo less man-db curl ca-certificates lsb-release bash-completion git openssh-client
+
+# Multibyte character support
+ENV LC_ALL=C.UTF-8
 
 ARG USER_ID
 ARG USER_NAME
