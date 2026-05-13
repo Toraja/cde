@@ -5,9 +5,4 @@ auth: password
 # While `setcap` command is used in the instruction, it is entirely optional and only necessary
 # if you need the port to be 443 (or any number < 1024).
 cert: false
-# Separate directory for installing extensions so that volume mounting ~/.local/share/code-server
-# does not result in old extensions overwriting newer ones installed during build.
-# `~` will not be expanded to home directory, and since the home directory (user name) is variable,
-# use /home/coder instead as it is a symlink to the user's actual home directory.
-extensions-dir: /home/coder/.local/share/code-server-extensions
 disable-workspace-trust: true
