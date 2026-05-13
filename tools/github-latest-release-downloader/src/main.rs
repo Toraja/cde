@@ -171,6 +171,7 @@ mod tests {
     }
 
     #[test]
+    #[allow(clippy::invalid_regex)]
     fn test_invalid_regex() {
         assert!(Regex::new("[invalid").is_err());
     }
