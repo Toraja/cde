@@ -10,6 +10,16 @@
 - name: Install taskwarrior-tui
   when: not latest_binary_is_installed
   block:
-    - name: Install taskwarrior-tui
+    - name: Download taskwarrior-tui.deb
       ansible.builtin.command:
-        cmd: ../github-latest-release-installer.sh -t kdheepak taskwarrior-tui taskwarrior-tui-x86_64-unknown-linux-gnu.tar.gz ~/.local/bin
+        cmd: ../github-latest-release-installer.sh kdheepak taskwarrior-tui taskwarrior-tui.deb /tmp/taskwarrior-tui.deb
+        creates: /tmp/taskwarrior-tui.deb
+    - name: Install taskwarrior-tui from deb file
+      become: true
+      ansible.builtin.apt:
+        deb: /tmp/taskwarrior-tui.deb
+        state: present
+    - name: Remove taskwarrior-tui.deb
+      ansible.builtin.file:
+        path: /tmp/taskwarrior-tui.deb
+        state: absent
