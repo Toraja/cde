@@ -25,11 +25,19 @@ mise install
 # curl --location --silent --show-error --fail https://get.nexte.st/latest/linux | tar -zxf - --directory $(dirname $(asdf which cargo))
 mise exec rust cargo-binstall --command 'cargo binstall cargo-nextest --secure'
 
-workdir=/tmp/codelldb
-mkdir --parents $workdir
-github-latest-release-installer.sh vadimcn codelldb 'codelldb-linux-x64.vsix' $workdir/codelldb.vsix
-unzip -o $workdir/codelldb.vsix -d $workdir
-mv $workdir/extension.vsixmanifest $workdir/extension/.vsixmanifest
-mkdir --parents ~/.local/share/code-server/extensions/
-mv $workdir/extension ~/.local/share/code-server/extensions/vadimcn.vscode-lldb
-rm --recursive --dir --force $workdir
+# Used by rustaceanvim
+code_server_extension_dir=~/.local/share/code-server/extensions
+codelldb_path=$(find $code_server_extension_dir -mindepth 1 -maxdepth 1 -type d -name "vadimcn.vscode-lldb*" | head -1)
+if [ -z "$codelldb_path" ]; then
+  workdir=/tmp/codelldb
+  mkdir --parents $workdir
+  github-latest-release-installer.sh vadimcn codelldb 'codelldb-linux-x64.vsix' $workdir/codelldb.vsix
+  unzip -o $workdir/codelldb.vsix -d $workdir
+  mv $workdir/extension.vsixmanifest $workdir/extension/.vsixmanifest
+  mkdir --parents $code_server_extension_dir
+  # Usually the directory name is vadimcn.vscode-lldb-<version>, but it is hard to determine the version, so just use vadimcn.vscode-lldb
+  mv $workdir/extension $code_server_extension_dir/vadimcn.vscode-lldb
+  rm --recursive --dir --force $workdir
+else
+  ln --symbolic $codelldb_path $code_server_extension_dir/vadimcn.vscode-lldb
+fi
