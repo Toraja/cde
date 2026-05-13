@@ -5,4 +5,5 @@ kubectl = { version = 'latest', postinstall = 'mise exec kubectl --command "kube
 kind = { version = 'latest', postinstall = 'mise exec kind --command "kind completion fish > ~/.config/fish/completions/kind.fish"' }
 k9s = { version = 'latest', postinstall = 'mise exec k9s --command "k9s completion fish > ~/.config/fish/completions/k9s.fish"' }
 helm = { version = 'latest', postinstall = 'mise exec helm --command "helm completion fish > ~/.config/fish/completions/helm.fish && helm plugin install https://github.com/databus23/helm-diff --verify=false"' }
+helm-ls = { version = 'latest' }
 helmfile = { version = 'latest', postinstall = 'mise exec helmfile --command "helmfile completion fish > ~/.config/fish/completions/helmfile.fish"' }
