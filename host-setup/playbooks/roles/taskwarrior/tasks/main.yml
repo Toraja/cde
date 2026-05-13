@@ -1,14 +1,14 @@
 - name: Install and setup taskwarrior
   tags:
     - taskwarrior-core
-  ansible.builtin.include_tasks: taskwarrior.yml
+  ansible.builtin.import_tasks: taskwarrior.yml
 
 - name: Install and setup taskwarrior-tui
   tags:
     - taskwarrior-tui
-  ansible.builtin.include_tasks: taskwarrior-tui.yml
+  ansible.builtin.import_tasks: taskwarrior-tui.yml
 
 - name: Install tasknote
   tags:
     - tasknote
-  ansible.builtin.include_tasks: tasknote.yml
+  ansible.builtin.import_tasks: tasknote.yml
