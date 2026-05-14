@@ -1,5 +1,6 @@
-use std::fs::File;
+use std::fs::{self, File};
 use std::io;
+use std::path::{Path, PathBuf};
 
 use clap::Parser;
 use regex::Regex;
@@ -21,6 +22,20 @@ struct Cli {
 
     /// Regex pattern to match against asset names (must match exactly one asset)
     pattern: Regex,
+
+    /// Directory in which to save the downloaded asset (original filename is preserved).
+    /// Parent directories are created automatically if they do not exist.
+    /// Mutually exclusive with --output.
+    #[arg(short = 'D', long, conflicts_with = "output")]
+    dir: Option<PathBuf>,
+
+    /// Exact file path at which to save the downloaded asset (enables renaming).
+    /// If the path already exists as a file it will be overwritten.
+    /// Must not point to an existing directory.
+    /// Parent directories are created automatically if they do not exist.
+    /// Mutually exclusive with --dir.
+    #[arg(short = 'O', long, conflicts_with = "dir")]
+    output: Option<PathBuf>,
 }
 
 #[derive(Debug, Deserialize)]
@@ -108,18 +123,44 @@ fn select_asset<'a>(assets: &'a [Asset], pattern: &Regex) -> Result<&'a Asset, S
     }
 }
 
-fn download_asset(asset: &Asset) -> Result<(), String> {
+fn resolve_output_path(
+    asset_name: &str,
+    dir: Option<&Path>,
+    output: Option<&Path>,
+) -> Result<PathBuf, String> {
+    if let Some(output) = output {
+        if output.is_dir() {
+            return Err(format!(
+                "--output path '{}' is an existing directory; use --dir to save into a directory",
+                output.display()
+            ));
+        }
+        return Ok(output.to_path_buf());
+    }
+
+    let base = dir.unwrap_or_else(|| Path::new("."));
+    Ok(base.join(asset_name))
+}
+
+fn download_asset(asset: &Asset, dest: &Path) -> Result<(), String> {
     let mut response = ureq::get(&asset.browser_download_url)
         .header("User-Agent", "github-latest-release-downloader")
         .call()
         .map_err(|e| format!("Download request failed: {}", e))?;
 
-    let mut file = File::create(&asset.name)
-        .map_err(|e| format!("Failed to create file '{}': {}", asset.name, e))?;
+    if let Some(parent) = dest.parent() {
+        if !parent.as_os_str().is_empty() {
+            fs::create_dir_all(parent)
+                .map_err(|e| format!("Failed to create directory '{}': {}", parent.display(), e))?;
+        }
+    }
+
+    let mut file = File::create(dest)
+        .map_err(|e| format!("Failed to create file '{}': {}", dest.display(), e))?;
 
     let mut reader = response.body_mut().as_reader();
     io::copy(&mut reader, &mut file)
-        .map_err(|e| format!("Failed to write '{}': {}", asset.name, e))?;
+        .map_err(|e| format!("Failed to write '{}': {}", dest.display(), e))?;
 
     Ok(())
 }
@@ -151,12 +192,24 @@ fn main() {
         }
     };
 
-    if let Err(e) = download_asset(asset) {
+    let dest = match resolve_output_path(
+        &asset.name,
+        cli.dir.as_deref(),
+        cli.output.as_deref(),
+    ) {
+        Ok(p) => p,
+        Err(e) => {
+            eprintln!("Error: {}", e);
+            std::process::exit(1);
+        }
+    };
+
+    if let Err(e) = download_asset(asset, &dest) {
         eprintln!("Error: {}", e);
         std::process::exit(1);
     }
 
-    println!("Downloaded: {}", asset.name);
+    println!("Downloaded: {}", dest.display());
 }
 
 #[cfg(test)]
@@ -243,5 +296,62 @@ mod tests {
     fn test_missing_repo_segment() {
         let url = Url::parse("https://github.com/owner").unwrap();
         assert!(to_api_url(&url).is_err());
+    }
+
+    // --- resolve_output_path tests ---
+
+    #[test]
+    fn test_resolve_no_flags_uses_current_dir() {
+        let path = resolve_output_path("asset.tar.gz", None, None).unwrap();
+        assert_eq!(path, Path::new(".").join("asset.tar.gz"));
+    }
+
+    #[test]
+    fn test_resolve_dir_existing_appends_filename() {
+        let tmp = tempfile::tempdir().unwrap();
+        let path = resolve_output_path("asset.tar.gz", Some(tmp.path()), None).unwrap();
+        assert_eq!(path, tmp.path().join("asset.tar.gz"));
+    }
+
+    #[test]
+    fn test_resolve_dir_non_existing_appends_filename() {
+        let tmp = tempfile::tempdir().unwrap();
+        let non_existing = tmp.path().join("subdir");
+        let path = resolve_output_path("asset.tar.gz", Some(&non_existing), None).unwrap();
+        assert_eq!(path, non_existing.join("asset.tar.gz"));
+    }
+
+    #[test]
+    fn test_resolve_output_non_existing_path_used_as_is() {
+        let path = resolve_output_path("asset.tar.gz", None, Some(Path::new("/tmp/renamed.bin"))).unwrap();
+        assert_eq!(path, Path::new("/tmp/renamed.bin"));
+    }
+
+    #[test]
+    fn test_resolve_output_existing_file_used_as_is() {
+        let tmp = tempfile::tempdir().unwrap();
+        let file_path = tmp.path().join("existing.bin");
+        File::create(&file_path).unwrap();
+        let path = resolve_output_path("asset.tar.gz", None, Some(&file_path)).unwrap();
+        assert_eq!(path, file_path);
+    }
+
+    #[test]
+    fn test_resolve_output_existing_directory_returns_error() {
+        let tmp = tempfile::tempdir().unwrap();
+        let err = resolve_output_path("asset.tar.gz", None, Some(tmp.path())).unwrap_err();
+        assert!(err.contains("existing directory"));
+    }
+
+    #[test]
+    fn test_dir_and_output_mutually_exclusive() {
+        let result = Cli::try_parse_from([
+            "prog",
+            "https://github.com/owner/repo",
+            "pattern",
+            "--dir", "/tmp",
+            "--output", "/tmp/file.bin",
+        ]);
+        assert!(result.is_err());
     }
 }
