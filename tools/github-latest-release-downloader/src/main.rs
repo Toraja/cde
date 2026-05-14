@@ -148,11 +148,11 @@ fn download_asset(asset: &Asset, dest: &Path) -> Result<(), String> {
         .call()
         .map_err(|e| format!("Download request failed: {}", e))?;
 
-    if let Some(parent) = dest.parent() {
-        if !parent.as_os_str().is_empty() {
-            fs::create_dir_all(parent)
-                .map_err(|e| format!("Failed to create directory '{}': {}", parent.display(), e))?;
-        }
+    if let Some(parent) = dest.parent()
+        && !parent.as_os_str().is_empty()
+    {
+        fs::create_dir_all(parent)
+            .map_err(|e| format!("Failed to create directory '{}': {}", parent.display(), e))?;
     }
 
     let mut file = File::create(dest)
