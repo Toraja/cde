@@ -1,8 +1,9 @@
 use std::fs::{self, File};
-use std::io;
+use std::io::{self, Read};
 use std::path::{Path, PathBuf};
 
 use clap::Parser;
+use flate2::read::GzDecoder;
 use regex::Regex;
 use serde::Deserialize;
 use url::Url;
@@ -36,6 +37,12 @@ struct Cli {
     /// Mutually exclusive with --dir.
     #[arg(short = 'O', long, conflicts_with = "dir")]
     output: Option<PathBuf>,
+
+    /// Extract the downloaded archive to the destination directory.
+    /// Supports .tar.gz and .tgz formats. The archive is not saved to disk.
+    /// Mutually exclusive with --output.
+    #[arg(short = 'x', long, conflicts_with = "output")]
+    extract: bool,
 }
 
 #[derive(Debug, Deserialize)]
@@ -125,6 +132,10 @@ fn select_asset<'a>(assets: &'a [Asset], pattern: &Regex) -> Result<&'a Asset, S
     }
 }
 
+fn is_extractable(asset_name: &str) -> bool {
+    asset_name.ends_with(".tar.gz") || asset_name.ends_with(".tgz")
+}
+
 fn resolve_output_path(
     asset_name: &str,
     dir: Option<&Path>,
@@ -167,6 +178,27 @@ fn download_asset(asset: &Asset, dest: &Path) -> Result<(), String> {
     Ok(())
 }
 
+fn extract_asset(asset: &Asset, dest_dir: &Path) -> Result<(), String> {
+    let mut response = ureq::get(&asset.browser_download_url)
+        .header("User-Agent", "github-latest-release-downloader")
+        .call()
+        .map_err(|e| format!("Download request failed: {}", e))?;
+
+    fs::create_dir_all(dest_dir)
+        .map_err(|e| format!("Failed to create directory '{}': {}", dest_dir.display(), e))?;
+
+    let reader = response.body_mut().as_reader();
+    unpack_tar_gz(reader, dest_dir)
+}
+
+fn unpack_tar_gz<R: Read>(reader: R, dest_dir: &Path) -> Result<(), String> {
+    let gz = GzDecoder::new(reader);
+    let mut archive = tar::Archive::new(gz);
+    archive
+        .unpack(dest_dir)
+        .map_err(|e| format!("Failed to extract archive: {}", e))
+}
+
 fn main() {
     let cli = Cli::parse();
 
@@ -194,11 +226,25 @@ fn main() {
         }
     };
 
-    let dest = match resolve_output_path(
-        &asset.name,
-        cli.dir.as_deref(),
-        cli.output.as_deref(),
-    ) {
+    if cli.extract && !is_extractable(&asset.name) {
+        eprintln!(
+            "Error: --extract requires a supported archive format (.tar.gz or .tgz), but '{}' is not supported",
+            asset.name
+        );
+        std::process::exit(1);
+    }
+
+    if cli.extract {
+        let dest_dir = cli.dir.as_deref().unwrap_or(Path::new("."));
+        if let Err(e) = extract_asset(asset, dest_dir) {
+            eprintln!("Error: {}", e);
+            std::process::exit(1);
+        }
+        println!("Extracted to: {}", dest_dir.display());
+        return;
+    }
+
+    let dest = match resolve_output_path(&asset.name, cli.dir.as_deref(), cli.output.as_deref()) {
         Ok(p) => p,
         Err(e) => {
             eprintln!("Error: {}", e);
@@ -358,5 +404,58 @@ mod tests {
             "/tmp/file.bin",
         ]);
         assert!(result.is_err());
+    }
+
+    #[test]
+    fn test_is_extractable() {
+        assert!(is_extractable("tool-v1.0.0-linux-amd64.tar.gz"));
+        assert!(is_extractable("tool-v1.0.0-linux-amd64.tgz"));
+        assert!(!is_extractable("tool-v1.0.0-linux-amd64.zip"));
+        assert!(!is_extractable("tool-v1.0.0-linux-amd64.tar.bz2"));
+        assert!(!is_extractable("tool-v1.0.0-linux-amd64"));
+    }
+
+    #[test]
+    fn test_extract_and_output_mutually_exclusive() {
+        let result = Cli::try_parse_from([
+            "prog",
+            "https://github.com/owner/repo",
+            "pattern",
+            "--output",
+            "/tmp/file.bin",
+            "--extract",
+        ]);
+        assert!(result.is_err());
+    }
+
+    #[test]
+    fn test_unpack_tar_gz_extracts_files() {
+        use flate2::Compression;
+        use flate2::write::GzEncoder;
+
+        // Create a source file to pack
+        let src_dir = tempfile::tempdir().unwrap();
+        let src_file = src_dir.path().join("hello.txt");
+        std::fs::write(&src_file, "hello from tarball").unwrap();
+
+        // Build a .tar.gz in memory
+        let gz = GzEncoder::new(Vec::new(), Compression::default());
+        let mut archive = tar::Builder::new(gz);
+        archive
+            .append_path_with_name(&src_file, "hello.txt")
+            .unwrap();
+        let gz = archive.into_inner().unwrap();
+        let gz_data = gz.finish().unwrap();
+
+        // Extract and verify
+        let dest_dir = tempfile::tempdir().unwrap();
+        unpack_tar_gz(gz_data.as_slice(), dest_dir.path()).unwrap();
+
+        let extracted = dest_dir.path().join("hello.txt");
+        assert!(extracted.exists(), "expected hello.txt to be extracted");
+        assert_eq!(
+            std::fs::read_to_string(&extracted).unwrap(),
+            "hello from tarball"
+        );
     }
 }
