@@ -23,3 +23,8 @@ fi
 
 # Install specify-cli with `mise exec` since `uv` is supposed to be installed in python catalog
 mise exec uv --command "uv tool install specify-cli --from git+https://github.com/github/spec-kit.git"
+
+mise exec node --command "npm install --global @fission-ai/openspec@latest"
+# During installation, mise has not been activated so openspec is not in PATH.
+# Use postinstall script so that the script is run in mise-activated sesson.
+mise run postinstall:openspec
