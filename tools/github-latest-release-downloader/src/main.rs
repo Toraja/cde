@@ -88,7 +88,9 @@ fn fetch_release(api_url: &Url) -> Result<Release, String> {
         req = req.header("Authorization", &format!("Bearer {}", token));
     }
 
-    let mut response = req.call().map_err(|e| format!("API request failed: {}", e))?;
+    let mut response = req
+        .call()
+        .map_err(|e| format!("API request failed: {}", e))?;
 
     response
         .body_mut()
@@ -323,7 +325,8 @@ mod tests {
 
     #[test]
     fn test_resolve_output_non_existing_path_used_as_is() {
-        let path = resolve_output_path("asset.tar.gz", None, Some(Path::new("/tmp/renamed.bin"))).unwrap();
+        let path =
+            resolve_output_path("asset.tar.gz", None, Some(Path::new("/tmp/renamed.bin"))).unwrap();
         assert_eq!(path, Path::new("/tmp/renamed.bin"));
     }
 
@@ -349,8 +352,10 @@ mod tests {
             "prog",
             "https://github.com/owner/repo",
             "pattern",
-            "--dir", "/tmp",
-            "--output", "/tmp/file.bin",
+            "--dir",
+            "/tmp",
+            "--output",
+            "/tmp/file.bin",
         ]);
         assert!(result.is_err());
     }
