@@ -6,6 +6,7 @@ services:
 
   mise:
     image: jdxcode/mise:latest
+    pull_policy: always
     init: true
     depends_on:
       - mise-file-copy
@@ -20,6 +21,7 @@ services:
 
   mise-file-copy:
     image: alpine:latest
+    pull_policy: always
     volumes:
       - type: volume
         source: mise
