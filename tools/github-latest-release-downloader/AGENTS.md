@@ -19,7 +19,5 @@ cargo clippy --all-targets --all-features -- --deny warnings
 ### Formatting
 
 ```sh
-cargo fmt --all --check
+cargo fmt --all
 ```
-
-If `cargo fmt --all --check` fails, run `cargo fmt --all` to apply formatting, then verify with `--check` again.
