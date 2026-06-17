@@ -41,11 +41,9 @@ repositories:
 	fi
 
 ansible:
-	sudo apt-get update
-	sudo apt-get install --no-install-recommends --yes pipx
-	# Install ansible directly with pipx rather than with mise as I don't need to switch versions
+	# Install ansible directly with uv rather than with mise as I don't need to switch versions
 	# and want to minimise disk usage
-	pipx install --include-deps ansible
+	uv tool install --include-deps ansible
 
 [group('Test')]
 test:

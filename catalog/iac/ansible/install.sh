@@ -11,5 +11,10 @@ if ls "$script_dir/postinstall/"* > /dev/null 2>&1; then
   cp -- "$script_dir/postinstall/"* ~/.config/mise/tasks/postinstall/
 fi
 
-pipx install --include-deps ansible
-pipx inject --include-apps ansible ansible-lint
+packages=(
+  ansible
+  ansible-lint
+)
+for package in "${packages[@]}"; do
+  mise exec uv --command "uv tool install $package"
+done

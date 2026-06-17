@@ -59,7 +59,7 @@ RUN --mount=type=cache,id=apt-cache,target=/var/cache/apt,sharing=locked --mount
     && apt-add-repository --yes ppa:git-core/ppa \
     && apt-add-repository --yes ppa:lepapareil/hurl \
     && apt-get update && apt-get install --no-install-recommends --yes \
-        sudo less man-db locales tree openssh-client unzip rsync wget gettext-base pipx \
+        sudo less man-db locales tree openssh-client unzip rsync wget gettext-base \
         git git-lfs make xclip net-tools netcat-openbsd dnsutils fish vim tmux \
         keychain file skopeo jq pwgen hurl
 
@@ -98,8 +98,6 @@ RUN mkdir --parents ~/tmp ~/.cde/mnt/single ~/.cde/mnt/shared ~/.local/share/fis
     ln --symbolic ~/toybox/git/gitignore_global ~/.config/git/ignore && \
     ln --symbolic ~/toybox/git/custom-commands/bin/* ~/.local/bin/ && \
     ln --symbolic ~/toybox/git/custom-commands/config/fish/* ~/.config/fish/conf.d/ && \
-    # pipx \
-    register-python-argcomplete --shell fish pipx > ~/.config/fish/completions/pipx.fish && \
     # tmux: tmp's install_plugins requires tmux.conf in toybox which is sourced from $XDG_CONFIG_HOME/tmux/tmux.conf \
     git clone --depth 1 https://github.com/tmux-plugins/tpm ~/.config/tmux/plugins/tpm && \
     ~/.config/tmux/plugins/tpm/bin/install_plugins && \

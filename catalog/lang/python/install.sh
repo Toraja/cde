@@ -28,5 +28,5 @@ packages=(
   pyright
 )
 for package in "${packages[@]}"; do
-  pipx install $package
+  mise exec uv --command "uv tool install $package"
 done

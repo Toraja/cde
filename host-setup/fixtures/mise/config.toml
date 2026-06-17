@@ -14,6 +14,7 @@ neovim = { version = 'latest' }
 ripgrep = { version = 'latest' }
 tree-sitter = { version = 'latest' }
 usage = { version = 'latest' }
+uv = { version = 'latest' }
 
 [tasks."postinstall:fzf"]
 run = """
