@@ -21,7 +21,6 @@ if $mise_install; then
   mise install
 fi
 
-# Install specify-cli with `mise exec` since `uv` is supposed to be installed in python catalog
 mise exec uv --command "uv tool install specify-cli --from git+https://github.com/github/spec-kit.git"
 
 mise exec node --command "npm install --global @fission-ai/openspec@latest"

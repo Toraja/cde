@@ -19,5 +19,6 @@ ripgrep = { version = 'latest', postinstall = 'mise run postinstall:ripgrep' }
 shfmt = { version = 'latest' }
 tree-sitter = { version = 'latest' }                                                 # required by nvim-treesitter
 usage = { version = 'latest' }
+uv = { version = 'latest' }
 xh = { version = 'latest', postinstall = 'mise run postinstall:xh' }
 yazi = { version = 'latest', postinstall = 'mise run postinstall:yazi' }
