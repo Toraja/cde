@@ -61,7 +61,7 @@ RUN --mount=type=cache,id=apt-cache,target=/var/cache/apt,sharing=locked --mount
     && apt-get update && apt-get install --no-install-recommends --yes \
         sudo less man-db locales tree openssh-client unzip rsync wget gettext-base \
         git git-lfs make xclip net-tools netcat-openbsd dnsutils fish vim tmux \
-        keychain file skopeo jq pwgen hurl
+        keychain file jq pwgen hurl
 
 # Multibyte character support
 ENV LC_ALL=C.UTF-8

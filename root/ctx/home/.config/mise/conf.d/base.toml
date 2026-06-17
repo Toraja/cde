@@ -15,6 +15,7 @@ lazydocker = { version = 'latest' }
 lazygit = { version = 'latest', postinstall = 'mise run postinstall:lazygit' }
 neovim = { version = 'latest', postinstall = 'mise run postinstall:neovim' }
 node = { version = 'latest', postinstall = 'mise run postinstall:node' }
+regctl = { version = 'latest', postinstall = 'mise run postinstall:regctl' }
 ripgrep = { version = 'latest', postinstall = 'mise run postinstall:ripgrep' }
 shfmt = { version = 'latest' }
 tree-sitter = { version = 'latest' }                                                 # required by nvim-treesitter
