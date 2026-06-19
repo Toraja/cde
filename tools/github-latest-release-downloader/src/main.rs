@@ -266,12 +266,6 @@ fn extract_entry_from_reader<R: Read>(reader: R, entry: &str, dest: &Path) -> Re
                     norm_entry
                 ));
             }
-            if dest.is_dir() {
-                return Err(format!(
-                    "--output path '{}' is an existing directory; use --dir to save into a directory",
-                    dest.display()
-                ));
-            }
             if let Some(parent) = dest.parent()
                 && !parent.as_os_str().is_empty()
             {
@@ -288,13 +282,6 @@ fn extract_entry_from_reader<R: Read>(reader: R, entry: &str, dest: &Path) -> Re
 
         // ── Directory-entry prefix match ─────────────────────────────────────
         if norm_path.starts_with(&dir_prefix) {
-            // Check for a conflicting destination directory once, on the first match.
-            if !matched && dest.is_dir() {
-                return Err(format!(
-                    "--output path '{}' already exists as a directory; remove it first or choose a different path",
-                    dest.display()
-                ));
-            }
             if tar_entry.header().entry_type().is_symlink() {
                 eprintln!("Warning: skipping symlink entry '{}' in archive", norm_path);
                 continue;
@@ -763,6 +750,41 @@ mod tests {
         assert_eq!(
             std::fs::read_to_string(dest.join("sub/b.conf")).unwrap(),
             "bbb"
+        );
+    }
+
+    // ── directory entry → merges into existing dest, overlapping file overwritten
+
+    #[test]
+    fn test_extract_entry_dir_merges_into_existing_dest() {
+        // Archive: mydir/foo/bar + mydir/foo/baz
+        let data = make_tar_gz_with_entries(&[
+            ("mydir/foo/bar", Some("from archive")),
+            ("mydir/foo/baz", Some("also from archive")),
+        ]);
+        let tmp = tempfile::tempdir().unwrap();
+        let dest = tmp.path().join("out");
+        // Dest already exists: foo/bar (will be overwritten) and foo/quux (must survive).
+        std::fs::create_dir_all(dest.join("foo")).unwrap();
+        std::fs::write(dest.join("foo/bar"), "original").unwrap();
+        std::fs::write(dest.join("foo/quux"), "also original").unwrap();
+
+        extract_entry_from_reader(data.as_slice(), "mydir", &dest).unwrap();
+
+        assert_eq!(
+            std::fs::read_to_string(dest.join("foo/bar")).unwrap(),
+            "from archive",
+            "bar should be overwritten by the archive"
+        );
+        assert_eq!(
+            std::fs::read_to_string(dest.join("foo/baz")).unwrap(),
+            "also from archive",
+            "baz should be newly created from the archive"
+        );
+        assert_eq!(
+            std::fs::read_to_string(dest.join("foo/quux")).unwrap(),
+            "also original",
+            "quux should be left untouched"
         );
     }
 
