@@ -1,0 +1,11 @@
+default:
+	@just --list --unsorted
+
+tests:
+	@cargo test
+
+Lint:
+	@cargo clippy --all-targets --all-features -- --deny warnings
+
+Format:
+	@cargo fmt --all
