@@ -1,4 +1,4 @@
-## ADDED Requirements
+## Requirements
 
 ### Requirement: Flag definition
 The CLI SHALL expose a `--extract-entry` flag (short: `-X`) that accepts a single string argument representing a path within the archive (e.g. `bin/mytool` or `share/config`).
@@ -86,6 +86,13 @@ When `--extract-entry` targets a directory and that directory contains symlink e
 #### Scenario: Archive contains a symlink under the target directory entry
 - **WHEN** `--extract-entry bin/` targets a directory that contains a symlink entry among its children
 - **THEN** the symlink entry is not extracted, a warning is printed to stderr, and all regular file entries under `bin/` are extracted normally
+
+### Requirement: Directory entry extraction into existing destination
+When `--extract-entry` targets a directory and the resolved destination already exists as a directory, the CLI SHALL merge the archive contents into that directory. Files present in the archive overwrite their counterparts in the destination; files already in the destination that are not in the archive are left untouched.
+
+#### Scenario: Archive files overwrite existing destination files; unrelated files are preserved
+- **WHEN** `--extract-entry mydir` is given, the resolved destination `./mydir/` already exists and contains `foo/bar` and `foo/quux`, and the archive contains `mydir/foo/bar` and `mydir/foo/baz`
+- **THEN** extraction succeeds, `foo/bar` is overwritten with the archive version, `foo/baz` is newly created, and `foo/quux` is left untouched
 
 ### Requirement: Archive not saved to disk
 When `--extract-entry` is used, the archive MUST NOT be written to disk; it SHALL be streamed and unpacked in-memory, consistent with the behaviour of `--extract`.
