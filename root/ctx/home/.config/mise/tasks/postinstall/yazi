@@ -9,4 +9,5 @@ mise exec yazi --command 'ya pkg add yazi-rs/plugins:smart-enter && \
   ya pkg add yazi-rs/plugins:smart-filter && \
   ya pkg add yazi-rs/plugins:chmod && \
   ya pkg add yazi-rs/plugins:git && \
-  ya pkg add yazi-rs/plugins:toggle-pane'
+  ya pkg add yazi-rs/plugins:toggle-pane && \
+  ya pkg add aresler/path-from-root'
