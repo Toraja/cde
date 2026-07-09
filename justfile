@@ -3,6 +3,7 @@ set dotenv-load
 set allow-duplicate-variables
 
 mod tests
+mod catalog
 
 compose_cmd := 'docker compose --file compose.yml'
 

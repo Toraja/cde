@@ -1,8 +1,14 @@
 # Catalog
 
-## Structure
+## Add a catalog
 
-To add a catalog, create a directory and create below files in the directory.
+To add a catalog, run:
+
+```sh
+just add <catalog path> [mise tools...]
+```
+
+This will create a new directory under `catalog` with the name of the catalog with the following files:
 - install.sh
 - mise config (optional)
 - postinstall scripts (under postinstall directory, optional)
@@ -11,30 +17,6 @@ To add a catalog, create a directory and create below files in the directory.
 
 This is the file that is executed from Dockerfile.  
 Any installation steps can go here.  
-Add the below snippets if mise is used to install.  
-(`mise install` should be run for each catalog to minimise the retry time in case catalog installation fails)
-
-```sh
-#!/bin/bash
-set -eo pipefail
-
-script_dir=$(dirname "$0")
-catalog_name=$(basename "$script_dir")
-mise_install=false
-
-if [ -f "$script_dir/${catalog_name}.toml" ]; then
-  cp -- "$script_dir/${catalog_name}.toml" ~/.config/mise/conf.d/
-  mise_install=true
-fi
-if ls "$script_dir/postinstall/"* > /dev/null 2>&1; then
-  cp -- "$script_dir/postinstall/"* ~/.config/mise/tasks/postinstall/
-fi
-if $mise_install; then
-  mise install
-fi
-
-# --- Add other commands ---
-```
 Code to setup tools installed with mise can also go here, if that is not what should go to postinstall script (see below).
 
 ### mise config & postinstall script

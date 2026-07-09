@@ -1,0 +1,5 @@
+[tools]
+
+{{ range (. | strings.TrimSpace | strings.Split " ") -}}
+{{ . }} = { version = "latest", postinstall = 'mise run postinstall:{{ . }}' }
+{{ end -}}

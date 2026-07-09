@@ -1,0 +1,25 @@
+default:
+	@echo "Run just --usage <recipe> for more information."
+	@just --list --unsorted
+
+[doc("Add a new catalog")]
+[arg("path", help="Relative path from `catalog` directory to the new catalog"), arg("tools", help="Name of mise tools")]
+@add path *tools:
+	#!/bin/bash
+	set -euo pipefail
+	catalog_name=$(basename {{path}})
+	mkdir --parents {{path}}
+	cp .templates/install.sh {{path}}/install.sh
+	if [ -n "{{tools}}" ]; then
+		echo {{tools}} | docker run --interactive --rm --volume ./:/work --workdir /work gomplate/gomplate --context .=stdin: --file .templates/template.toml.tmpl --out {{path}}/${catalog_name}.toml
+
+		mkdir --parents {{path}}/postinstall
+		for tool in {{tools}}; do
+
+			cp .templates/postinstall/template.sh {{path}}/postinstall/${tool}.sh
+		done
+	fi
+	echo '{{style("cyan", f"Catalog {{path}} has been added.")}}'
+	if [ -n "{{tools}}" ]; then
+		echo '{{style("cyan", f"Modify {{path}}/${catalog_name}.toml and {{path}}/postinstall/*.sh to finish setting up the catalog.")}}'
+	fi
