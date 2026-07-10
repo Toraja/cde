@@ -37,7 +37,7 @@ This is conveinent if:
 - You want to store environments in git repository
 - Environments somehow need to be stored in another directory
 
-The symlink targets must have the same structure as `skeleton/bundle` directory.  
+The symlink targets must have the same structure as `template/bundle` directory.  
 The easiest way to create a new external environment is to:
 - Add a new environment as usual
 - Move the bundle directory to somewhere else

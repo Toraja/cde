@@ -141,12 +141,12 @@ new-env bundle project:
 [private]
 new-bundle bundle:
 	mkdir --parents env/{{bundle}}
-	find skeleton/bundle -maxdepth 1 -type f -exec cp {} env/{{bundle}}/ \;
+	find temlate/bundle -maxdepth 1 -type f -exec cp {} env/{{bundle}}/ \;
 	sed --in-place --expression 's/xxx-bundle/{{bundle}}/g' env/{{bundle}}/docker-bake.hcl
-	cp --recursive skeleton/bundle/project env/{{bundle}}/base
+	cp --recursive temlate/bundle/project env/{{bundle}}/base
 	just echocyan "Base env has been initialised in env/{{bundle}}/base/"
 
 [private]
 new-project bundle project:
-	cp --recursive skeleton/bundle/project env/{{bundle}}/{{project}}
-	cat skeleton/fixtures/docker-bake-project.hcl | sed --expression 's/xxx-bundle/{{bundle}}/g' --expression 's/yyy-project/{{project}}/g' >> env/{{bundle}}/docker-bake.hcl
+	cp --recursive temlate/bundle/project env/{{bundle}}/{{project}}
+	cat temlate/fixtures/docker-bake-project.hcl | sed --expression 's/xxx-bundle/{{bundle}}/g' --expression 's/yyy-project/{{project}}/g' >> env/{{bundle}}/docker-bake.hcl
