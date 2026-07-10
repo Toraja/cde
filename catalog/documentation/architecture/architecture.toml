@@ -1,0 +1,3 @@
+[tools]
+
+adrs = { version = "latest", postinstall = 'mise exec adrs --command "adrs completions fish > ~/.config/fish/completions/adrs.fish"' }
