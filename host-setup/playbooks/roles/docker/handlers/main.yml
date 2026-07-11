@@ -1,0 +1,3 @@
+- name: Inform to restart WSL
+  ansible.builtin.debug:
+    msg: "Setting to enable systemd has been added to /etc/wsl.conf. You need to restart WSL."

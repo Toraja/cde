@@ -29,13 +29,16 @@
 # source: https://dev.to/felipecrs/simply-run-docker-on-wsl2-3o8
 - name: Enable systemd in WSL
   become: true
+  when: "'wsl' in ansible_run_tags"
   tags:
     - wsl
-  ansible.builtin.blockinfile:
-    path: "/etc/wsl.conf"
-    block: |
-      [boot]
-      systemd=true
-    create: true
-    mode: "0644"
-  when: "'wsl' in ansible_run_tags"
+  block:
+    - name: Update WSL config
+      ansible.builtin.script:
+        cmd: update_wsl_config.py
+      args:
+        executable: python3
+      register: docker_wsl_config_updated
+      changed_when: docker_wsl_config_updated.rc == 0
+      failed_when: false
+      notify: Inform to restart WSL
