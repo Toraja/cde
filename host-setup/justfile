@@ -43,7 +43,7 @@ repositories:
 ansible:
 	# Install ansible directly with uv rather than with mise as I don't need to switch versions
 	# and want to minimise disk usage
-	uv tool install --include-deps ansible
+	uv tool install --with-executables-from ansible-core,ansible-lint ansible
 
 [group('Test')]
 test:
