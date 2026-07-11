@@ -114,6 +114,11 @@ RUN --mount=type=secret,id=GITHUB_TOKEN,env=GITHUB_TOKEN \
 RUN --mount=type=secret,id=GITHUB_TOKEN,env=GITHUB_TOKEN \
     --mount=type=cache,id=apt-cache,target=/var/cache/apt,sharing=locked \
     --mount=type=cache,id=apt-cache,target=/var/lib/apt,sharing=locked \
+    --mount=type=bind,from=catalog,source=editor/neovim,target=/tmp/catalog/neovim \
+	/tmp/catalog/neovim/install.sh
+RUN --mount=type=secret,id=GITHUB_TOKEN,env=GITHUB_TOKEN \
+    --mount=type=cache,id=apt-cache,target=/var/cache/apt,sharing=locked \
+    --mount=type=cache,id=apt-cache,target=/var/lib/apt,sharing=locked \
     --mount=type=bind,from=catalog,source=lang/lua,target=/tmp/catalog/lua \
 	/tmp/catalog/lua/install.sh
 RUN --mount=type=secret,id=GITHUB_TOKEN,env=GITHUB_TOKEN \
