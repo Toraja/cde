@@ -13,13 +13,14 @@ default:
 @echocyan +args:
 	echo -e "\e[0;36m{{args}}\e[0;0m"
 
-[private]
 playbook tags *flags:
 	ANSIBLE_ROLES_PATH={{source_directory()}}/.ansible/roles/ ansible-playbook --tags={{tags}} {{flags}} main.yml
 
-[private]
 playbook-check tags:
 	just playbook {{tags}} {{playbook_check_flags}}
+
+playbook-start-at-task task tags *flags:
+	ANSIBLE_ROLES_PATH={{source_directory()}}/.ansible/roles/ ansible-playbook --tags={{tags}} --start-at-task "{{task}}" --step {{flags}} main.yml
 
 lint:
 	ansible-lint
@@ -35,7 +36,7 @@ docker-check: galaxy-install
 
 docker-wsl:
 	just playbook docker,wsl
-	just echocyan Setting to enable systemd might be added to /etc/wsl.conf. In that case, you need to restart WSL.
+	# just echocyan Setting to enable systemd might have been added to /etc/wsl.conf. In that case, you need to restart WSL.
 
 docker-wsl-check:
 	just playbook-check docker,wsl
