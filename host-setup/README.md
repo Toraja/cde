@@ -7,7 +7,7 @@
 - Copy `.ssh/config` to your machine.
 - Clone this repository
   ```sh
-  git clone git@personal.github.com:Toraja/cde.git ~/cde
+  git clone git@github.com:Toraja/cde.git ~/cde
   ```
 - Make sure `curl` is installed.
 - Run `first-step.sh` to setup prerequisite stuff.

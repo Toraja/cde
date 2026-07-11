@@ -158,7 +158,7 @@ RUN rm --recursive --force ~/toybox && \
     # This also enables replacing those links with actual files when symlink is inappriate \
     ln --symbolic ~/.cde/mnt/hosthome/.ssh ~/.ssh && \
     mkdir --parents ~/.docker && ln --symbolic ~/.cde/mnt/hosthome/.docker/config.json ~/.docker/config.json && \
-    ln --symbolic ~/workspace/personal.github.com/Toraja/toybox ~/toybox && \
+    ln --symbolic ~/workspace/github.com/Toraja/toybox ~/toybox && \
     mkdir --parents ~/.config/github-copilot/ ~/.cde/mnt/shared/.config/github-copilot/ && ln --symbolic ~/.cde/mnt/shared/.config/github-copilot/apps.json ~/.config/github-copilot/
 
 CMD ["tail", "-f", "/dev/null"]

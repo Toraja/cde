@@ -13,8 +13,8 @@ export PATH := env_var('HOME') / '.local/bin:' + env_var('PATH')
 default:
 	@just --list --unsorted
 
-github_repo_subpath := 'personal.github.com/Toraja'
-github_host_user := 'personal.github.com:Toraja'
+github_repo_subpath := 'github.com/Toraja'
+github_host_user := 'github.com:Toraja'
 toybox_repo_url := 'git@' + github_host_user / 'toybox.git'
 cde_repo_url := 'git@' + github_host_user / 'cde.git'
 
