@@ -11,7 +11,7 @@ default:
 	mkdir --parents {{path}}
 	cp .templates/install.sh {{path}}/install.sh
 	if [ -n "{{tools}}" ]; then
-		echo {{tools}} | docker run --interactive --rm --volume ./:/work --workdir /work gomplate/gomplate --context .=stdin: --file .templates/template.toml.tmpl --out {{path}}/${catalog_name}.toml
+		echo {{tools}} | docker run --interactive --rm --user $(id --user):$(id --group) --volume ./:/work --workdir /work gomplate/gomplate --context .=stdin: --file .templates/template.toml.tmpl --out {{path}}/${catalog_name}.toml
 
 		mkdir --parents {{path}}/postinstall
 		for tool in {{tools}}; do
