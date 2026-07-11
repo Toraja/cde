@@ -22,7 +22,7 @@ sudo apt-get update
 sudo apt-get install --no-install-recommends --yes \
   default-jre graphviz
 
-curl --fail --silent --show-error --location https://code-server.dev/install.sh | sh
+curl --location --silent --show-error --fail --retry 5 --retry-delay 3 https://code-server.dev/install.sh | sh
 
 # code-server creates workspace file in /home/coder and it failes because /home is not writable to non-root user.
 # There seems to be no option to change it, so as a workaround, create symbolic link to home directory.

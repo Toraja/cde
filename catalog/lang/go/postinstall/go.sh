@@ -30,4 +30,4 @@ mise exec go --command '\
   echo "=== installing ginkgo-v2 ===" && go install github.com/onsi/ginkgo/v2/ginkgo@latest && \
   echo "=== installing json-to-struct ===" && go install github.com/tmc/json-to-struct@latest && \
   echo "=== installing mockgen ===" && go install go.uber.org/mock/mockgen@latest && \
-  echo "=== installing go-enum ===" && curl --location --silent --show-error --fail --output ~/.local/bin/go-enum "https://github.com/abice/go-enum/releases/latest/download/go-enum_$(uname -s)_$(uname -m)" && chmod 755 ~/.local/bin/go-enum'
+  echo "=== installing go-enum ===" && curl --location --silent --show-error --fail --retry 5 --retry-delay 3 --output ~/.local/bin/go-enum "https://github.com/abice/go-enum/releases/latest/download/go-enum_$(uname -s)_$(uname -m)" && chmod 755 ~/.local/bin/go-enum'

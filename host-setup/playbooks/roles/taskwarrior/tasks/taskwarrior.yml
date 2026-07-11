@@ -2,7 +2,7 @@
   vars:
     binary_name: task
     binary_installed_version_cmd: task --version
-    binary_latest_version_cmd: curl -s https://api.github.com/repos/GothenburgBitFactory/taskwarrior/releases/latest | jq -r .tag_name | cut -c 2-
+    binary_latest_version_cmd: curl --location --silent --show-error --fail --retry 5 --retry-delay 3 https://api.github.com/repos/GothenburgBitFactory/taskwarrior/releases/latest | jq -r .tag_name | cut -c 2-
   ansible.builtin.include_role:
     name: binary
     tasks_from: latest_is_installed

@@ -80,14 +80,14 @@ github_reponame=$2
 asset_name=$3
 destination=$4
 
-download_url=$(curl -sSL https://api.github.com/repos/${github_user}/${github_reponame}/releases/latest \
+download_url=$(curl --location --silent --show-error --fail --retry 5 --retry-delay 3 https://api.github.com/repos/${github_user}/${github_reponame}/releases/latest \
     | jq --raw-output '.assets[] | select( .name | match ("^'${asset_name}'$") ) | .browser_download_url')
 if [[ -z "$download_url" ]]; then
     error 'Failed to get download URL.'
     exit 1
 fi
 
-curl_cmd='curl -fsSL'
+curl_cmd='--location --silent --show-error --fail --retry 5 --retry-delay 3'
 tar_cmd='tar xzf -'
 if $strip_components; then
     tar_cmd="$tar_cmd --strip-components=$strip_number"
