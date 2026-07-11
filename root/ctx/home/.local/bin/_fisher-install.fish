@@ -7,7 +7,7 @@ function create_fish_dirs --on-event $FAIL_EVENT
     # if plugins were successfully installed. (such as creating directories)
 end
 
-curl -fsSL https://git.io/fisher | source
+curl --location --silent --show-error --fail --retry 5 --retry-delay 3 https://git.io/fisher | source
 for code in $pipestatus
     if [ $code -gt 0 ]
         emit $FAIL_EVENT

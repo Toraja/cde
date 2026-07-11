@@ -13,7 +13,7 @@ grep --quiet '# Added by host setup' ~/.bashrc || cat $fixture_dir/bashrc >> ~/.
 
 # Install mise
 PATH="$HOME/.local/bin:$PATH" # mise is installed under ~/.local/bin
-curl https://mise.run | sh
+curl --location --silent --show-error --fail --retry 5 --retry-delay 3 https://mise.run | sh
 cp --recursive $fixture_dir/mise ~/.config/
 mise completion --include-bash-completion-lib bash > ~/.local/share/bash-completion/completions/mise.bash
 mise activate bash > ~/.bashrc.d/mise.bash

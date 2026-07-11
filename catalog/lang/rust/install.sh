@@ -22,7 +22,6 @@ fi
 mise install
 
 # required by nvim-neotest
-# curl --location --silent --show-error --fail https://get.nexte.st/latest/linux | tar -zxf - --directory $(dirname $(asdf which cargo))
 mise exec rust cargo-binstall --command 'cargo binstall cargo-nextest --secure'
 
 # Used by rustaceanvim

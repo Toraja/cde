@@ -13,7 +13,7 @@ RUN --mount=type=cache,id=apt-cache,target=/var/cache/apt,sharing=locked --mount
 
 # taskwarrior is installed at /usr/local/bin/task
 RUN --mount=type=secret,id=GITHUB_TOKEN,env=GITHUB_TOKEN \
-    version=$(curl --silent --header "Authorization: token $GITHUB_TOKEN" https://api.github.com/repos/GothenburgBitFactory/taskwarrior/releases/latest | jq --raw-output '.tag_name') && \
+    version=$(curl --location --silent --show-error --fail --retry 5 --retry-delay 3 --header "Authorization: token $GITHUB_TOKEN" https://api.github.com/repos/GothenburgBitFactory/taskwarrior/releases/latest | jq --raw-output '.tag_name') && \
     git clone --depth 1 --branch $version https://github.com/GothenburgBitFactory/taskwarrior.git /taskwarrior && \
     cd /taskwarrior && \
     cmake -DCMAKE_BUILD_TYPE=release -DENABLE_SYNC=OFF . && \
@@ -41,7 +41,7 @@ RUN --mount=type=cache,id=apt-cache,target=/var/cache/apt,sharing=locked --mount
     apt-get update && apt-get install --no-install-recommends --yes \
     apt-transport-https ca-certificates curl gnupg lsb-release \
     && install --mode 0755 --directory /etc/apt/keyrings \
-    && curl --fail --silent --show-error --location https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor --output /etc/apt/keyrings/docker.gpg \
+    && curl --location --silent --show-error --fail --retry 5 --retry-delay 3 https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor --output /etc/apt/keyrings/docker.gpg \
     && chmod a+r /etc/apt/keyrings/docker.gpg \
     && echo "deb [arch="$(dpkg --print-architecture)" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu "$(. /etc/os-release && echo "$VERSION_CODENAME")" stable" | \
         tee /etc/apt/sources.list.d/docker.list > /dev/null \
@@ -104,7 +104,7 @@ RUN mkdir --parents ~/tmp ~/.cde/mnt/single ~/.cde/mnt/shared ~/.local/share/fis
     mkdir --parents ~/.cde/mnt/single/.local/share/tmux/resurrect/ ~/.local/share/tmux/ && \
     ln --symbolic --force ~/.cde/mnt/single/.local/share/tmux/resurrect ~/.local/share/tmux/
 
-RUN curl https://mise.run | sh && \
+RUN curl --location --silent --show-error --fail --retry 5 --retry-delay 3 https://mise.run | sh && \
     mise completion fish > ~/.config/fish/completions/mise.fish
 
 # Separate installation of base mise tools and each catalog
