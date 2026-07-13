@@ -4,8 +4,8 @@ default:
 tests:
 	@cargo test
 
-Lint:
+lint:
 	@cargo clippy --all-targets --all-features -- --deny warnings
 
-Format:
+format:
 	@cargo fmt --all
