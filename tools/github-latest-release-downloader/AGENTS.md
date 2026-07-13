@@ -7,17 +7,17 @@ Run the following commands after every code change to ensure correctness:
 ### Tests
 
 ```sh
-cargo test
+just test
 ```
 
 ### Lint
 
 ```sh
-cargo clippy --all-targets --all-features -- --deny warnings
+just lint
 ```
 
 ### Formatting
 
 ```sh
-cargo fmt --all
+just format
 ```
