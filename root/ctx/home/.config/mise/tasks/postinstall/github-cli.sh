@@ -3,5 +3,5 @@
 set -e
 
 mkdir --parents ~/.cde/mnt/shared/.config/gh
-ln --symbolic --force ~/.cde/mnt/shared/.config/gh ~/.config/gh
+ln --symbolic --force ~/.cde/mnt/shared/.config/gh/hosts.yml ~/.config/gh/
 mise exec github-cli --command "gh extension install dlvhdr/gh-dash"
