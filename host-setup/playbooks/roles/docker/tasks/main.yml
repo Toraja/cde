@@ -5,10 +5,13 @@
     mode: "0755"
 
 - name: Setup docker config
-  ansible.builtin.copy:
-    src: "{{ toybox_docker_dir }}/config.json"
-    dest: "{{ docker_config_dir }}/config.json"
-    force: false
+  ansible.builtin.script:
+    cmd: merge_docker_config.py "{{ docker_config_dir }}/config.json" "{{ toybox_docker_dir }}/config.json"
+  args:
+    executable: python3
+  register: docker_config_updated
+  changed_when: docker_config_updated.rc == 0
+  failed_when: docker_config_updated.rc not in [0, 1]
 
 - name: Check if cde_shared docker volume exists
   ansible.builtin.command:
