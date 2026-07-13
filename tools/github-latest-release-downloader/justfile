@@ -9,3 +9,9 @@ lint:
 
 format:
 	@cargo fmt --all
+
+release:
+	@cargo release
+
+release-execute:
+	@cargo release --execute
