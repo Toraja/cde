@@ -8,7 +8,6 @@
     cmd: update_wsl_config.py
   args:
     executable: python3
-  register: docker_wsl_config_updated
-  changed_when: docker_wsl_config_updated.rc == 0
-  failed_when: false
+  register: wsl_wsl_config_updated
+  failed_when: wsl_wsl_config_updated.rc not in [0, 1]
   notify: Inform to restart WSL
