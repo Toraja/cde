@@ -31,6 +31,4 @@ ln --symbolic ~/.cde/mnt/shared/.local/share/opencode/account.json ~/.local/shar
 ln --symbolic ~/.cde/mnt/shared/.local/share/opencode/auth.json ~/.local/share/opencode/
 
 mise exec node --command "npm install --global @fission-ai/openspec@latest"
-# During installation, mise has not been activated so openspec is not in PATH.
-# Use postinstall script so that the script is run in mise-activated sesson.
 mise run postinstall:openspec

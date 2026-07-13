@@ -1,4 +1,4 @@
 #!/bin/bash
 set -eo pipefail
 
-openspec completion install fish
+mise exec node --command "openspec completion install fish"
