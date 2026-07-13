@@ -1,6 +1,8 @@
 export ANSIBLE_BECOME_PASSWORD_FILE := '.ansible_become_password'
+export ANSIBLE_ROLES_PATH := source_directory() + "/.ansible/roles/"
 
 playbook_check_flags := '--check --diff'
+playbook := 'main.yml'
 
 default:
         @just --list --unsorted
@@ -14,13 +16,13 @@ default:
 	echo -e "\e[0;36m{{args}}\e[0;0m"
 
 playbook tags *flags:
-	ANSIBLE_ROLES_PATH={{source_directory()}}/.ansible/roles/ ansible-playbook --tags={{tags}} {{flags}} main.yml
+	ansible-playbook --tags={{tags}} {{flags}} {{playbook}}
 
 playbook-check tags:
 	just playbook {{tags}} {{playbook_check_flags}}
 
 playbook-start-at-task task tags *flags:
-	ANSIBLE_ROLES_PATH={{source_directory()}}/.ansible/roles/ ansible-playbook --tags={{tags}} --start-at-task "{{task}}" --step {{flags}} main.yml
+	ansible-playbook --tags={{tags}} --start-at-task "{{task}}" --step {{flags}} {{playbook}}
 
 lint:
 	ansible-lint
@@ -33,13 +35,6 @@ docker: galaxy-install
 
 docker-check: galaxy-install
 	just playbook-check docker
-
-docker-wsl:
-	just playbook docker,wsl
-	# just echocyan Setting to enable systemd might have been added to /etc/wsl.conf. In that case, you need to restart WSL.
-
-docker-wsl-check:
-	just playbook-check docker,wsl
 
 fish:
 	just playbook fish
@@ -70,3 +65,9 @@ misc:
 
 misc-check:
 	just playbook-check misc
+
+wsl:
+	just --set playbook wsl.yml playbook wsl
+
+wsl-check:
+	just  --set playbook wsl.yml playbook-check wsl

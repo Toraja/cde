@@ -1,0 +1,14 @@
+# With systemd enabled, dockerd automatically starts up when wsl launches
+# source: https://dev.to/felipecrs/simply-run-docker-on-wsl2-3o8
+- name: Enable systemd in WSL
+  become: true
+  tags:
+    - wsl
+  ansible.builtin.script:
+    cmd: update_wsl_config.py
+  args:
+    executable: python3
+  register: docker_wsl_config_updated
+  changed_when: docker_wsl_config_updated.rc == 0
+  failed_when: false
+  notify: Inform to restart WSL

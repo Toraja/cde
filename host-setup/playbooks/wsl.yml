@@ -1,0 +1,6 @@
+- name: Setup wsl on host
+
+  hosts: localhost
+  roles:
+    - role: wsl
+      tags: ["wsl"]

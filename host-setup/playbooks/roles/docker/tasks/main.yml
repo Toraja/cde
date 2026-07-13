@@ -25,20 +25,3 @@
     cmd: docker volume create --label prune=false cde_shared
   when: cde_shared_volume_info.rc != 0
   changed_when: cde_shared_volume_info.rc != 0
-
-# source: https://dev.to/felipecrs/simply-run-docker-on-wsl2-3o8
-- name: Enable systemd in WSL
-  become: true
-  when: "'wsl' in ansible_run_tags"
-  tags:
-    - wsl
-  block:
-    - name: Update WSL config
-      ansible.builtin.script:
-        cmd: update_wsl_config.py
-      args:
-        executable: python3
-      register: docker_wsl_config_updated
-      changed_when: docker_wsl_config_updated.rc == 0
-      failed_when: false
-      notify: Inform to restart WSL
