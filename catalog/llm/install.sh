@@ -23,10 +23,12 @@ fi
 
 mise exec uv --command "uv tool install specify-cli --from git+https://github.com/github/spec-kit.git"
 
-mkdir --parents ~/.config/opencode/
+mkdir --parents ~/.config/opencode/ ~/.local/share/opencode ~/.cde/mnt/shared/.local/share/opencode
 # opencode config might need to be localised (custom providers) while tui config does not
 cp --force ~/toybox/opencode/opencode.jsonc ~/.config/opencode/
 ln --symbolic ~/toybox/opencode/tui.jsonc ~/.config/opencode/
+ln --symbolic ~/.cde/mnt/shared/.local/share/opencode/account.json ~/.local/share/opencode/
+ln --symbolic ~/.cde/mnt/shared/.local/share/opencode/auth.json ~/.local/share/opencode/
 
 mise exec node --command "npm install --global @fission-ai/openspec@latest"
 # During installation, mise has not been activated so openspec is not in PATH.
