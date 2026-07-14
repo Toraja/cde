@@ -1,34 +1,70 @@
 import json
 import argparse
 import sys
+import os
 from pathlib import Path
 
-def is_subset(sub: dict, super: dict):
-    return all(k in super and super[k] == v for k, v in sub.items())
 
-parser = argparse.ArgumentParser()
-parser.add_argument("json_base")
-parser.add_argument("json_override")
-args = parser.parse_args()
+def load_json_or_empty_dict(path: str) -> dict:
+    json_file = Path(path)
 
-base_json_file = Path(args.json_base)
-override_json_file = Path(args.json_override)
+    if not json_file.exists():
+        return {}
 
-base_json = {}
-if base_json_file.exists():
-    with base_json_file.open() as base:
-        base_json = json.load(base)
+    with json_file.open() as base:
+        return json.load(base)
 
-with override_json_file.open() as override:
-    override_json = json.load(override)
 
-if is_subset(override_json, base_json):
-    # Everything is contained already
-    sys.exit(1)
+def is_subset(sub: dict, super: dict) -> bool:
+    for sub_key, sub_value in sub.items():
+        if sub_key not in super:
+            return False
+        if isinstance(sub_value, dict):
+            if not isinstance(super[sub_key], dict):
+                return False
+            if not is_subset(sub_value, super[sub_key]):
+                return False
+        else:
+            if super[sub_key] != sub_value:
+                return False
+    return True
 
-merged_json = {**base_json, **override_json}
 
-with open(base_json_file, "w") as out:
-    json.dump(merged_json, out, indent=2)
+def make_proxy_config() -> dict:
+    def get_proxy(name: str):
+        return os.getenv(name.lower()) or os.getenv(name.upper())
 
-sys.exit(0)
+    names = ("http_proxy", "https_proxy", "no_proxy")
+    proxies = {name: value for name in names if (value := get_proxy(name)) is not None}
+    return {
+        "proxies": {
+            "default": proxies,
+        }
+    }
+
+
+def main() -> int:
+    """
+    Returns 0 if config is updated, 1 if not.
+    """
+    parser = argparse.ArgumentParser()
+    parser.add_argument("base_config_path")
+    parser.add_argument("override_config_path")
+    args = parser.parse_args()
+
+    base_config = load_json_or_empty_dict(args.base_config_path)
+    override_config = load_json_or_empty_dict(args.override_config_path)
+    override_config.update(make_proxy_config())
+
+    if is_subset(override_config, base_config):
+        return 1
+
+    base_config.update(override_config)
+    with open(args.base_config_path, "w") as out:
+        json.dump(base_config, out, indent=2)
+
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())
