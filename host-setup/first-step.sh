@@ -20,3 +20,6 @@ mise activate bash > ~/.bashrc.d/mise.bash
 cp --recursive $fixture_dir/fish ~/.config/
 mise completion fish > ~/.config/fish/completions/mise.fish
 mise install
+
+# Source bashrc (including mise.bash) to avoid re-login
+. ~/.bashrc
