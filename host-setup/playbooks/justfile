@@ -1,4 +1,3 @@
-export ANSIBLE_BECOME_PASSWORD_FILE := '.ansible_become_password'
 export ANSIBLE_ROLES_PATH := source_directory() + "/.ansible/roles/"
 
 playbook_check_flags := '--check --diff'
