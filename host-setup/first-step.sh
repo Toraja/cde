@@ -5,6 +5,10 @@ set -euo pipefail
 script_dir=$(dirname "$0")
 fixture_dir=$script_dir/fixtures
 
+set -a
+${script_dir}/../.env
+set +a
+
 # Create shell directories
 mkdir --parents ~/.bashrc.d ~/.local/share/bash-completion/completions/ ~/.config/fish/{completions,conf.d}
 
