@@ -6,7 +6,7 @@
 
 - name: Setup docker config
   ansible.builtin.script:
-    cmd: merge_docker_config.py "{{ docker_config_dir }}/config.json" "{{ toybox_docker_dir }}/config.json"
+    cmd: setup_docker_config.py "{{ docker_config_dir }}/config.json" "{{ toybox_docker_dir }}/config.json"
   args:
     executable: python3
   register: docker_config_updated
