@@ -2,34 +2,31 @@
 
 ## Setup
 
-### Prepare .env
-Run the below command and and modify `.env`.
-```sh
-cp .env.example .env
-```
-
-### Things to do on Host machine
+### Setup host machine
+For the first time, setup the host machine to install necessary tools (and some minimal QoL tools).  
 Refer to [Host setup README](./host-setup/README.md)
 
-#### WSL
-- Do the setup and configuration illustrated in
-  [here](https://github.com/Toraja/candyjar/blob/master/windows/wsl/wsl.adoc)
-
 ### Adding environments
-1. `just new-env <bundle> <project>`
+1. Create new env from the template
+   ```sh
+   just new-env <bundle> <project>`
+   ```
 1. If you are adding a new bundle and:
-    - Need common setup (base image) for your projects:
-        - Modify `Dockerfile` in the base env
-    - Otherwise:
-        - Edit `docker-bake.hcl` to:
-            - Remove `base` section
-            - Change default value of `PROJECT_BASE_IMAGE` to `target:root`
-        - Delete `env/<bundle>/base` directory
+   - Need common setup (base image) for your projects:
+     - Modify `Dockerfile` in the base env
+   - Otherwise:
+     - Edit `docker-bake.hcl` to:
+       - Remove `base` section
+       - Change default value of `PROJECT_BASE_IMAGE` to `target:root`
+     - Delete `env/<bundle>/base` directory
 1. Modify `Dockerfile` in the env
 
 #### Dockerfile
 By default, `catalog` directory is given as addtional build context.  
 Pick things you need from catalog and run the installers.
+
+Some catalogs use environment variables to customise the installation.
+Refer to README of each catalog for the list of variables and add those variables to `.env` if necessary.
 
 #### Use external environments
 Environments in the `env` directory can be symlinks that point to other directories.  
