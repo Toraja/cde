@@ -1,4 +1,4 @@
 [tools]
 
-neovim = { version = "latest", postinstall = 'mise run postinstall:neovim' }
+neovim = { version = "latest" }
 tree-sitter = { version = "latest" }
