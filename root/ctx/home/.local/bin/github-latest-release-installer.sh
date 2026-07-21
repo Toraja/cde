@@ -87,7 +87,7 @@ if [[ -z "$download_url" ]]; then
     exit 1
 fi
 
-curl_cmd='--location --silent --show-error --fail --retry 5 --retry-delay 3'
+curl_cmd='curl --location --silent --show-error --fail --retry 5 --retry-delay 3'
 tar_cmd='tar xzf -'
 if $strip_components; then
     tar_cmd="$tar_cmd --strip-components=$strip_number"
