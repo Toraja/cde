@@ -11,8 +11,6 @@ if ls "$script_dir/postinstall/"* > /dev/null 2>&1; then
   cp -- "$script_dir/postinstall/"* ~/.config/mise/tasks/postinstall/
 fi
 
-for package in "${packages[@]}"; do
-  # Better to install them altogether to reduce duplicates
-  # https://docs.astral.sh/uv/concepts/tools/#installing-executables-from-additional-packages
-  mise exec uv --command "uv tool install --with-executables-from ansible-core,ansible-lint ansible"
-done
+# Better to install them altogether to reduce duplicates
+# https://docs.astral.sh/uv/concepts/tools/#installing-executables-from-additional-packages
+mise exec uv --command "uv tool install --with-executables-from ansible-core,ansible-lint ansible"
