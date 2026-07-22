@@ -13,3 +13,7 @@ fi
 mise install
 
 mise exec node --command "npm install --global vscode-langservers-extracted yaml-language-server"
+
+# These configs should be project specific so don't make them global
+# ln --symbolic --force ~/toybox/yamlfmt ~/.config/
+# ln --symbolic --force ~/toybox/yamllint ~/.config/

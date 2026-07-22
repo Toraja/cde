@@ -1,4 +1,4 @@
 [tools]
-yamlfmt = { version = 'latest', postinstall = 'ln --symbolic --force ~/toybox/yamlfmt ~/.config/' }
-yamllint = { version = 'latest', postinstall = 'ln --symbolic --force ~/toybox/yamllint ~/.config/' }
+yamlfmt = { version = 'latest' }
+yamllint = { version = 'latest' }
 yq = { version = 'latest' }
