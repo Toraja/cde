@@ -34,3 +34,6 @@ mv $workdir/extension.vsixmanifest $workdir/extension/.vsixmanifest
 # Usually the directory name is vadimcn.vscode-lldb-<version>, but it is hard to determine the version, so just use vadimcn.vscode-lldb
 mv $workdir/extension $nvim_vscode_extension_dir/vadimcn.vscode-lldb
 rm --recursive --dir --force $workdir
+
+# cargo-release fails to install with mise
+mise exec rust cargo-binstall --command 'cargo binstall --no-comfirm cargo-release'
