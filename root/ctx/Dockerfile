@@ -137,6 +137,11 @@ RUN --mount=type=secret,id=GITHUB_TOKEN,env=GITHUB_TOKEN \
     --mount=type=cache,id=apt-cache,target=/var/lib/apt,sharing=locked \
     --mount=type=bind,from=catalog,source=llm,target=/tmp/catalog/llm \
 	/tmp/catalog/llm/install.sh
+RUN --mount=type=secret,id=GITHUB_TOKEN,env=GITHUB_TOKEN \
+    --mount=type=cache,id=apt-cache,target=/var/cache/apt,sharing=locked \
+    --mount=type=cache,id=apt-cache,target=/var/lib/apt,sharing=locked \
+    --mount=type=bind,from=catalog,source=documentation/architecture,target=/tmp/catalog/architecture \
+	/tmp/catalog/architecture/install.sh
 
 # taskwarrior
 COPY --from=taskwarrior --chown=${USER_NAME}:${GROUP_NAME} /usr/local/bin/task /home/${USER_NAME}/.local/bin/task
