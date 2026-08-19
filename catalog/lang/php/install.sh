@@ -2,20 +2,33 @@
 set -eo pipefail
 
 sudo apt-get update
+# List of dependencies taken from https://github.com/jdx/mise/discussions/4720#discussioncomment-12627273
 sudo apt-get install --no-install-recommends --yes \
-    pkg-config \
-    build-essential \
     autoconf \
     bison \
-    re2c \
+    build-essential \
+    curl \
+    gettext \
+    git \
+    libgd-dev \
+    libcurl4-openssl-dev \
+    libedit-dev \
+    libicu-dev \
+    libjpeg-dev \
+    libmysqlclient-dev \
+    libonig-dev \
+    libpng-dev \
+    libpq-dev \
+    libreadline-dev \
+    libsqlite3-dev \
+    libssl-dev \
     libxml2-dev \
-    libsqlite3-dev
-
-# TODO: Must be updated to use mise
-export PATH="$HOME/.asdf/shims:$PATH"
-# XXX Installation fails with error: No package 'openssl' found
-# Installing 'openssl' with apt-get does not solve it.
-asdf-global-installer.sh php
+    libxslt-dev \
+    libzip-dev \
+    openssl \
+    pkg-config \
+    re2c \
+    zlib1g-dev
 
 composer global require --dev \
     emielmolenaar/phpcs-laravel \

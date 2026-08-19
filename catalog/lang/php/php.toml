@@ -1,0 +1,3 @@
+[tools]
+# FIXME: fails to install with an error: Composer installer signature verification failed
+php = { version = 'latest' }
