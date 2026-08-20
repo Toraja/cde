@@ -51,7 +51,7 @@ RUN --mount=type=cache,id=apt-cache,target=/var/cache/apt,sharing=locked --mount
     && groupmod --gid ${DOCKER_GROUP_ID} docker
 
 ## gettext-base installs envsubst
-# file required by yazi, jq required by github-latest-release-installer
+# file required by yazi
 RUN --mount=type=cache,id=apt-cache,target=/var/cache/apt,sharing=locked --mount=type=cache,id=apt-cache,target=/var/lib/apt,sharing=locked \
     apt-get update && apt-get install --no-install-recommends --yes \
         software-properties-common \
@@ -61,7 +61,7 @@ RUN --mount=type=cache,id=apt-cache,target=/var/cache/apt,sharing=locked --mount
     && apt-get update && apt-get install --no-install-recommends --yes \
         sudo less man-db locales tree openssh-client unzip rsync wget gettext-base \
         git git-lfs make xclip net-tools netcat-openbsd dnsutils fish vim tmux \
-        keychain file jq pwgen hurl
+        keychain file pwgen hurl
 
 # Multibyte character support
 ENV LC_ALL=C.UTF-8
@@ -105,7 +105,9 @@ RUN mkdir --parents ~/tmp ~/.cde/mnt/single ~/.cde/mnt/shared ~/.local/share/fis
     ln --symbolic --force ~/.cde/mnt/single/.local/share/tmux/resurrect ~/.local/share/tmux/
 
 RUN curl --location --silent --show-error --fail --retry 5 --retry-delay 3 https://mise.run | sh && \
-    mise completion fish > ~/.config/fish/completions/mise.fish
+    mise completion fish > ~/.config/fish/completions/mise.fish && \
+	curl --proto '=https' --tlsv1.2 -LsSf https://github.com/Toraja/github-release-downloader/releases/latest/download/github-release-downloader-installer.sh | sh && \
+	ghrls completion fish > ~/.config/fish/completions/ghrls.fish
 
 # Separate installation of base mise tools and each catalog
 # as some might fail sometimes and it takes time to retry all.
@@ -145,7 +147,7 @@ RUN --mount=type=secret,id=GITHUB_TOKEN,env=GITHUB_TOKEN \
 
 # taskwarrior
 COPY --from=taskwarrior --chown=${USER_NAME}:${GROUP_NAME} /usr/local/bin/task /home/${USER_NAME}/.local/bin/task
-RUN github-latest-release-installer.sh kdheepak taskwarrior-tui taskwarrior-tui.deb /tmp/taskwarrior-tui.deb && \
+RUN ghrls download --output /tmp/taskwarrior-tui.deb https://github.com/kdheepak/taskwarrior-tui taskwarrior-tui.deb && \
 	sudo dpkg --install /tmp/taskwarrior-tui.deb && \
 	rm /tmp/taskwarrior-tui.deb && \
     # taskwarrior \

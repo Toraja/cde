@@ -25,5 +25,8 @@ cp --recursive $fixture_dir/fish ~/.config/
 mise completion fish > ~/.config/fish/completions/mise.fish
 mise install
 
+curl --proto '=https' --tlsv1.2 -LsSf https://github.com/Toraja/github-release-downloader/releases/latest/download/github-release-downloader-installer.sh | sh
+ghrls completion fish > ~/.config/fish/completions/ghrls.fish
+
 # Source bashrc (including mise.bash) to avoid re-login
 . ~/.bashrc

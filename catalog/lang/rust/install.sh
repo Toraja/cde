@@ -28,7 +28,7 @@ mise exec rust cargo-binstall --command 'cargo binstall cargo-nextest --secure'
 nvim_vscode_extension_dir=~/.local/share/nvim/vscode-extensions
 workdir=/tmp/codelldb
 mkdir --parents $nvim_vscode_extension_dir $workdir
-github-latest-release-installer.sh vadimcn codelldb 'codelldb-linux-x64.vsix' $workdir/codelldb.vsix
+ghrls download --output $workdir/codelldb.vsix https://github.com/vadimcn/codelldb 'codelldb-linux-x64.vsix'
 unzip -o $workdir/codelldb.vsix -d $workdir
 mv $workdir/extension.vsixmanifest $workdir/extension/.vsixmanifest
 # Usually the directory name is vadimcn.vscode-lldb-<version>, but it is hard to determine the version, so just use vadimcn.vscode-lldb

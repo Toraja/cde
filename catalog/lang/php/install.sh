@@ -38,4 +38,4 @@ composer global require --dev \
     phpmd/phpmd \
     squizlabs/php_codesniffer
 
-github-latest-release-installer.sh -x phpactor phpactor phpactor.phar ~/.local/bin/phpactor
+ghrls download --output ~/.local/bin/phpactor --executable https://github.com/phpactor/phpactor phpactor.phar

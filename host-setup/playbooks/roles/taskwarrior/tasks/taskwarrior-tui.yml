@@ -12,7 +12,7 @@
   block:
     - name: Download taskwarrior-tui.deb
       ansible.builtin.command:
-        cmd: ../github-latest-release-installer.sh kdheepak taskwarrior-tui taskwarrior-tui.deb /tmp/taskwarrior-tui.deb
+        cmd: ghrls download --output /tmp/taskwarrior-tui.deb https://github.com/kdheepak/taskwarrior-tui taskwarrior-tui.deb
         creates: /tmp/taskwarrior-tui.deb
     - name: Install taskwarrior-tui from deb file
       become: true
