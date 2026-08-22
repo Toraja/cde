@@ -106,8 +106,8 @@ RUN mkdir --parents ~/tmp ~/.cde/mnt/single ~/.cde/mnt/shared ~/.local/share/fis
 
 RUN curl --location --silent --show-error --fail --retry 5 --retry-delay 3 https://mise.run | sh && \
     mise completion fish > ~/.config/fish/completions/mise.fish && \
-	curl --proto '=https' --tlsv1.2 -LsSf https://github.com/Toraja/github-release-downloader/releases/latest/download/github-release-downloader-installer.sh | sh && \
-	ghrls completion fish > ~/.config/fish/completions/ghrls.fish
+    curl --proto '=https' --tlsv1.2 -LsSf https://github.com/Toraja/github-release-downloader/releases/latest/download/github-release-downloader-installer.sh | sh && \
+    ghrls completion fish > ~/.config/fish/completions/ghrls.fish
 
 # Separate installation of base mise tools and each catalog
 # as some might fail sometimes and it takes time to retry all.
@@ -117,12 +117,12 @@ RUN --mount=type=secret,id=GITHUB_TOKEN,env=GITHUB_TOKEN \
     --mount=type=cache,id=apt-cache,target=/var/cache/apt,sharing=locked \
     --mount=type=cache,id=apt-cache,target=/var/lib/apt,sharing=locked \
     --mount=type=bind,from=catalog,source=editor/neovim,target=/tmp/catalog/neovim \
-	/tmp/catalog/neovim/install.sh
+    /tmp/catalog/neovim/install.sh
 RUN --mount=type=secret,id=GITHUB_TOKEN,env=GITHUB_TOKEN \
     --mount=type=cache,id=apt-cache,target=/var/cache/apt,sharing=locked \
     --mount=type=cache,id=apt-cache,target=/var/lib/apt,sharing=locked \
     --mount=type=bind,from=catalog,source=lang/lua,target=/tmp/catalog/lua \
-	/tmp/catalog/lua/install.sh
+    /tmp/catalog/lua/install.sh
 RUN --mount=type=secret,id=GITHUB_TOKEN,env=GITHUB_TOKEN \
     --mount=type=cache,id=apt-cache,target=/var/cache/apt,sharing=locked \
     --mount=type=cache,id=apt-cache,target=/var/lib/apt,sharing=locked \
@@ -133,23 +133,23 @@ RUN --mount=type=secret,id=GITHUB_TOKEN,env=GITHUB_TOKEN \
     --mount=type=cache,id=apt-cache,target=/var/cache/apt,sharing=locked \
     --mount=type=cache,id=apt-cache,target=/var/lib/apt,sharing=locked \
     --mount=type=bind,from=catalog,source=iac/ansible,target=/tmp/catalog/ansible \
-	/tmp/catalog/ansible/install.sh
+    /tmp/catalog/ansible/install.sh
 RUN --mount=type=secret,id=GITHUB_TOKEN,env=GITHUB_TOKEN \
     --mount=type=cache,id=apt-cache,target=/var/cache/apt,sharing=locked \
     --mount=type=cache,id=apt-cache,target=/var/lib/apt,sharing=locked \
     --mount=type=bind,from=catalog,source=llm,target=/tmp/catalog/llm \
-	/tmp/catalog/llm/install.sh
+    /tmp/catalog/llm/install.sh
 RUN --mount=type=secret,id=GITHUB_TOKEN,env=GITHUB_TOKEN \
     --mount=type=cache,id=apt-cache,target=/var/cache/apt,sharing=locked \
     --mount=type=cache,id=apt-cache,target=/var/lib/apt,sharing=locked \
     --mount=type=bind,from=catalog,source=documentation/architecture,target=/tmp/catalog/architecture \
-	/tmp/catalog/architecture/install.sh
+    /tmp/catalog/architecture/install.sh
 
 # taskwarrior
 COPY --from=taskwarrior --chown=${USER_NAME}:${GROUP_NAME} /usr/local/bin/task /home/${USER_NAME}/.local/bin/task
 RUN ghrls download --output /tmp/taskwarrior-tui.deb https://github.com/kdheepak/taskwarrior-tui taskwarrior-tui.deb && \
-	sudo dpkg --install /tmp/taskwarrior-tui.deb && \
-	rm /tmp/taskwarrior-tui.deb && \
+    sudo dpkg --install /tmp/taskwarrior-tui.deb && \
+    rm /tmp/taskwarrior-tui.deb && \
     # taskwarrior \
     mkdir --parents ~/.local/share/taskwarrior/ ~/.cde/mnt/shared/.local/share/taskwarrior/task/ && \
     ln --symbolic ~/.cde/mnt/shared/.local/share/taskwarrior/task ~/.local/share/taskwarrior/ && \

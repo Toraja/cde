@@ -4,7 +4,7 @@ FROM ubuntu:${IMAGE_TAG:-latest}
 
 RUN apt-get update && apt-get upgrade --no-install-recommends --yes && apt-get install --no-install-recommends --yes \
     unminimize && \
-	yes | unminimize
+    yes | unminimize
 
 RUN apt-get update && apt-get upgrade --no-install-recommends --yes && apt-get install --no-install-recommends --yes \
     sudo less man-db curl ca-certificates lsb-release bash-completion git openssh-client
@@ -27,4 +27,4 @@ COPY --chown=${USER_NAME}:${GROUP_NAME} ./ /home/${USER_NAME}/wd/
 WORKDIR /home/${USER_NAME}/wd/
 
 RUN --mount=type=secret,id=GITHUB_TOKEN,env=GITHUB_TOKEN \
-	./first-step.sh
+    ./first-step.sh

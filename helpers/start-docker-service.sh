@@ -31,26 +31,26 @@ main() {
 	echo ${cyan}Starting Docker...${nc}
 
 	case $(get_dist) in
-		${dist_wsl})
-			if is_docker_desktop; then
-				if [[ -f /mnt/c/Program\ Files/Docker/Docker/Docker\ Desktop.exe ]]; then
-					/mnt/c/Program\ Files/Docker/Docker/Docker\ Desktop.exe &
-					echo 'Docker Desktop has been dispatched.'
-					echo 'Wait until docker is ready.'
-					return 99
-				else
-					echo 'Docker Desktop excutable was not found. Start it manually.'
-					exit 1
-				fi
+	${dist_wsl})
+		if is_docker_desktop; then
+			if [[ -f /mnt/c/Program\ Files/Docker/Docker/Docker\ Desktop.exe ]]; then
+				/mnt/c/Program\ Files/Docker/Docker/Docker\ Desktop.exe &
+				echo 'Docker Desktop has been dispatched.'
+				echo 'Wait until docker is ready.'
+				return 99
+			else
+				echo 'Docker Desktop excutable was not found. Start it manually.'
+				exit 1
 			fi
+		fi
 
-			start_docker_init_script
-			;;
-		*)
-			echo "Unsupported distribution"
-			exit 1
+		start_docker_init_script
+		;;
+	*)
+		echo "Unsupported distribution"
+		exit 1
+		;;
 	esac
 }
 
 main
-
