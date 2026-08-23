@@ -37,3 +37,5 @@ rm --recursive --dir --force $workdir
 
 # cargo-release fails to install with mise
 mise exec rust cargo-binstall --command 'cargo binstall --no-confirm cargo-release'
+
+ghrls download --extract --dir ~/.cargo/bin/ https://github.com/taiki-e/cargo-llvm-cov cargo-llvm-cov-x86_64-unknown-linux-gnu.tar.gz
