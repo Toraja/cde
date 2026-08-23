@@ -17,11 +17,6 @@ if $mise_install; then
 fi
 
 # --- Add other commands ---
-sudo apt-get update
-# xz-utils is required to extract the adrs installer
-sudo apt-get install --no-install-recommends --yes \
-  xz-utils
-
 curl --proto '=https' --tlsv1.2 -LsSf https://github.com/joshrotenberg/adrs/releases/latest/download/adrs-installer.sh | sh
 mkdir --parents ~/.config/adrs/
 ln --symbolic ~/toybox/documentation/adrs/config.toml ~/.config/adrs/config.toml
