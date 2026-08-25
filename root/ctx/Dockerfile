@@ -11,15 +11,14 @@ RUN --mount=type=cache,id=apt-cache,target=/var/cache/apt,sharing=locked --mount
     apt-get update && apt-get upgrade --no-install-recommends --yes && apt-get install --no-install-recommends --yes \
     make cmake gcc g++ uuid-dev jq
 
-# taskwarrior is installed at /usr/local/bin/task
+ENV PATH="/home/${USER_NAME}/.local/bin:${PATH}"
 RUN --mount=type=secret,id=GITHUB_TOKEN,env=GITHUB_TOKEN \
-    version=$(curl --location --silent --show-error --fail --retry 5 --retry-delay 3 --header "Authorization: token $GITHUB_TOKEN" https://api.github.com/repos/GothenburgBitFactory/taskwarrior/releases/latest | jq --raw-output '.tag_name') && \
-    git clone --depth 1 --branch $version https://github.com/GothenburgBitFactory/taskwarrior.git /taskwarrior && \
-    cd /taskwarrior && \
-    cmake -DCMAKE_BUILD_TYPE=release -DENABLE_SYNC=OFF . && \
-    make && \
-    make install && \
-    rm --recursive --force /taskwarrior
+    curl --proto '=https' --tlsv1.2 -LsSf https://github.com/Toraja/github-release-downloader/releases/latest/download/github-release-downloader-installer.sh | sh && \
+    tag=$(curl --location --silent --show-error --fail --retry 5 --retry-delay 3 --header "Authorization: token $GITHUB_TOKEN" https://api.github.com/repos/GothenburgBitFactory/taskwarrior/releases/latest | jq --raw-output '.tag_name' | cut -c 2-) && \
+    ghrls download --extract --archive-entry "task-$tag" --output /tmp/taskwarrior https://github.com/GothenburgBitFactory/taskwarrior "task-$tag\.tar\.gz" && \
+    cd /tmp/taskwarrior && \
+    cmake -S . -B build -DCMAKE_BUILD_TYPE=Release && \
+    cmake --build build
 
 FROM ubuntu:${BASE_IMAGE_TAG:-rolling}
 
@@ -59,7 +58,7 @@ RUN --mount=type=cache,id=apt-cache,target=/var/cache/apt,sharing=locked --mount
     && apt-add-repository --yes ppa:git-core/ppa \
     && apt-add-repository --yes ppa:lepapareil/hurl \
     && apt-get update && apt-get install --no-install-recommends --yes \
-        dnsutils file fish gettext-base git git-lfs hurl keychain less locales \
+        cmake dnsutils file fish gettext-base git git-lfs hurl keychain less locales \
         make man-db net-tools netcat-openbsd openssh-client pwgen rsync sudo \
         tmux tree unzip vim wget xclip xz-utils
 
@@ -145,9 +144,12 @@ RUN --mount=type=secret,id=GITHUB_TOKEN,env=GITHUB_TOKEN \
     --mount=type=bind,from=catalog,source=documentation/architecture,target=/tmp/catalog/architecture \
     /tmp/catalog/architecture/install.sh
 
-# taskwarrior
-COPY --from=taskwarrior --chown=${USER_NAME}:${GROUP_NAME} /usr/local/bin/task /home/${USER_NAME}/.local/bin/task
-RUN ghrls download --output /tmp/taskwarrior-tui.deb https://github.com/kdheepak/taskwarrior-tui taskwarrior-tui.deb && \
+# Taskwarrior needs more than just copying the binary, so copy the whole build directory and install it here.
+# The path must match the path used in the taskwarrior stage, otherwise the build will fail.
+COPY --from=taskwarrior --chown=${USER_NAME}:${GROUP_NAME} /tmp/taskwarrior /tmp/taskwarrior
+RUN cmake --install /tmp/taskwarrior/build && \
+    rm --recursive --force /tmp/taskwarrior && \
+    ghrls download --output /tmp/taskwarrior-tui.deb https://github.com/kdheepak/taskwarrior-tui taskwarrior-tui.deb && \
     sudo dpkg --install /tmp/taskwarrior-tui.deb && \
     rm /tmp/taskwarrior-tui.deb && \
     # taskwarrior \
