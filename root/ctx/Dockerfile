@@ -14,8 +14,8 @@ RUN --mount=type=cache,id=apt-cache,target=/var/cache/apt,sharing=locked --mount
 ENV PATH="/home/${USER_NAME}/.local/bin:${PATH}"
 RUN --mount=type=secret,id=GITHUB_TOKEN,env=GITHUB_TOKEN \
     curl --proto '=https' --tlsv1.2 -LsSf https://github.com/Toraja/github-release-downloader/releases/latest/download/github-release-downloader-installer.sh | sh && \
-    tag=$(curl --location --silent --show-error --fail --retry 5 --retry-delay 3 --header "Authorization: token $GITHUB_TOKEN" https://api.github.com/repos/GothenburgBitFactory/taskwarrior/releases/latest | jq --raw-output '.tag_name' | cut -c 2-) && \
-    ghrls download --extract --archive-entry "task-$tag" --output /tmp/taskwarrior https://github.com/GothenburgBitFactory/taskwarrior "task-$tag\.tar\.gz" && \
+    version=$(ghrls tag https://github.com/GothenburgBitFactory/taskwarrior --strip-prefix v) && \
+    ghrls download --extract --archive-entry "task-$version" --output /tmp/taskwarrior https://github.com/GothenburgBitFactory/taskwarrior "task-$version\.tar\.gz" && \
     cd /tmp/taskwarrior && \
     cmake -S . -B build -DCMAKE_BUILD_TYPE=Release && \
     cmake --build build
