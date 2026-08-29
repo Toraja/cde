@@ -11,7 +11,7 @@ RUN --mount=type=cache,id=apt-cache,target=/var/cache/apt,sharing=locked --mount
     apt-get update && apt-get upgrade --no-install-recommends --yes && apt-get install --no-install-recommends --yes \
     make cmake gcc g++ uuid-dev jq
 
-ENV PATH="/home/${USER_NAME}/.local/bin:${PATH}"
+ENV PATH="/root/.local/bin:${PATH}"
 RUN --mount=type=secret,id=GITHUB_TOKEN,env=GITHUB_TOKEN \
     curl --proto '=https' --tlsv1.2 -LsSf https://github.com/Toraja/github-release-downloader/releases/latest/download/github-release-downloader-installer.sh | sh && \
     version=$(ghrls tag https://github.com/GothenburgBitFactory/taskwarrior --strip-prefix v) && \
@@ -147,7 +147,7 @@ RUN --mount=type=secret,id=GITHUB_TOKEN,env=GITHUB_TOKEN \
 # Taskwarrior needs more than just copying the binary, so copy the whole build directory and install it here.
 # The path must match the path used in the taskwarrior stage, otherwise the build will fail.
 COPY --from=taskwarrior --chown=${USER_NAME}:${GROUP_NAME} /tmp/taskwarrior /tmp/taskwarrior
-RUN cmake --install /tmp/taskwarrior/build && \
+RUN sudo cmake --install /tmp/taskwarrior/build && \
     rm --recursive --force /tmp/taskwarrior && \
     ghrls download --output /tmp/taskwarrior-tui.deb https://github.com/kdheepak/taskwarrior-tui taskwarrior-tui.deb && \
     sudo dpkg --install /tmp/taskwarrior-tui.deb && \
