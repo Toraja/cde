@@ -3,3 +3,13 @@ fetch_remote_versions_timeout = "15s"
 http_timeout = "120s"
 # Concurrent download triggers unofficial(?) rate limit and downloads time out
 jobs = 1
+
+[settings.task]
+# Not sure what has changed since mise version `2026.9.16 linux-x64 (2026-09-28)`,
+# but apparently mise obtains a lock for the currently installing tool and `mise run`,
+# which is used in `postinstall` option of tools, installs tools that are
+# not yet installed by default. So when `mise run` is called in postinstall
+# task, it tries to install the tool that the outer mise is currently
+# installing, hence deadlock occurs.
+# This option disables `mise run` to install missing tools.
+run_auto_install = false
