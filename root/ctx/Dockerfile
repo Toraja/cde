@@ -49,11 +49,12 @@ RUN --mount=type=cache,id=apt-cache,target=/var/cache/apt,sharing=locked --mount
     # Specify GROUP_ID for docker as it differs depending on the environment (Docker Desktop etc.) \
     && groupmod --gid ${DOCKER_GROUP_ID} docker
 
-## gettext-base installs envsubst
+# python3-socks is required as launchpadlib skips proxies if pysocks isn't installed, and apt-add-repository fails
+# gettext-base installs envsubst
 # file required by yazi
 RUN --mount=type=cache,id=apt-cache,target=/var/cache/apt,sharing=locked --mount=type=cache,id=apt-cache,target=/var/lib/apt,sharing=locked \
     apt-get update && apt-get install --no-install-recommends --yes \
-        software-properties-common \
+        software-properties-common python3-socks \
     && apt-add-repository --yes ppa:fish-shell/release-4 \
     && apt-add-repository --yes ppa:git-core/ppa \
     && apt-add-repository --yes ppa:lepapareil/hurl \
