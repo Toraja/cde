@@ -33,7 +33,7 @@ ARG CODE_SERVER_BIND_ADDR
 ARG CODE_SERVER_CERT
 ARG CODE_SERVER_CODE_SERVER_COPILOT_CHAT_VERSION
 RUN --mount=type=cache,id=apt-cache,target=/var/cache/apt,sharing=locked \
-    --mount=type=cache,id=apt-cache,target=/var/lib/apt,sharing=locked \
+    --mount=type=cache,id=apt-list,target=/var/lib/apt/list,sharing=locked \
     --mount=type=bind,from=catalog,source=editor/code-server,target=/tmp/catalog/code-server \
     CODE_SERVER_BIND_ADDR=${CODE_SERVER_BIND_ADDR} \
     CODE_SERVER_CERT=${CODE_SERVER_CERT} \

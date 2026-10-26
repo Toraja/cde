@@ -7,7 +7,7 @@ SHELL ["/bin/bash", "-eo", "pipefail", "-c"]
 RUN --mount=type=bind,source=helpers/proxy.sh,target=/tmp/proxy.sh /tmp/proxy.sh
 
 RUN rm --force /etc/apt/apt.conf.d/docker-clean; echo 'Binary::apt::APT::Keep-Downloaded-Packages "true";' > /etc/apt/apt.conf.d/keep-cache
-RUN --mount=type=cache,id=apt-cache,target=/var/cache/apt,sharing=locked --mount=type=cache,id=apt-cache,target=/var/lib/apt,sharing=locked \
+RUN --mount=type=cache,id=apt-cache,target=/var/cache/apt,sharing=locked --mount=type=cache,id=apt-list,target=/var/lib/apt/list,sharing=locked \
     apt-get update && apt-get upgrade --no-install-recommends --yes && apt-get install --no-install-recommends --yes \
     make cmake gcc g++ uuid-dev jq
 
@@ -26,7 +26,7 @@ RUN --mount=type=bind,source=helpers/proxy.sh,target=/tmp/proxy.sh /tmp/proxy.sh
 
 # `unminimize` is required to use `man`
 RUN rm --force /etc/apt/apt.conf.d/docker-clean; echo 'Binary::apt::APT::Keep-Downloaded-Packages "true";' > /etc/apt/apt.conf.d/keep-cache
-RUN --mount=type=cache,id=apt-cache,target=/var/cache/apt,sharing=locked --mount=type=cache,id=apt-cache,target=/var/lib/apt,sharing=locked \
+RUN --mount=type=cache,id=apt-cache,target=/var/cache/apt,sharing=locked --mount=type=cache,id=apt-list,target=/var/lib/apt/list,sharing=locked \
     apt-get update && apt-get upgrade --no-install-recommends --yes && apt-get install --no-install-recommends --yes \
     unminimize \
     && yes | unminimize
@@ -36,7 +36,7 @@ SHELL ["/bin/bash", "-eo", "pipefail", "-c"]
 # Official Debian and Ubuntu images automatically run apt-get clean, so explicit invocation is not required.
 # Set up to install docker
 ARG DOCKER_GROUP_ID
-RUN --mount=type=cache,id=apt-cache,target=/var/cache/apt,sharing=locked --mount=type=cache,id=apt-cache,target=/var/lib/apt,sharing=locked \
+RUN --mount=type=cache,id=apt-cache,target=/var/cache/apt,sharing=locked --mount=type=cache,id=apt-list,target=/var/lib/apt/list,sharing=locked \
     apt-get update && apt-get install --no-install-recommends --yes \
     apt-transport-https ca-certificates curl gnupg lsb-release \
     && install --mode 0755 --directory /etc/apt/keyrings \
@@ -52,7 +52,7 @@ RUN --mount=type=cache,id=apt-cache,target=/var/cache/apt,sharing=locked --mount
 # python3-socks is required as launchpadlib skips proxies if pysocks isn't installed, and apt-add-repository fails
 # gettext-base installs envsubst
 # file required by yazi
-RUN --mount=type=cache,id=apt-cache,target=/var/cache/apt,sharing=locked --mount=type=cache,id=apt-cache,target=/var/lib/apt,sharing=locked \
+RUN --mount=type=cache,id=apt-cache,target=/var/cache/apt,sharing=locked --mount=type=cache,id=apt-list,target=/var/lib/apt/list,sharing=locked \
     apt-get update && apt-get install --no-install-recommends --yes \
         software-properties-common python3-socks \
     && apt-add-repository --yes ppa:fish-shell/release-4 \
@@ -115,33 +115,33 @@ RUN --mount=type=secret,id=GITHUB_TOKEN,env=GITHUB_TOKEN \
     mise install
 RUN --mount=type=secret,id=GITHUB_TOKEN,env=GITHUB_TOKEN \
     --mount=type=cache,id=apt-cache,target=/var/cache/apt,sharing=locked \
-    --mount=type=cache,id=apt-cache,target=/var/lib/apt,sharing=locked \
+    --mount=type=cache,id=apt-list,target=/var/lib/apt/list,sharing=locked \
     --mount=type=bind,from=catalog,source=editor/neovim,target=/tmp/catalog/neovim \
     /tmp/catalog/neovim/install.sh
 RUN --mount=type=secret,id=GITHUB_TOKEN,env=GITHUB_TOKEN \
     --mount=type=cache,id=apt-cache,target=/var/cache/apt,sharing=locked \
-    --mount=type=cache,id=apt-cache,target=/var/lib/apt,sharing=locked \
+    --mount=type=cache,id=apt-list,target=/var/lib/apt/list,sharing=locked \
     --mount=type=bind,from=catalog,source=lang/lua,target=/tmp/catalog/lua \
     /tmp/catalog/lua/install.sh
 RUN --mount=type=secret,id=GITHUB_TOKEN,env=GITHUB_TOKEN \
     --mount=type=cache,id=apt-cache,target=/var/cache/apt,sharing=locked \
-    --mount=type=cache,id=apt-cache,target=/var/lib/apt,sharing=locked \
+    --mount=type=cache,id=apt-list,target=/var/lib/apt/list,sharing=locked \
     --mount=type=bind,from=catalog,source=lang/toml,target=/tmp/catalog/toml \
     --mount=type=bind,from=catalog,source=lang/yaml,target=/tmp/catalog/yaml \
     for installer in /tmp/catalog/*/install.sh; do $installer; done
 RUN --mount=type=secret,id=GITHUB_TOKEN,env=GITHUB_TOKEN \
     --mount=type=cache,id=apt-cache,target=/var/cache/apt,sharing=locked \
-    --mount=type=cache,id=apt-cache,target=/var/lib/apt,sharing=locked \
+    --mount=type=cache,id=apt-list,target=/var/lib/apt/list,sharing=locked \
     --mount=type=bind,from=catalog,source=iac/ansible,target=/tmp/catalog/ansible \
     /tmp/catalog/ansible/install.sh
 RUN --mount=type=secret,id=GITHUB_TOKEN,env=GITHUB_TOKEN \
     --mount=type=cache,id=apt-cache,target=/var/cache/apt,sharing=locked \
-    --mount=type=cache,id=apt-cache,target=/var/lib/apt,sharing=locked \
+    --mount=type=cache,id=apt-list,target=/var/lib/apt/list,sharing=locked \
     --mount=type=bind,from=catalog,source=llm,target=/tmp/catalog/llm \
     /tmp/catalog/llm/install.sh
 RUN --mount=type=secret,id=GITHUB_TOKEN,env=GITHUB_TOKEN \
     --mount=type=cache,id=apt-cache,target=/var/cache/apt,sharing=locked \
-    --mount=type=cache,id=apt-cache,target=/var/lib/apt,sharing=locked \
+    --mount=type=cache,id=apt-list,target=/var/lib/apt/list,sharing=locked \
     --mount=type=bind,from=catalog,source=documentation/architecture,target=/tmp/catalog/architecture \
     /tmp/catalog/architecture/install.sh
 
