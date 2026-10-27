@@ -26,7 +26,7 @@ mise exec uv --command "uv tool install specify-cli --from git+https://github.co
 mkdir --parents ~/.config/opencode/ ~/.local/share/opencode ~/.cde/mnt/shared/.local/share/opencode
 # opencode config might need to be localised (custom providers) while tui config does not
 cp --force ~/toybox/opencode/opencode.jsonc ~/.config/opencode/
-ln --symbolic ~/toybox/opencode/tui.jsonc ~/.config/opencode/
+ln --symbolic ~/toybox/opencode/cli.jsonc ~/.config/opencode/cli.json # jsonc format is supported, but file extension must be .json
 ln --symbolic ~/.cde/mnt/shared/.local/share/opencode/account.json ~/.local/share/opencode/
 ln --symbolic ~/.cde/mnt/shared/.local/share/opencode/auth.json ~/.local/share/opencode/
 
